@@ -54,7 +54,7 @@ function make2DTable(data, isPer){
     var tbody = [];
 
     if(isPer)
-        sum = Enumerable.From(chartData).Sum('o=>o.value');
+        sum = Enumerable.from(chartData).sum('o=>o.value');
 
     chartData.forEach((item)=>{
         var arr = isPer? [item.name, ((item.value/sum)*100).toFixed(2)+"%"]: [item.name, item.value];
