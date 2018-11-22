@@ -10,6 +10,7 @@ function makeBarTable(data){
     var yTitle = copydata.yTitle || ""; //y轴标题
     var xUnit = copydata.xUnit || ""; //x轴单位
     var yUnit = copydata.yUnit || ""; //y轴单位
+    var vUnit = copydata.vUnit || ""; //value单位
     var chartType = copydata.chartType;
     
     xdata.unshift(""); //在xdata前插入空字符串
@@ -17,13 +18,13 @@ function makeBarTable(data){
     if(xUnit){ //如果有x轴单位
         xdata.forEach(function(item, index){
             if(index != 0){
-                xdata[index] = item + "(" + xUnit + ")";
+                xdata[index] = item + setUnit(xUnit);
             }
         });
     }
 
     vdata.forEach(function(arr, index){
-        if(chartType==105){ //需要转成%
+        if(chartType==105 || chartType==106 || chartType==107){ //需要转成%
             arr.forEach(function(val, i){
                 arr[i] = val+"%";
             });
@@ -31,10 +32,10 @@ function makeBarTable(data){
         }else{ //不需要转成%
             if(yUnit){
                 arr.forEach(function(val, i){
-                    arr[i] = val+ "(" + yUnit + ")";
+                    arr[i] = val + vUnit;
                 });
             }
-            arr.unshift(ydata[index] + "(" + yUnit + ")");
+            arr.unshift(ydata[index] + setUnit(yUnit));
         } 
     });
 
@@ -46,7 +47,7 @@ function makeBarTable(data){
 
 //
 function make2DTable(data, isPer){
-    isPer = isPer!=undefined? isPer: true; //默认需要转成比例
+    isPer = (isPer!=undefined)? isPer: true; //默认需要转成比例
     var copydata = $.extend(true, {}, data); //深拷贝
     var chartData = copydata.chartdata || copydata.chartData;
     
@@ -69,7 +70,7 @@ function make2DTable(data, isPer){
 
 //
 function make4DTable(data){
-    console.log(data);
+    //console.log(data);
     var copydata = $.extend(true, {}, data); //深拷贝
     var chartData = copydata.chartData;
     var xTitle = copydata.xTitle; //x轴标题
@@ -89,4 +90,9 @@ function make4DTable(data){
 
 export{
     makeBarTable, make2DTable, make4DTable
+}
+
+
+function setUnit(unit){
+    return unit? "(" + unit + ")": "";
 }

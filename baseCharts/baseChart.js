@@ -14,11 +14,6 @@ class BaseChart{
         this.dataType = data.datatype || data.dataType || 0; //是否需要过滤数据
     }
 
-    //保留小数点后一位
-    toDecimal(num){
-        return parseFloat(num).toFixed(1);
-    }
-
     //设置单位
     setUnit(value) {
         if(value >= 100000000) {
@@ -27,6 +22,19 @@ class BaseChart{
             return value / 10000 + ' 万'
         } else {
             return value + ''
+        }
+    }
+
+    //设置标题
+    setTitle(title, unit) {
+        if(title && unit){
+            return title + "(" + unit + ")";
+        }else if(title && !unit){
+            return title;
+        }else if(!title && unit){
+            return unit;
+        }else{
+            return "";
         }
     }
     

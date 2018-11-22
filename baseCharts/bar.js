@@ -62,7 +62,7 @@ class BarChart extends BaseChart {
             },
             xAxis: [
                 {
-                    name: this.xTitle + "(" + this.xUnit + ")",
+                    name: this.setTitle(this.xTitle, this.xUnit),
                     type: 'category',
                     axisLine:{lineStyle:{color:'#000'}},
                     data: this.xdata,
@@ -75,7 +75,7 @@ class BarChart extends BaseChart {
             ],
             yAxis: [
                 {
-                    name: this.yTitle + "(" + (isPer? "%": this.yUnit) + ")",
+                    name: this.setTitle(this.yTitle , (isPer? "%": this.yUnit)),
                     type: 'value',
                     axisLine:{lineStyle:{color:'#000'}},
                     axisLabel: {
@@ -94,7 +94,7 @@ class BarChart extends BaseChart {
             option.yAxis[0].max = 100;
         }
         //显示滚动条
-        let ydataLength = !(this.chartType==105 || this.chartType==113)? this.ydata.length: 1;
+        let ydataLength = !(this.chartType==105 || this.chartType==113)? this.ydata.length: 1; //如果数据堆叠，ydata长度算1
         if(this.xdata.length*ydataLength > 20){
             option.grid.bottom = "12%";
             option.dataZoom = [{
@@ -371,7 +371,7 @@ class BarChart extends BaseChart {
                         sum += this.vdata[j][i]; //实时求每一列的和
                     }
                 }
-                sumData[i] = this.toDecimal(sum);
+                sumData[i] = sum.toFixed(1);
             }
             chart.setOption(option);
         });

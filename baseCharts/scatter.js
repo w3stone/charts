@@ -6,21 +6,115 @@ class ScatterChart extends BaseChart {
     constructor(data){
         super(data);
     }
+
+    //基础配置
+    _baseScatterOption(defaultSymbolSize, max, legenddata){
+        let option = {
+            legend: {
+                data: legenddata,
+                type: 'scroll',
+                top: '8%'
+            },
+            tooltip: {
+                trigger: 'item',
+                axisPointer: {
+                    show: true,
+                    type: 'cross',
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1
+                    },
+                },
+                formatter: obj => {
+                    //console.log(obj);
+                    if (obj.componentType == "series") {
+                        var result =  '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+                            obj.name + '</div>' +
+                            '<span>' + this.xTitle + ':' + obj.data.value[0] + this.xUnit + '</span><br/>' +
+                            '<span>' + this.yTitle + ':' + obj.data.value[1] + this.yUnit + '</span>';
+                        //还原value
+                        if(max){ result += '<br/><span>' + this.vTitle + ':' + (obj.data.symbolSize*max/defaultSymbolSize).toFixed(2) + this.vUnit +  '</span>'; }
+                        return result;
+                    }
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'bottom',
+                    formatter: params => {
+                        return params.name
+                    }
+                },
+                emphasis: {
+                    show: true,
+                    position: 'bottom',
+                }
+            },
+            xAxis: {
+                name: this.setTitle(this.xTitle, this.xUnit),
+                type: 'value',
+                scale: true,
+                nameTextStyle:{
+                    fontSize: 14
+                },
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#3259B8'
+                    }
+                }
+            },
+            yAxis: {
+                name: this.setTitle(this.yTitle, this.yUnit),
+                type: 'value',
+                scale: true,
+                nameTextStyle:{
+                    fontSize: 14
+                },
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#3259B8'
+                    }
+                }
+            },
+            grid: {
+                top:'20%',
+                left: '6%',
+                right: '8%',
+                bottom: '6%',
+                containLabel: true
+            }
+        };
+
+        return option;
+    }
     
-    //散点图
+    //普通散点图(颜色不同)
     scatter(scatterConfig){
-        var legenddata = [];
-        var seriesData = [];
+        let legenddata = [];
+        let series = [];
 
-        var sourceData = this.chartData;
-        var defSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
+        let sourceData = this.chartData;
+        let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
 
-        var max = sourceData.length>0? Enumerable.from(sourceData).select('o=>o.value').max(): 0; //value最大值
+        let max = sourceData.length>0? Enumerable.from(sourceData).select('o=>o.value').max(): 0; //value最大值
 
         //拼接数据
         sourceData.forEach(item => {
             if(item.name=="平均值"){ //平均值
-                var av = {
+                let av = {
                     name: item.name,
                     type: 'scatter',
                     markLine: {
@@ -47,10 +141,10 @@ class ScatterChart extends BaseChart {
                         ]
                     }  
                 }
-                seriesData.push(av);
+                series.push(av);
 
             }else{ //非平均值
-                var bs = {
+                let bs = {
                     name: item.name,
                     type: 'scatter',
                     data: [{
@@ -61,104 +155,16 @@ class ScatterChart extends BaseChart {
                                 fontSize: 14
                             }
                         },
-                        symbolSize: max? (item.value/max)*defSymbolSize :defSymbolSize //散点大小
+                        symbolSize: max? (item.value/max)*defaultSymbolSize :defaultSymbolSize //散点大小
                     }]
                 } 
-                seriesData.push(bs);
+                series.push(bs);
             }
             legenddata.push(item.name);
         });
 
-        var option = {
-            legend: {
-                data: legenddata,
-                type: 'scroll',
-                top: '8%',
-                textStyle:{fontSize: 14}
-            },
-            tooltip: {
-                trigger: 'item',
-                axisPointer: {
-                    show: true,
-                    type: 'cross',
-                    lineStyle: {
-                        type: 'dashed',
-                        width: 1
-                    },
-                },
-                formatter: (obj) => {
-                    //console.log(obj);
-                    if (obj.componentType == "series") {
-                        var result =  '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-                            obj.name + '</div>' +
-                            '<span>' + this.xTitle + ':' + obj.data.value[0] + this.xUnit + '</span><br/>' +
-                            '<span>' + this.yTitle + ':' + obj.data.value[1] + this.yUnit + '</span>';
-                        
-                        if(max){ result += '<br/><span>' + this.vTitle + ':' + (obj.data.symbolSize*max/defSymbolSize).toFixed(2) + this.vUnit +  '</span>'; }
-                        return result;
-                    }
-                }
-            },
-            label: {
-                normal: {
-                    show: true,
-                    position: 'bottom',
-                    formatter: function(params) {
-                        return params.name
-                    }
-                },
-                emphasis: {
-                    show: true,
-                    position: 'bottom',
-                }
-            },
-            xAxis: {
-                name: this.xTitle,
-                type: 'value',
-                scale: true,
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
-                }
-            },
-            yAxis: {
-                name: this.yTitle,
-                type: 'value',
-                scale: true,
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
-                }
-            },
-            grid: {
-                top:'20%',
-                left: '5%',
-                right: '10%',
-                bottom: '8%',
-                containLabel: true
-            },
-            series: seriesData
-        };
+        let option = this._baseScatterOption(defaultSymbolSize, max, legenddata);
+        option.series = series;
 
         return option;
     }
@@ -166,19 +172,19 @@ class ScatterChart extends BaseChart {
 
     //散点图(相同颜色)
     scatterSameColor(scatterConfig){
-        var legenddata = [];
-        var seriesData = [];
-        var series = [];
+        let legenddata = [];
+        let seriesData = [];
+        let series = [];
 
-        var sourceData = this.chartData;
-        var defSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
+        let sourceData = this.chartData;
+        let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
         
-        var max = sourceData.length>0? Enumerable.from(sourceData).select('$.value').max(): 0; //value最大值
+        let max = sourceData.length>0? Enumerable.from(sourceData).select('o=>o.value').max(): 0; //value最大值
 
         //拼接数据
         sourceData.forEach(item => {
             if(item.name=="平均值"){ //平均值
-                var av = {
+                let av = {
                     name: item.name,
                     type: 'scatter',
                     data:[{
@@ -215,7 +221,7 @@ class ScatterChart extends BaseChart {
                 series.push(av);
 
             }else{
-                var each = {
+                let each = {
                     name: item.name,
                     value: [item.x, item.y],
                     label:{
@@ -223,129 +229,42 @@ class ScatterChart extends BaseChart {
                             fontSize: 14
                         }
                     },
-                    symbolSize: max? (item.value/max)*defSymbolSize :defSymbolSize //散点大小
+                    symbolSize: max? (item.value/max)*defaultSymbolSize :defaultSymbolSize //散点大小
                 }
                 seriesData.push(each);
             }
             legenddata.push(item.name); 
-            
         });
+
         //所有散点图
-        var bs = {
+        let bs = {
             name: "散点图",
             type: 'scatter',
             data: seriesData
         } 
         series.push(bs);
 
-        var option = {
-            legend: {
-                data: legenddata,
-                type: 'scroll',
-                top: '8%',
-                textStyle:{fontSize: 14}
-            },
-            tooltip: {
-                trigger: 'item',
-                axisPointer: {
-                    show: true,
-                    type: 'cross',
-                    lineStyle: {
-                        type: 'dashed',
-                        width: 1
-                    },
-                },
-                formatter: (obj) => {
-                    //console.log(obj);
-                    if (obj.componentType == "series") {
-                        var result = '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-                            obj.name + '</div>' +
-                            '<span>' + this.xTitle + ':' + obj.data.value[0] + this.xUnit + '</span><br/>' +
-                            '<span>' + this.yTitle + ':' + obj.data.value[1] + this.yUnit + '</span>';
-                        
-                        if(max){ result += '<br/><span>' + this.vTitle + ':' + (obj.data.symbolSize*max/defSymbolSize).toFixed(2) + this.vUnit + '</span>'; }
-                        return result;
-                    }
-                }
-            },
-            label: {
-                normal: {
-                    show: false,
-                    position: 'bottom',
-                    formatter: function(params) {
-                        return params.name
-                    }
-                },
-                emphasis: {
-                    show: true,
-                    position: 'bottom',
-                }
-            },
-            xAxis: {
-                name: this.xTitle,
-                type: 'value',
-                scale: true,
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
-                }
-            },
-            yAxis: {
-                name: this.yTitle,
-                type: 'value',
-                scale: true,
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
-                }
-            },
-            grid: {
-                top:'20%',
-                left: '5%',
-                right: '10%',
-                bottom: '8%',
-                containLabel: true
-            },
-            series: series
-        };
+        //
+        let option = this._baseScatterOption(defaultSymbolSize, max, legenddata);
+        option.series = series;
 
         return option;
     }
 
 
-    //散点图(自动求平均)
+    //散点图(自动求平均, 颜色不同)
     scatterAutoAvg(scatterConfig){
-        var legenddata = [];
-        var seriesData = [];
+        let legenddata = [];
+        let series = [];
 
-        var sourceData = this.chartData;
-        var defSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
-        var max = sourceData.length>0? Enumerable.from(sourceData).select('$.value').max(): 0; //value最大值
+        let sourceData = this.chartData;
+        let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
+        let max = sourceData.length>0? Enumerable.from(sourceData).select('o=>o.value').max(): 0; //value最大值
 
-        var avgX = Enumerable.from(sourceData).sum("o=>parseFloat(o.x)") /sourceData.length;
-        var avgY = Enumerable.from(sourceData).sum("o=>parseFloat(o.y)") /sourceData.length;
+        let avgX = Enumerable.from(sourceData).sum("o=>parseFloat(o.x)") /sourceData.length;
+        let avgY = Enumerable.from(sourceData).sum("o=>parseFloat(o.y)") /sourceData.length;
 
-        var av = {
+        let av = {
             name: "平均值",
             type: 'scatter',
             markLine: {
@@ -371,13 +290,12 @@ class ScatterChart extends BaseChart {
                 ]
             }  
         }
-        seriesData.push(av);
+        series.push(av);
 
         //拼接数据
-        sourceData.forEach(function(item,index){
-
+        sourceData.forEach(item => {
             legenddata.push(item.name);
-            var bs = {
+            let bs = {
                 name: item.name,
                 type: 'scatter',
                 data: [{
@@ -388,104 +306,14 @@ class ScatterChart extends BaseChart {
                             fontSize: 14
                         }
                     },
-                    symbolSize: max? (item.value/max)*defSymbolSize :defSymbolSize //散点大小
+                    symbolSize: max? (item.value/max)*defaultSymbolSize :defaultSymbolSize //散点大小
                 }]
             } 
-            seriesData.push(bs);
+            series.push(bs);
         });
 
-        var option = {
-            legend: {
-                data: legenddata,
-                type: 'scroll',
-                top: '8%',
-                textStyle:{
-                    fontSize: 14
-                }
-            },
-            tooltip: {
-                trigger: 'item',
-                axisPointer: {
-                    show: true,
-                    type: 'cross',
-                    lineStyle: {
-                        type: 'dashed',
-                        width: 1
-                    },
-                },
-                formatter: (obj) => {
-                    //console.log(obj);
-                    if (obj.componentType == "series") {
-                        var result = '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-                            obj.name + '</div>' +
-                            '<span>' + this.xTitle + ':' + obj.data.value[0] + '</span><br/>' +
-                            '<span>' + this.yTitle + ':' + obj.data.value[1] + '</span>';
-                        
-                        if(max){ result += '<br/><span>' + this.vTitle + ':' + (obj.data.symbolSize*max/defSymbolSize).toFixed(2) + '</span>'; }
-                        return result;
-                    }
-                }
-            },
-            label: {
-                normal: {
-                    show: true,
-                    position: 'bottom',
-                    formatter: function(params) {
-                        return params.name
-                    }
-                },
-                emphasis: {
-                    show: true,
-                    position: 'bottom',
-                }
-            },
-            xAxis: {
-                name: this.xTitle,
-                type: 'value',
-                scale: true,
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
-                }
-            },
-            yAxis: {
-                name: this.yTitle,
-                type: 'value',
-                scale: true,
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
-                }
-            },
-            grid: {
-                top:'20%',
-                left: '5%',
-                right: '10%',
-                bottom: '8%',
-                containLabel: true
-            },
-            series: seriesData
-        };
+        let option = this._baseScatterOption(defaultSymbolSize, max, legenddata);
+        option.series = series;
 
         return option;
     }

@@ -79,6 +79,11 @@ class SuCharts{
                 this.chartObj = new PieChart(this.data);
                 option = this.chartObj.pie(config.pieConfig);
                 break;
+            case 202: //环形饼图
+                let pieConfig = {innerRadius: '30%', outerRadius: '60%'};
+                this.chartObj = new PieChart(this.data);
+                option = this.chartObj.pie(pieConfig);
+                break;
             case 301: //折线图普通
                 this.chartObj = new LineChart(this.data);
                 option = this.chartObj.line(false);
@@ -118,13 +123,10 @@ class SuCharts{
         //补充添加配置项
         if(config.ifTitle==true){
             option.title = addTitle(this.data.title);
+            //option.grid.top = '20%'
         }
         if(config.ifToolBox==true){
             option.toolbox = addToolbox(this.data, this.panelId);
-        }
-        if(config.ifDataZoom==true && this.chartObj.xdata){
-            option.grid.bottom = "10%"; //改变底部距离
-            option.dataZoom = addDataZoom(this.chartObj.xdata);
         }
 
         return option;
@@ -200,21 +202,4 @@ function addToolbox(data, panelId){
         }
     };
     return toolbox;
-}
-
-//添加dataZoom
-function addDataZoom(xdata) {
-    let startValue = xdata[0];
-    let endValue = xdata.length>10 ? xdata[9] : xdata[xdata.length-1];
-
-    let dataZoom = [{
-        show: true,
-        height: 30,
-        bottom: 10,
-        startValue: startValue,
-        endValue: endValue,
-        handleSize: '110%',
-    }, {type: 'inside'}];
-
-    return dataZoom;
 }
