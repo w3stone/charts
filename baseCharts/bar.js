@@ -311,7 +311,7 @@ class BarChart extends BaseChart {
                 for(let j=0; j<this.vdata.length; j++){
                     sum += this.vdata[j][i];
                 }
-                sumData[i] = this.toDecimal(sum);
+                sumData[i] = sum.toFixed(1);
             }
         })();
 
