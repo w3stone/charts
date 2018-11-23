@@ -22,7 +22,6 @@ class PieChart extends BaseChart {
         this._init();
         let series = [];
         let seriesData = [];
-        //let sum = 0; //总和
 
         //重构vdata数据
         this.vdata.forEach((val, index) => {
