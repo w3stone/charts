@@ -164,8 +164,8 @@ export { SuCharts }
 function addTitle(chartTitle){
     let title = {
         text: chartTitle,
-        right:'center',
-        top: 10
+        right:'center'
+        //top: 10
     };
     return title;
 }
