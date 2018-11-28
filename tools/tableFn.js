@@ -50,6 +50,7 @@ function make2DTable(data, isPer){
     isPer = (isPer!=undefined)? isPer: true; //默认需要转成比例
     var copydata = $.extend(true, {}, data); //深拷贝
     var chartData = copydata.chartdata || copydata.chartData;
+    var vTitle = copydata.vTitle; //value标题
     
     var sum = 0;
     var tbody = [];
@@ -63,7 +64,7 @@ function make2DTable(data, isPer){
     })
 
     return {
-        thead: isPer? ["名称", "比例"]: ["名称", "值"],
+        thead: isPer? ["名称", "比例"]: ["名称", vTitle],
         tbody: tbody
     };
 }
@@ -75,6 +76,7 @@ function make4DTable(data){
     var chartData = copydata.chartData;
     var xTitle = copydata.xTitle; //x轴标题
     var yTitle = copydata.yTitle; //y轴标题
+    var vTitle = copydata.vTitle; //value标题
     var tbody = [];
 
     chartData.forEach((item)=>{
@@ -83,7 +85,7 @@ function make4DTable(data){
     })
 
     return {
-        thead: ["名称", xTitle, yTitle, "值"],
+        thead: ["名称", xTitle, yTitle, vTitle],
         tbody: tbody
     };
 }
