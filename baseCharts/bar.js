@@ -386,18 +386,18 @@ class BarChart extends BaseChart {
         let series = [];
         let chartData = this.chartData;
         
-        this.xdata = Enumerable.from(chartData).select("o=>o.x").distinct().toArray(); 
+        this.xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray(); 
         let barChartData = chartData.filter((o)=>{return o.name=="BarChart"});
         let lineChartData = chartData.filter((o)=>{return o.name=="LineChart"});
         
-        let bar_ydata = Enumerable.from(barChartData).select("o=>o.y").distinct().toArray();
-        let line_ydata = Enumerable.from(lineChartData).select("o=>o.y").distinct().toArray();
+        let bar_ydata = Enumerable.from(barChartData).select(o=>o.y).distinct().toArray();
+        let line_ydata = Enumerable.from(lineChartData).select(o=>o.y).distinct().toArray();
 
         bar_ydata.forEach((valy)=>{
             let barArr = [];
     
             this.xdata.forEach((valx)=>{
-                let eachBarValue = Enumerable.from(barChartData).where((o)=>{return o.x==valx && o.y==valy}).sum('o=>o.value');
+                let eachBarValue = Enumerable.from(barChartData).where((o)=>{return o.x==valx && o.y==valy}).sum(o=>o.value);
                 barArr.push(eachBarValue);   
             });
             if(barArr.length>0) bar_vdata.push(barArr);
@@ -407,7 +407,7 @@ class BarChart extends BaseChart {
             let lineArr = [];
     
             this.xdata.forEach((valx)=>{
-                let eachLineValue = Enumerable.from(lineChartData).where((o)=>{return o.x==valx && o.y==valy}).sum('o=>o.value');
+                let eachLineValue = Enumerable.from(lineChartData).where((o)=>{return o.x==valx && o.y==valy}).sum(o=>o.value);
                 lineArr.push(eachLineValue);
             });
             

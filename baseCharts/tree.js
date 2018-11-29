@@ -143,7 +143,7 @@ export { TreeChart }
 
 //过滤树状图数据
 function filterTreeData(data){
-    var sum = Enumerable.from(data).sum('o=>o.value'); //value最大值
+    var sum = Enumerable.from(data).sum(o=>o.value); //value最大值
     var need2DeleteArr = [];
     var otherValue = 0;
     

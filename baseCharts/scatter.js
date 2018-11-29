@@ -109,7 +109,7 @@ class ScatterChart extends BaseChart {
         let sourceData = this.chartData;
         let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
 
-        let max = sourceData.length>0? Enumerable.from(sourceData).select('o=>o.value').max(): 0; //value最大值
+        let max = sourceData.length>0? Enumerable.from(sourceData).select(o=>o.value).max(): 0; //value最大值
 
         //拼接数据
         sourceData.forEach(item => {
@@ -179,7 +179,7 @@ class ScatterChart extends BaseChart {
         let sourceData = this.chartData;
         let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
         
-        let max = sourceData.length>0? Enumerable.from(sourceData).select('o=>o.value').max(): 0; //value最大值
+        let max = sourceData.length>0? Enumerable.from(sourceData).select(o=>o.value).max(): 0; //value最大值
 
         //拼接数据
         sourceData.forEach(item => {
@@ -259,10 +259,10 @@ class ScatterChart extends BaseChart {
 
         let sourceData = this.chartData;
         let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
-        let max = sourceData.length>0? Enumerable.from(sourceData).select('o=>o.value').max(): 0; //value最大值
+        let max = sourceData.length>0? Enumerable.from(sourceData).select(o=>o.value).max(): 0; //value最大值
 
-        let avgX = Enumerable.from(sourceData).sum("o=>parseFloat(o.x)") /sourceData.length;
-        let avgY = Enumerable.from(sourceData).sum("o=>parseFloat(o.y)") /sourceData.length;
+        let avgX = Enumerable.from(sourceData).sum(o=>parseFloat(o.x)) /sourceData.length;
+        let avgY = Enumerable.from(sourceData).sum(o=>parseFloat(o.y)) /sourceData.length;
 
         let av = {
             name: "平均值",
