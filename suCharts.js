@@ -66,7 +66,7 @@ class SuCharts{
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barPercent("ex");
                 break;
-            case 107: //柱状图百分比(相同ydata和为100%)
+            case 107: //柱状图百分比(相同ydata,即相同颜色和为100%)
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barPercent("ey");
                 break;
