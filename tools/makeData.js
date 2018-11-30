@@ -3,10 +3,17 @@ function makeBarData(chartData, dataType, perMode) {
     //perMode: ex相同xdata和为100%, ey相同ydata和为100%
     perMode = perMode || "normal";
 
-    let xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray(); 
+    let xdata = [];
     let ydata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
     let vdata = [];
     let extraChartData = []; //存储被过滤后再还原的项
+
+    let reg = new RegExp("^[0-9]*$");
+    if(chartData.length>0 && reg.test(chartData[0].x)){ //如果x轴是年份月份，不排序 
+        xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray(); 
+    }else{ //如果x轴不是年份月份，需排序 
+        xdata = Enumerable.from(chartData).orderByDescending(o=>o.value).select(o=>o.x).distinct().toArray();
+    }
 
     if(dataType){ //需要转换
         let allSum = Enumerable.from(chartData).sum(o=>o.value); //所有数据求和
