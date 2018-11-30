@@ -1,10 +1,10 @@
 /**柱状图表格
-    data: {xdata,ydata,vdata, xUnit, yUnit...}
+    data: {xdata,legenddata,vdata, xUnit, yUnit...}
 **/
 function makeBarTable(data){
     var copydata = $.extend(true, {}, data); //深拷贝
     var xdata = copydata.xdata || [];
-    var ydata = copydata.ydata || [];
+    var legenddata = copydata.legenddata || [];
     var vdata = copydata.vdata || [];
     var xTitle = copydata.xTitle || ""; //x轴标题
     var yTitle = copydata.yTitle || ""; //y轴标题
@@ -28,14 +28,14 @@ function makeBarTable(data){
             arr.forEach(function(val, i){
                 arr[i] = val+"%";
             });
-            arr.unshift(ydata[index]);
+            arr.unshift(legenddata[index]);
         }else{ //不需要转成%
             if(yUnit){
                 arr.forEach(function(val, i){
                     arr[i] = val + vUnit;
                 });
             }
-            arr.unshift(ydata[index] + setUnit(yUnit));
+            arr.unshift(legenddata[index] + setUnit(yUnit));
         } 
     });
 
@@ -94,7 +94,7 @@ export{
     makeBarTable, make2DTable, make4DTable
 }
 
-
+//设置单位
 function setUnit(unit){
-    return unit? "(" + unit + ")": "";
+    return (unit && unit!="年" && unit!="月")? "(" + unit + ")": "";
 }

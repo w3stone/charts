@@ -7,15 +7,15 @@ class BarChart extends BaseChart {
     constructor(data){
         super(data);
         this.xdata = [];
-        this.ydata = [];
+        this.legenddata = [];
         this.vdata = [];
         this.extraChartData = [];
     }
 
     _init(perMode){
-        let workedData = makeBarData(this.chartData, this.dataType, perMode);
+        let workedData = makeBarData(this.chartData, this.xUnit, this.nUnit, this.dataType, perMode);
         this.xdata = workedData.xdata;
-        this.ydata = workedData.ydata;
+        this.legenddata = workedData.legenddata;
         this.vdata = workedData.vdata;
         this.extraChartData = workedData.extraChartData;
     }
@@ -24,7 +24,7 @@ class BarChart extends BaseChart {
     _baseBarOption(isPer){
         let option = {
             legend: {
-                data: this.ydata, 
+                data: this.legenddata, 
                 type:'scroll', 
                 top:'8%'
             },
@@ -94,15 +94,15 @@ class BarChart extends BaseChart {
             option.yAxis[0].max = 100;
         }
         //显示滚动条
-        let ydataLength = !(this.chartType==105 || this.chartType==113)? this.ydata.length: 1; //如果数据堆叠，ydata长度算1
-        if(this.xdata.length*ydataLength > 20){
+        let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
+        if((this.xdata.length*legenddataLength > 20) && this.xUnit!="年" && this.xUnit!="月"){
             option.grid.bottom = "12%";
             option.dataZoom = [{
                 show: true,
                 height: 30,
                 bottom: 10,
                 startValue: this.xdata[0],
-                endValue: this.xdata[parseInt(20/this.ydata.length)-1],
+                endValue: this.xdata[parseInt(20/this.legenddata.length)-1],
                 handleSize: '110%',
             }, {type: 'inside'}];
         }
@@ -119,7 +119,7 @@ class BarChart extends BaseChart {
         //设置series配置项
         this.vdata.forEach((val, index) => {
             let bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type: 'bar',
                 data: val,
                 barMaxWidth: "25%",
@@ -168,7 +168,7 @@ class BarChart extends BaseChart {
         
         this.vdata.forEach((val, index)=>{
             let bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type: 'bar',
                 stack:'堆积',
                 data: val,
@@ -201,7 +201,7 @@ class BarChart extends BaseChart {
         
         this.vdata.forEach((val, index)=>{
             let bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type: 'bar',
                 data: val,
                 barMaxWidth: "25%",
@@ -229,14 +229,14 @@ class BarChart extends BaseChart {
     //柱状图+增长率
     barWithRate(){
         this._init();
-        let ydata = [];
+        let legenddata = [];
         let vdata = [];
         let series = [];
 
-        //重新拼ydata
-        this.ydata.forEach(val => {
-            ydata.push(val);
-            ydata.push(val+"增长率");
+        //重新拼legenddata
+        this.legenddata.forEach(val => {
+            legenddata.push(val);
+            legenddata.push(val+"增长率");
         });
         //重新拼vdata
         this.vdata.forEach(arr => {
@@ -258,7 +258,7 @@ class BarChart extends BaseChart {
         vdata.forEach((val, index)=>{
             if( !(index%2) ){ //柱图
                 let bs = {
-                    name: ydata[index],
+                    name: legenddata[index],
                     type: 'bar',
                     data: val,
                     barMaxWidth: "25%",
@@ -268,7 +268,7 @@ class BarChart extends BaseChart {
                 series.push(bs);
             }else{ //增长率
                 let rs = {
-                    name: ydata[index],
+                    name: legenddata[index],
                     type: 'line',
                     itemStyle:{normal:{color:''}},
                     yAxisIndex: 1,
@@ -280,10 +280,10 @@ class BarChart extends BaseChart {
         });
 
         let option = this._baseBarOption(false);
-        this.ydata = ydata;
+        this.legenddata = legenddata;
         this.vdata = vdata;
 
-        option.legend.data = ydata;
+        option.legend.data = legenddata;
         option.xAxis[0].nameGap = 40;
         option.yAxis[1] = {   
             name:'增长率(%)',
@@ -317,7 +317,7 @@ class BarChart extends BaseChart {
 
         this.vdata.forEach((val, index) => {
             let bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type: 'bar',
                 smooth: true,
                 data: val,
@@ -361,13 +361,13 @@ class BarChart extends BaseChart {
 
         //lengend点击事件
         chart.on("legendselectchanged", (params)=>{
-            selected = params.selected; //ydata被选中的实时状态
+            selected = params.selected; //legenddata被选中的实时状态
             //循环
             for (let i=0; i<this.vdata[0].length; i++){
                 let sum = 0;
                 for (let key in selected){
                     if(selected[key]){ //如果被选中
-                        let j = this.ydata.indexOf(key); //找到被选中键值在ydata中的索引
+                        let j = this.legenddata.indexOf(key); //找到被选中键值在legenddata中的索引
                         sum += this.vdata[j][i]; //实时求每一列的和
                     }
                 }
@@ -390,10 +390,10 @@ class BarChart extends BaseChart {
         let barChartData = chartData.filter((o)=>{return o.name=="BarChart"});
         let lineChartData = chartData.filter((o)=>{return o.name=="LineChart"});
         
-        let bar_ydata = Enumerable.from(barChartData).select(o=>o.y).distinct().toArray();
-        let line_ydata = Enumerable.from(lineChartData).select(o=>o.y).distinct().toArray();
+        let bar_legenddata = Enumerable.from(barChartData).select(o=>o.y).distinct().toArray();
+        let line_legenddata = Enumerable.from(lineChartData).select(o=>o.y).distinct().toArray();
 
-        bar_ydata.forEach((valy)=>{
+        bar_legenddata.forEach((valy)=>{
             let barArr = [];
     
             this.xdata.forEach((valx)=>{
@@ -403,7 +403,7 @@ class BarChart extends BaseChart {
             if(barArr.length>0) bar_vdata.push(barArr);
         });
 
-        line_ydata.forEach((valy)=>{
+        line_legenddata.forEach((valy)=>{
             let lineArr = [];
     
             this.xdata.forEach((valx)=>{
@@ -417,7 +417,7 @@ class BarChart extends BaseChart {
         //设置series配置项
         bar_vdata.forEach((val, index) => {
             let bs = {
-                name: bar_ydata[index],
+                name: bar_legenddata[index],
                 type: 'bar',
                 yAxisIndex: 0,
                 data: val,
@@ -434,7 +434,7 @@ class BarChart extends BaseChart {
 
         line_vdata.forEach((val, index)=>{
             let ls = {
-                name: line_ydata[index],
+                name: line_legenddata[index],
                 type: 'line',
                 yAxisIndex: 1,
                 data: val,
@@ -449,11 +449,11 @@ class BarChart extends BaseChart {
         });
 
         this.vdata = bar_vdata.concat(line_vdata);
-        this.ydata = bar_ydata.concat(line_ydata);
+        this.legenddata = bar_legenddata.concat(line_legenddata);
         
         let option = {
             legend: {
-                data: this.ydata, type:'scroll', top:'8%'
+                data: this.legenddata, type:'scroll', top:'8%'
             },
             tooltip: {
                 trigger: 'axis',
