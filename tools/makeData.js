@@ -133,21 +133,22 @@ function makeBarData(chartData, xUnit, nUnit, dataType, perMode) {
 }
 
 
-//拼饼图格式(vdata, legenddata)
+//拼饼图格式(legenddata)
 function makePieData(chartData) {
     let legenddata = Enumerable.from(chartData).select(o=>o.name).toArray();
-    let vdata = [];
-    let sum = Enumerable.from(chartData).sum(o=>o.value);
 
-    legenddata.forEach(val => {
-        let value = Enumerable.from(chartData).where(o=>{return o.name==val}).sum(o=>o.value);
-        let perValue = parseFloat( (perValue/sum*100).toFixed(2) );
-        vdata.push(value);
+    chartData = chartData.map(o=>{
+        return {
+            "x": o.x, 
+            "y": o.y,
+            "value": o.value,
+            "name": o.name || "未填"
+        }
     });
 
     return {
-        "legenddata":legenddata,
-        "vdata":vdata
+        "legenddata": legenddata,
+        "chartData": chartData
     }
 }
 
@@ -178,16 +179,19 @@ function makeLineData(chartData) {
 }
 
 
-//拼散点图格式(vdata, legenddata)
-function makeScatterData(chartData) {
+//拼散点图格式(legenddata,chartData,valueMax,xMin,xMax,yMin,yMax)
+function makeScatterData(chartData, nUnit) {
     let legenddata = Enumerable.from(chartData).select(o=>o.name).toArray();
+    if(yearOrMonth(nUnit)){
+        legenddata = legenddata.map(o=>{return o + nUnit});
+    }
     
     chartData = chartData.map(o=>{
         return {
             "x":trans2number(o.x), 
             "y":trans2number(o.y),
             "value": o.value,
-            "name": o.name
+            "name": yearOrMonth(nUnit)? o.name + nUnit :o.name
         }
     });
 

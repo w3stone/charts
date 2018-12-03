@@ -18,7 +18,7 @@ class ScatterChart extends BaseChart {
 
     //初始化
     _init(scatterConfig){
-        let workedData = makeScatterData(this.chartData);
+        let workedData = makeScatterData(this.chartData, this.nUnit);
         this.legenddata = workedData.legenddata;
         this.chartData = workedData.chartData;
         this.valueMax = workedData.valueMax; //value最大值
@@ -54,11 +54,11 @@ class ScatterChart extends BaseChart {
                     if (obj.componentType == "series") {
                         let result =  '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
                             obj.name + '</div>' +
-                            '<span>' + this.xTitle + ':' + obj.data.value[0] + this.xUnit + '</span><br/>' +
-                            '<span>' + this.yTitle + ':' + obj.data.value[1] + this.yUnit + '</span>';
+                            '<span>' + this.xTitle + ': ' + obj.data.value[0] + this.xUnit + '</span><br/>' +
+                            '<span>' + this.yTitle + ': ' + obj.data.value[1] + this.yUnit + '</span>';
                         //还原value
                         if(this.valueMax){ 
-                            result += '<br/><span>' + this.vTitle + ':' 
+                            result += '<br/><span>' + this.vTitle + ': ' 
                             + (obj.data.symbolSize*this.valueMax/this.defaultSymbolSize).toFixed(2) + this.vUnit +  '</span>'; 
                         }
                         return result;
