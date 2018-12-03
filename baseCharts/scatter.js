@@ -1,17 +1,41 @@
 /**散点图封装**/
 import {BaseChart} from './baseChart.js'
+import {makeScatterData} from '../tools/makeData.js'
 
 class ScatterChart extends BaseChart {
 
     constructor(data){
         super(data);
+        this.legenddata = [];
+        this.valueMax = 0;
+        this.valueMax = 0;
+        this.xMin = 0;
+        this.xMax = 0;
+        this.yMin = 0;
+        this.yMax = 0;
+        this.defaultSymbolSize = 0; //默认散点大小
+    }
+
+    //初始化
+    _init(scatterConfig){
+        let workedData = makeScatterData(this.chartData);
+        this.legenddata = workedData.legenddata;
+        this.chartData = workedData.chartData;
+        this.valueMax = workedData.valueMax; //value最大值
+        this.xMin = workedData.xMin;
+        this.xMax = workedData.xMax;
+        this.yMin = workedData.yMin;
+        this.yMax = workedData.yMax;
+        this.defaultSymbolSize = scatterConfig.symbolSize; //默认散点大小
     }
 
     //基础配置
-    _baseScatterOption(defaultSymbolSize, max, legenddata){
+    _baseScatterOption(){
+        console.log(this.xMin, this.xMax, this.yMin, this.yMax);
+
         let option = {
             legend: {
-                data: legenddata,
+                data: this.legenddata,
                 type: 'scroll',
                 top: '8%'
             },
@@ -28,12 +52,15 @@ class ScatterChart extends BaseChart {
                 formatter: obj => {
                     //console.log(obj);
                     if (obj.componentType == "series") {
-                        var result =  '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+                        let result =  '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
                             obj.name + '</div>' +
                             '<span>' + this.xTitle + ':' + obj.data.value[0] + this.xUnit + '</span><br/>' +
                             '<span>' + this.yTitle + ':' + obj.data.value[1] + this.yUnit + '</span>';
                         //还原value
-                        if(max){ result += '<br/><span>' + this.vTitle + ':' + (obj.data.symbolSize*max/defaultSymbolSize).toFixed(2) + this.vUnit +  '</span>'; }
+                        if(this.valueMax){ 
+                            result += '<br/><span>' + this.vTitle + ':' 
+                            + (obj.data.symbolSize*this.valueMax/this.defaultSymbolSize).toFixed(2) + this.vUnit +  '</span>'; 
+                        }
                         return result;
                     }
                 }
@@ -55,6 +82,8 @@ class ScatterChart extends BaseChart {
                 name: this.setTitle(this.xTitle, this.xUnit),
                 type: 'value',
                 scale: true,
+                min: (this.xUnit!="%")? parseInt(0.85*this.xMin): parseInt((this.xMin-15)),
+                max: (this.xUnit!="%")? parseInt(1.15*this.xMax): parseInt((this.xMax+15)),
                 nameTextStyle:{
                     fontSize: 14
                 },
@@ -74,6 +103,8 @@ class ScatterChart extends BaseChart {
                 name: this.setTitle(this.yTitle, this.yUnit),
                 type: 'value',
                 scale: true,
+                min: (this.yUnit!="%")? parseInt(0.85*this.yMin): parseInt((this.yMin-15)),
+                max: (this.yUnit!="%")? parseInt(1.15*this.yMax): parseInt((this.yMax+15)),
                 nameTextStyle:{
                     fontSize: 14
                 },
@@ -100,16 +131,17 @@ class ScatterChart extends BaseChart {
 
         return option;
     }
+
+    //设置每一个散点实际大小
+    _setItemSymbolSize(value){
+        return this.valueMax? (value/this.valueMax)*this.defaultSymbolSize :this.defaultSymbolSize; //实际散点大小
+    }
     
     //普通散点图(颜色不同)
     scatter(scatterConfig){
-        let legenddata = [];
+        this._init(scatterConfig);
         let series = [];
-
         let sourceData = this.chartData;
-        let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
-
-        let max = sourceData.length>0? Enumerable.from(sourceData).select(o=>o.value).max(): 0; //value最大值
 
         //拼接数据
         sourceData.forEach(item => {
@@ -155,15 +187,14 @@ class ScatterChart extends BaseChart {
                                 fontSize: 14
                             }
                         },
-                        symbolSize: max? (item.value/max)*defaultSymbolSize :defaultSymbolSize //散点大小
+                        symbolSize: this._setItemSymbolSize(item.value) //散点大小
                     }]
                 } 
                 series.push(bs);
             }
-            legenddata.push(item.name);
         });
 
-        let option = this._baseScatterOption(defaultSymbolSize, max, legenddata);
+        let option = this._baseScatterOption();
         option.series = series;
 
         return option;
@@ -172,14 +203,10 @@ class ScatterChart extends BaseChart {
 
     //散点图(相同颜色)
     scatterSameColor(scatterConfig){
-        let legenddata = [];
+        this._init(scatterConfig);
         let seriesData = [];
         let series = [];
-
         let sourceData = this.chartData;
-        let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
-        
-        let max = sourceData.length>0? Enumerable.from(sourceData).select(o=>o.value).max(): 0; //value最大值
 
         //拼接数据
         sourceData.forEach(item => {
@@ -229,11 +256,10 @@ class ScatterChart extends BaseChart {
                             fontSize: 14
                         }
                     },
-                    symbolSize: max? (item.value/max)*defaultSymbolSize :defaultSymbolSize //散点大小
+                    symbolSize: this._setItemSymbolSize(item.value) //散点大小
                 }
                 seriesData.push(each);
             }
-            legenddata.push(item.name); 
         });
 
         //所有散点图
@@ -245,7 +271,7 @@ class ScatterChart extends BaseChart {
         series.push(bs);
 
         //
-        let option = this._baseScatterOption(defaultSymbolSize, max, legenddata);
+        let option = this._baseScatterOption();
         option.series = series;
 
         return option;
@@ -254,12 +280,10 @@ class ScatterChart extends BaseChart {
 
     //散点图(自动求平均, 颜色不同)
     scatterAutoAvg(scatterConfig){
+        this._init(scatterConfig);
         let legenddata = [];
         let series = [];
-
         let sourceData = this.chartData;
-        let defaultSymbolSize = scatterConfig.symbolSize; //默认气泡图大小
-        let max = sourceData.length>0? Enumerable.from(sourceData).select(o=>o.value).max(): 0; //value最大值
 
         let avgX = Enumerable.from(sourceData).sum(o=>parseFloat(o.x)) /sourceData.length;
         let avgY = Enumerable.from(sourceData).sum(o=>parseFloat(o.y)) /sourceData.length;
@@ -306,13 +330,13 @@ class ScatterChart extends BaseChart {
                             fontSize: 14
                         }
                     },
-                    symbolSize: max? (item.value/max)*defaultSymbolSize :defaultSymbolSize //散点大小
+                    symbolSize: this._setItemSymbolSize(item.value) //散点大小
                 }]
             } 
             series.push(bs);
         });
 
-        let option = this._baseScatterOption(defaultSymbolSize, max, legenddata);
+        let option = this._baseScatterOption();
         option.series = series;
 
         return option;

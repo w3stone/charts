@@ -7,14 +7,14 @@ class LineChart extends BaseChart{
     constructor(data){
         super(data);
         this.xdata = [];
-        this.ydata = [];
+        this.legenddata = [];
         this.vdata = [];
     }
 
     _init(){
         let workedData = makeLineData(this.chartData);
         this.xdata = workedData.xdata;
-        this.ydata = workedData.ydata;
+        this.legenddata = workedData.legenddata;
         this.vdata = workedData.vdata;
     }
 
@@ -22,7 +22,7 @@ class LineChart extends BaseChart{
     _baseLineOption(){
         let option = {
             legend: {
-                data: this.ydata, 
+                data: this.legenddata, 
                 type:'scroll', 
                 top:'8%'
             },
@@ -100,7 +100,7 @@ class LineChart extends BaseChart{
         //设置series配置项
         this.vdata.forEach((val, index) => {
             let bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type: 'line',
                 itemStyle: {normal: {}},
                 data: val,

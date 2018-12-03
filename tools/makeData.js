@@ -177,11 +177,53 @@ function makeLineData(chartData) {
     };
 }
 
-export{
-    makeBarData, makePieData, makeLineData
+
+//拼散点图格式(vdata, legenddata)
+function makeScatterData(chartData) {
+    let legenddata = Enumerable.from(chartData).select(o=>o.name).toArray();
+    
+    chartData = chartData.map(o=>{
+        return {
+            "x":trans2number(o.x), 
+            "y":trans2number(o.y),
+            "value": o.value,
+            "name": o.name
+        }
+    });
+
+    let valueMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.value): 0; //value最大值
+    let xMin = chartData.length>0? Enumerable.from(chartData).min(o=>o.x): 0; //x最小值
+    let xMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.x): 0; //x最大值
+    let yMin = chartData.length>0? Enumerable.from(chartData).min(o=>o.y): 0; //x最小值
+    let yMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.y): 0; //x最大值
+
+    return {
+        "legenddata": legenddata,
+        "chartData": chartData,
+        "valueMax": valueMax,
+        "xMin": xMin,
+        "xMax": xMax,
+        "yMin": yMin,
+        "yMax": yMax
+    }
 }
+
+export{
+    makeBarData, makePieData, makeLineData, makeScatterData
+}
+
 
 //单位是否为年或月
 function yearOrMonth(unit){
     return (unit=="月" || unit=="年")? true: false;
+}
+
+//数字string串转number
+function trans2number(val){
+    let reg = new RegExp("^[-+]?[0-9]+(\\.[0-9]+)?$"); //正负整数或小数
+    if(reg.test(val)){
+        return parseFloat(val);
+    }else{
+        return val;
+    }
 }
