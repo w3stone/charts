@@ -63,7 +63,7 @@ class TreeChart extends BaseChart {
     }
 
     //横向树状图
-    tree(chart){
+    tree(){
         var treeData = this.treeData;
         
         for(var i=0; i<treeData[0].children.length; i++){
