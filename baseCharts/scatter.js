@@ -31,8 +31,6 @@ class ScatterChart extends BaseChart {
 
     //基础配置
     _baseScatterOption(){
-        console.log(this.xMin, this.xMax, this.yMin, this.yMax);
-
         let option = {
             legend: {
                 data: this.legenddata,
