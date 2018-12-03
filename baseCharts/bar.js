@@ -96,13 +96,15 @@ class BarChart extends BaseChart {
         //显示滚动条
         let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
         if((this.xdata.length*legenddataLength > 20) && this.xUnit!="年" && this.xUnit!="月"){
+            let endlength = !(this.xdata.length>10)? parseInt(20/this.legenddata.length)-1: 9;
+
             option.grid.bottom = "12%";
             option.dataZoom = [{
                 show: true,
                 height: 30,
                 bottom: 10,
                 startValue: this.xdata[0],
-                endValue: this.xdata[parseInt(20/this.legenddata.length)-1],
+                endValue: this.xdata[endlength],
                 handleSize: '110%',
             }, {type: 'inside'}];
         }
@@ -178,7 +180,7 @@ class BarChart extends BaseChart {
                         show: true,
                         position: index%2 ? 'left': 'right',
                         color: "#303133",
-                        formatter: function(p){
+                        formatter: (p)=>{
                             return (p.value=="0.00")? "": p.value + "%";
                         }
                     }	

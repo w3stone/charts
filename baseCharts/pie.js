@@ -37,7 +37,7 @@ class PieChart extends BaseChart {
         }
         series.push(config);
 
-        var option = {
+        let option = {
             tooltip: {
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"

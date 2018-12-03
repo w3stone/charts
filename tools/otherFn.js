@@ -1,14 +1,18 @@
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
 
-//合并对象(临时方法)
+//合并对象
 function mergeJson(prev, next){
+    if(!(Object.getOwnPropertyNames(prev).length>0)) return false;
     var newJson = {};
+    
     for(var key in prev){
+        //debugger;
         if(next.hasOwnProperty(key)){ //如果next有key属性
             if(typeof prev[key] == "object"){ //如果是对象
-                //newJson[key] = Object.assign(prev[key], next[key]);
-                newJson[key] = $.extend({}, prev[key], next[key]); //深拷贝
+                newJson[key] = Object.assign(prev[key], next[key]);
+                mergeJson(prev[key], next[key]); //递归
+                
             }else{ //如果不是对象
                 newJson[key] = next[key];
             }
@@ -16,7 +20,6 @@ function mergeJson(prev, next){
             newJson[key] = prev[key];
         }
     }
-    //console.log(prev);
     return newJson;
 }
 

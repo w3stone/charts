@@ -80,9 +80,9 @@ class SuCharts{
                 option = this.chartObj.pie(config.pieConfig);
                 break;
             case 202: //环形饼图
-                let pieConfig = {innerRadius: '30%', outerRadius: '60%', xCenter: '50%', yCenter: '60%'};
+                config = mergeJson(defaultConfig, {pieConfig:{innerRadius: '30%', outerRadius: '60%'}});
                 this.chartObj = new PieChart(this.data);
-                option = this.chartObj.pie(pieConfig);
+                option = this.chartObj.pie(config.pieConfig);
                 break;
             case 301: //折线图普通
                 this.chartObj = new LineChart(this.data);
