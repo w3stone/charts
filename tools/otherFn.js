@@ -5,12 +5,13 @@ import XLSX from 'xlsx'
 function mergeJson(prev, next){
     if(!(Object.getOwnPropertyNames(prev).length>0)) return false;
     var newJson = {};
-    
+
     for(var key in prev){
         //debugger;
         if(next.hasOwnProperty(key)){ //如果next有key属性
             if(typeof prev[key] == "object"){ //如果是对象
-                newJson[key] = Object.assign(prev[key], next[key]);
+                let prevKey = JSON.parse(JSON.stringify(prev[key])); //深拷贝
+                newJson[key] = Object.assign(prevKey, next[key]);
                 mergeJson(prev[key], next[key]); //递归
                 
             }else{ //如果不是对象
