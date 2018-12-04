@@ -4,7 +4,8 @@ let defaultConfig = {
     ifToolBox: true, //工具栏
     //柱状图配置项
     barConfig:{
-        barWidth: '' //柱状图宽度
+        barWidth: "30%", //柱状图宽度
+        barMaxWidth: "25%" //最大宽度
     },
     //饼图配置项
     pieConfig: {

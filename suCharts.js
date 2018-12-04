@@ -44,36 +44,36 @@ class SuCharts{
                 break;
             case 101: //柱状图普通
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.bar(false);
+                option = this.chartObj.bar(false, config.barConfig);
                 break;
             case 102: //柱状图+增长率
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barWithRate();
+                option = this.chartObj.barWithRate(config.barConfig);
                 break;
             case 103: //柱状图+折线图
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barAndLine();
+                option = this.chartObj.barAndLine(config.barConfig);
                 break;
             case 104: //柱状图普通(含平均值线)
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.bar(true);
+                option = this.chartObj.bar(true, config.barConfig);
                 break;
             case 105: //柱状图百分比(相同xdata和为100%, 堆叠)
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barPercentStack();
+                option = this.chartObj.barPercentStack(config.barConfig);
                 break;
             case 106: //柱状图百分比(相同xdata和为100%)
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barPercent("ex");
+                option = this.chartObj.barPercent("ex", config.barConfig);
                 break;
             case 107: //柱状图百分比(相同ydata,即相同颜色和为100%)
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barPercent("ey");
+                option = this.chartObj.barPercent("ey", config.barConfig);
                 break;
             case 113: //柱状图动态求和
                 this.chartObj = new BarChart(this.data);
                 let echart = echarts.init(document.getElementById(this.panelId), "macarons"); //用于绑定事件
-                option = this.chartObj.barDynamic(echart);
+                option = this.chartObj.barDynamic(echart, config.barConfig);
                 break;
             case 201: //饼图
                 this.chartObj = new PieChart(this.data);

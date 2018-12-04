@@ -115,7 +115,7 @@ class BarChart extends BaseChart {
 
 
     //普通柱状图
-    bar(isAvg){
+    bar(isAvg, barConfig){
         this._init();
         let series = [];
 
@@ -125,7 +125,7 @@ class BarChart extends BaseChart {
                 name: this.legenddata[index],
                 type: 'bar',
                 data: val,
-                barMaxWidth: "25%",
+                barMaxWidth: barConfig.barMaxWidth,
                 label: {
                     normal: {
                         show: true,
@@ -165,7 +165,7 @@ class BarChart extends BaseChart {
 
 
     //柱状图百分比(相同xdata和为100%, 数据堆叠)
-    barPercentStack(){
+    barPercentStack(barConfig){
         this._init("ex");
         let series = [];
         
@@ -175,7 +175,7 @@ class BarChart extends BaseChart {
                 type: 'bar',
                 stack:'堆积',
                 data: val,
-                barMaxWidth: "25%",
+                barMaxWidth: barConfig.barMaxWidth,
                 label:{
                     normal:{
                         show: true,
@@ -198,7 +198,7 @@ class BarChart extends BaseChart {
 
 
     //柱状图百分比(数据不堆叠)
-    barPercent(perMode){
+    barPercent(perMode, barConfig){
         this._init(perMode);
         let series = [];
         
@@ -207,7 +207,7 @@ class BarChart extends BaseChart {
                 name: this.legenddata[index],
                 type: 'bar',
                 data: val,
-                barMaxWidth: "25%",
+                barMaxWidth: barConfig.barMaxWidth,
                 label:{
                     normal:{
                         show: true,
@@ -230,7 +230,7 @@ class BarChart extends BaseChart {
 
 
     //柱状图+增长率
-    barWithRate(){
+    barWithRate(barConfig){
         this._init();
         let legenddata = [];
         let vdata = [];
@@ -264,7 +264,7 @@ class BarChart extends BaseChart {
                     name: legenddata[index],
                     type: 'bar',
                     data: val,
-                    barMaxWidth: "25%",
+                    barMaxWidth: barConfig.barMaxWidth,
                     itemStyle:{normal:{color:''}},
                     label: {normal: {show: true,position: 'top'}},
                 };
@@ -324,7 +324,7 @@ class BarChart extends BaseChart {
                 type: 'bar',
                 smooth: true,
                 data: val,
-                barMaxWidth: "25%",
+                barMaxWidth: barConfig.barMaxWidth,
                 stack: '总量'
             };
             series.push(bs);
@@ -424,7 +424,7 @@ class BarChart extends BaseChart {
                 type: 'bar',
                 yAxisIndex: 0,
                 data: val,
-                barMaxWidth: "25%",
+                barMaxWidth: barConfig.barMaxWidth,
                 label: {
                     normal: {
                         show: true,
