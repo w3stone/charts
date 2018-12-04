@@ -48,7 +48,7 @@ class LineChart extends BaseChart{
             },
             xAxis: [
                 {
-                    name: this.xTitle + "(" + this.xUnit + ")",
+                    name: this.setTitle(this.xTitle, this.xUnit),
                     type: 'category',
                     axisLine:{lineStyle:{color:'#000'}},
                     data: this.xdata,
@@ -61,7 +61,7 @@ class LineChart extends BaseChart{
             ],
             yAxis: [
                 {
-                    name: this.yTitle + "(" + this.yUnit + ")",
+                    name: this.setTitle(this.yTitle, this.yUnit),
                     type: 'value',
                     axisLine:{lineStyle:{color:'#000'}},
                     axisLabel: {

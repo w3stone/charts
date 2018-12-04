@@ -57,7 +57,7 @@ class BarChart extends BaseChart {
                 top:'20%',
                 left: '6%',
                 right: '8%',
-                bottom: '6%',
+                bottom: '0%',
                 containLabel: true
             },
             xAxis: [
