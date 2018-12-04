@@ -2,7 +2,7 @@
     data: {xdata,legenddata,vdata, xUnit, yUnit...}
 **/
 function makeBarTable(data){
-    var copydata = $.extend(true, {}, data); //深拷贝
+    var copydata = JSON.parse(JSON.stringify(data)); //深拷贝
     var xdata = copydata.xdata || [];
     var legenddata = copydata.legenddata || [];
     var vdata = copydata.vdata || [];
@@ -48,7 +48,7 @@ function makeBarTable(data){
 //
 function make2DTable(data, isPer){
     isPer = (isPer!=undefined)? isPer: true; //默认需要转成比例
-    var copydata = $.extend(true, {}, data); //深拷贝
+    var copydata = JSON.parse(JSON.stringify(data)); //深拷贝
     var chartData = copydata.chartdata || copydata.chartData;
     var vTitle = copydata.vTitle; //value标题
     var nTitle = copydata.nTitle; //name标题
@@ -58,7 +58,7 @@ function make2DTable(data, isPer){
     var tbody = [];
 
     if(isPer)
-        sum = Enumerable.from(chartData).sum('o=>o.value');
+        sum = Enumerable.from(chartData).sum(o=>o.value);
 
     chartData.forEach((item)=>{
         var arr = isPer? [item.name, ((item.value/sum)*100).toFixed(2)+"%"]: [item.name, item.value];
@@ -73,8 +73,7 @@ function make2DTable(data, isPer){
 
 //
 function make4DTable(data){
-    //console.log(data);
-    var copydata = $.extend(true, {}, data); //深拷贝
+    var copydata = JSON.parse(JSON.stringify(data)); //深拷贝
     var chartData = copydata.chartData;
     var xTitle = copydata.xTitle; //x轴标题
     var yTitle = copydata.yTitle; //y轴标题
