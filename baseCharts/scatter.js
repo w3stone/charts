@@ -150,7 +150,7 @@ class ScatterChart extends BaseChart {
                     markLine: {
                         label: {
                             normal: {
-                                //fontSize: 14,
+                                //fontSize: scatterConfig.labelFontSize,
                                 formatter: (params) => {
                                     return params.name + ": \n" + params.value;
                                 }
@@ -182,7 +182,7 @@ class ScatterChart extends BaseChart {
                         value: [item.x, item.y],
                         label:{
                             normal:{
-                                fontSize: 14
+                                fontSize: scatterConfig.labelFontSize
                             }
                         },
                         symbolSize: this._setItemSymbolSize(item.value) //散点大小
@@ -220,7 +220,7 @@ class ScatterChart extends BaseChart {
                     markLine: {
                         label: {
                             normal: {
-                                //fontSize: 14,
+                                //fontSize: scatterConfig.labelFontSize,
                                 formatter: (params) => {
                                     return params.name + ": \n" + params.value;
                                 }
@@ -251,7 +251,7 @@ class ScatterChart extends BaseChart {
                     value: [item.x, item.y],
                     label:{
                         normal:{
-                            fontSize: 14
+                            fontSize: scatterConfig.labelFontSize
                         }
                     },
                     symbolSize: this._setItemSymbolSize(item.value) //散点大小
@@ -325,7 +325,7 @@ class ScatterChart extends BaseChart {
                     value: [item.x, item.y],
                     label:{
                         normal:{
-                            fontSize: 14
+                            fontSize: scatterConfig.labelFontSize
                         }
                     },
                     symbolSize: this._setItemSymbolSize(item.value) //散点大小
@@ -333,6 +333,108 @@ class ScatterChart extends BaseChart {
             } 
             series.push(bs);
         });
+
+        let option = this._baseScatterOption();
+        option.series = series;
+
+        return option;
+    }
+
+
+    //散点图(分两组&双平均)
+    scatterWithGroup(scatterConfig){
+        let group = scatterConfig.scatterGroup;
+        if(!(group.length>=2)) return {};
+        
+        let firstGroupName = group[0].name;
+        let firstGroupType = group[0].type;
+        let secondGroupName = group[1].name;
+        let secondGroupType = group[1].type;
+
+        if(!(firstGroupName && firstGroupType && secondGroupName && secondGroupType)) return {};
+        
+        this._init(scatterConfig);
+        let legenddata = [];
+        let series = [];
+        let firstSeriesData = [];
+        let secondSeriesData = [];
+        let sourceData = this.chartData;
+
+        sourceData.forEach(item => {
+            if(item.type==0 || item.type==10){ //平均值
+                let av = {
+                    name: item.name,
+                    type: 'scatter',
+                    data:[{
+                        name: item.name,
+                        value: [item.x, item.y],
+                        symbolSize: 0
+                    }],
+                    markLine: {
+                        label: {
+                            normal: {
+                                //fontSize: scatterConfig.labelFontSize,
+                                formatter: (params) => {
+                                    return params.name + ": \n" + params.value;
+                                }
+                            }
+                        },
+                        lineStyle:{
+                            normal:{
+                                type: "solid"
+                            }
+                        },
+                        data: [
+                            {
+                                name: item.name,
+                                xAxis: item.x
+                            },
+                            {
+                                name: item.name,
+                                yAxis: item.y
+                            }
+                        ]
+                    }  
+                }
+                series.push(av);
+                legenddata.push(item.name);
+        
+            }else{ //非平均值
+                let bd = {
+                    name: item.name,
+                    value: [item.x, item.y],
+                    label:{
+                        normal:{
+                            fontSize: scatterConfig.labelFontSize
+                        }
+                    },
+                    symbolSize: this._setItemSymbolSize(item.value)
+                }
+        
+                if(item.type == firstGroupType){ //三级医院
+                    firstSeriesData.push(bd);
+
+                }else if(item.type == secondGroupType){ //二级医院
+                    secondSeriesData.push(bd);
+                }
+            }	
+        });
+        
+        //拼接三级医院、二级医院series
+        (function(){
+            let bs1 = {
+                name: firstGroupName,
+                type: 'scatter',
+                data: firstSeriesData
+            }
+            series.push(bs1);
+            let bs2 = {
+                name: secondGroupName,
+                type: 'scatter',
+                data: secondSeriesData 
+            }
+            series.push(bs2);
+        })();
 
         let option = this._baseScatterOption();
         option.series = series;

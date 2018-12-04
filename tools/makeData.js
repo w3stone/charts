@@ -188,10 +188,11 @@ function makeScatterData(chartData, nUnit) {
     
     chartData = chartData.map(o=>{
         return {
-            "x":trans2number(o.x), 
-            "y":trans2number(o.y),
+            "x": trans2number(o.x), 
+            "y": trans2number(o.y),
             "value": o.value,
-            "name": yearOrMonth(nUnit)? o.name + nUnit :o.name
+            "name": yearOrMonth(nUnit)? o.name + nUnit :o.name,
+            "type": trans2number(o.type)
         }
     });
 

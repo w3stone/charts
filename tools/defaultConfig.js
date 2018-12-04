@@ -16,7 +16,9 @@ let defaultConfig = {
     },
     //散点图配置项
     scatterConfig:{
-        symbolSize: 30 //默认散点大小
+        symbolSize: 30, //默认散点大小
+        labelFontSize: 14, //label字体大小
+        scatterGroup: [{"name":"三级医院", "type":3}, {"name":"二级医院", "type":2}] //分组
     }
 }
 

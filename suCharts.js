@@ -104,6 +104,10 @@ class SuCharts{
                 this.chartObj = new ScatterChart(this.data);
                 option = this.chartObj.scatterAutoAvg(config.scatterConfig);
                 break;
+            case 404: //散点图(分两组&双平均)
+                this.chartObj = new ScatterChart(this.data);
+                option = this.chartObj.scatterWithGroup(config.scatterConfig);
+                break;
             case 991: //数量&增长率分开
                 this.chartObj = new SpecialChart(this.data);
                 option = this.chartObj.special01();
