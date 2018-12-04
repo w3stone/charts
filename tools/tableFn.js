@@ -6,8 +6,8 @@ function makeBarTable(data){
     var xdata = copydata.xdata || [];
     var legenddata = copydata.legenddata || [];
     var vdata = copydata.vdata || [];
-    var xTitle = copydata.xTitle || ""; //x轴标题
-    var yTitle = copydata.yTitle || ""; //y轴标题
+    //var xTitle = copydata.xTitle || ""; //x轴标题
+    //var yTitle = copydata.yTitle || ""; //y轴标题
     var xUnit = copydata.xUnit || ""; //x轴单位
     var yUnit = copydata.yUnit || ""; //y轴单位
     var vUnit = copydata.vUnit || ""; //value单位
@@ -51,6 +51,8 @@ function make2DTable(data, isPer){
     var copydata = $.extend(true, {}, data); //深拷贝
     var chartData = copydata.chartdata || copydata.chartData;
     var vTitle = copydata.vTitle; //value标题
+    var nTitle = copydata.nTitle; //name标题
+    var vUnit = copydata.vUnit || ""; //value单位
     
     var sum = 0;
     var tbody = [];
@@ -64,7 +66,7 @@ function make2DTable(data, isPer){
     })
 
     return {
-        thead: isPer? ["名称", "比例"]: ["名称", vTitle],
+        thead: isPer? [nTitle || "名称", "占比"]: [nTitle || "名称", vTitle+setUnit(vUnit)],
         tbody: tbody
     };
 }
@@ -77,6 +79,10 @@ function make4DTable(data){
     var xTitle = copydata.xTitle; //x轴标题
     var yTitle = copydata.yTitle; //y轴标题
     var vTitle = copydata.vTitle; //value标题
+    var nTitle = copydata.nTitle; //name标题
+    var xUnit = copydata.xUnit || ""; //x轴单位
+    var yUnit = copydata.yUnit || ""; //y轴单位
+    var vUnit = copydata.vUnit || ""; //value单位
     var tbody = [];
 
     chartData.forEach((item)=>{
@@ -85,7 +91,7 @@ function make4DTable(data){
     })
 
     return {
-        thead: ["名称", xTitle, yTitle, vTitle],
+        thead: [nTitle || "名称", xTitle+setUnit(xUnit), yTitle+setUnit(yUnit), vTitle+setUnit(vUnit)],
         tbody: tbody
     };
 }
