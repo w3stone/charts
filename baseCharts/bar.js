@@ -384,7 +384,7 @@ class BarChart extends BaseChart {
 
 
     //柱状图+折线图(手动区分)
-    barAndLine(){
+    barAndLine(barConfig){
         let bar_vdata=[], line_vdata = [];
         let series = [];
         let chartData = this.chartData;
@@ -451,62 +451,24 @@ class BarChart extends BaseChart {
             series.push(ls);
         });
 
-        this.vdata = bar_vdata.concat(line_vdata);
         this.legenddata = bar_legenddata.concat(line_legenddata);
+        this.vdata = bar_vdata.concat(line_vdata);
+        let option = this._baseBarOption(false);
         
-        let option = {
-            legend: {
-                data: this.legenddata, type:'scroll', top:'8%'
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {          
-                    type: 'shadow'     
-                }
-            },
-            grid: {
-                top:'20%',
-                left: '6%',
-                right: '4%',
-                bottom: '6%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    name: this.xTitle,
-                    type: 'category',
-                    axisLine:{lineStyle:{color:'#000'}},
-                    data: this.xdata,
-                    axisLabel: {interval:0, rotate:50, textStyle:{color:'#000'}}
-                }
-            ],
-            yAxis: [
-                {
-                    name: this.yUnit,
-                    type: 'value',
-                    axisLine:{lineStyle:{color:'#000'}},
-                    axisLabel: {
-                        textStyle:{color:'#000'},
-                        formatter: (value)=>{
-                            return this.setUnit(value);
-                        },
-                    }
+        option.xAxis[0].nameGap = 40;
+        option.yAxis[1] = {
+            name: this.xUnit,
+            type: 'value',
+            axisLine:{lineStyle:{color:'#000'}},
+            axisLabel: {
+                textStyle:{color:'#000'},
+                formatter: (value)=>{
+                    return this.setUnit(value);
                 },
-                {
-                    name: this.xUnit,
-                    type: 'value',
-                    axisLine:{lineStyle:{color:'#000'}},
-                    axisLabel: {
-                        textStyle:{color:'#000'},
-                        formatter: (value)=>{
-                            return this.setUnit(value);
-                        },
-                    }
-                }
-            ],
-            series: series
+            }
         };
-        
+        option.series = series;
+
         return option;
     }
 
