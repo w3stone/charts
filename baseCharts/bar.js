@@ -68,7 +68,7 @@ class BarChart extends BaseChart {
                     data: this.xdata,
                     axisLabel: {
                         interval:0, 
-                        rotate: 45,
+                        rotate: 30,
                         textStyle:{color:'#000'}
                     }
                 }
@@ -99,7 +99,7 @@ class BarChart extends BaseChart {
             //?
             let endlength = !(this.xdata.length>5 && legenddataLength>10)? parseInt(20/this.legenddata.length)-1: 4;
 
-            option.grid.bottom = "12%";
+            //option.grid.bottom = "12%";
             option.dataZoom = [{
                 show: true,
                 height: 30,

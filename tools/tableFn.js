@@ -85,12 +85,18 @@ function make4DTable(data){
     var tbody = [];
 
     chartData.forEach((item)=>{
-        var arr = [item.name, item.x, item.y, item.value];
+        var arr = [];
+        if(vTitle){
+            arr = [item.name, item.x, item.y, item.value];
+        }else{
+            arr = [item.name, item.x, item.y];
+        }
         tbody.push(arr);
     })
 
     return {
-        thead: [nTitle || "名称", xTitle+setUnit(xUnit), yTitle+setUnit(yUnit), vTitle+setUnit(vUnit)],
+        thead: vTitle? [nTitle || "名称", xTitle+setUnit(xUnit), yTitle+setUnit(yUnit), vTitle+setUnit(vUnit)]: 
+            [nTitle || "名称", xTitle+setUnit(xUnit), yTitle+setUnit(yUnit)],
         tbody: tbody
     };
 }
