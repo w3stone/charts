@@ -34,23 +34,24 @@ class BarChart extends BaseChart {
                     type: 'shadow'     
                 },
                 formatter: (p)=>{
-                    let res = "";
+                    let result = this.setTooltipTitle(p[0].name);
+
                     if(isPer){ //需要转成百分比
                         for(let i=0;i<p.length;i++){
                             if(p[i].value>0){
-                                res += p[i].seriesName + ":" + p[i].value + "%</br>";
+                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
                             }
                         }
                     }else{ //不需要转成百分比
                         for(let i=0;i<p.length;i++){
                             if(p[i].seriesName.indexOf("率")!=-1){ //？
-                                res += p[i].seriesName + ":" + p[i].value + "%</br>";
+                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
                             }else{
-                                res += p[i].seriesName + ":" + p[i].value + "("+ this.vUnit + ")</br>";
+                                result += p[i].seriesName + ": " + p[i].value + "("+ this.vUnit + ")</br>";
                             }
                         }
                     }
-                    return res;
+                    return result;
                 },
             },
             grid: {
@@ -69,6 +70,9 @@ class BarChart extends BaseChart {
                     axisLabel: {
                         interval:0, 
                         rotate: 30,
+                        formatter: (name)=>{
+                            return this.setNameOmit(name);
+                        },
                         textStyle:{color:'#000'}
                     }
                 }
@@ -99,7 +103,7 @@ class BarChart extends BaseChart {
             //?
             let endlength = !(this.xdata.length>5 && legenddataLength>10)? parseInt(20/this.legenddata.length)-1: 4;
 
-            //option.grid.bottom = "12%";
+            option.grid.bottom = "5%";
             option.dataZoom = [{
                 show: true,
                 height: 30,

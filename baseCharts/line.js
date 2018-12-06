@@ -32,18 +32,18 @@ class LineChart extends BaseChart{
                     type: 'shadow'     
                 },
                 formatter: (p)=>{
-                    let res = "";
+                    let result = this.setTooltipTitle(p[0].name);
                     for(let i=0;i<p.length;i++){
-                        res += p[i].seriesName + ":" + p[i].value + "("+ this.vUnit + ")</br>";
+                        result += p[i].seriesName + ":" + p[i].value + "("+ this.vUnit + ")</br>";
                     }
-                    return res;
+                    return result;
                 },
             },
             grid: {
                 top:'20%',
                 left: '6%',
                 right: '8%',
-                bottom: '6%',
+                bottom: '0%',
                 containLabel: true
             },
             xAxis: [
@@ -54,7 +54,10 @@ class LineChart extends BaseChart{
                     data: this.xdata,
                     axisLabel: {
                         interval:0, 
-                        rotate: 45,
+                        rotate: 30,
+                        formatter: (name)=>{
+                            return this.setNameOmit(name);
+                        },
                         textStyle:{color:'#000'}
                     }
                 }

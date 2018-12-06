@@ -48,11 +48,9 @@ class ScatterChart extends BaseChart {
                     },
                 },
                 formatter: obj => {
-                    //console.log(obj);
                     if (obj.componentType == "series") {
-                        let result =  '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-                            obj.name + '</div>' +
-                            '<span>' + this.xTitle + ': ' + obj.data.value[0] + this.xUnit + '</span><br/>' +
+                        let result = this.setTooltipTitle(obj.name);
+                        result += '<span>' + this.xTitle + ': ' + obj.data.value[0] + this.xUnit + '</span><br/>' +
                             '<span>' + this.yTitle + ': ' + obj.data.value[1] + this.yUnit + '</span>';
                         //还原value
                         if(this.valueMax){ 
@@ -113,6 +111,7 @@ class ScatterChart extends BaseChart {
                     show: false
                 },
                 axisLine: {
+                    onZero: false,
                     lineStyle: {
                         color: '#3259B8'
                     }
