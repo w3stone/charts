@@ -44,7 +44,7 @@ class BarChart extends BaseChart {
                         }
                     }else{ //不需要转成百分比
                         for(let i=0;i<p.length;i++){
-                            if(p[i].seriesName.indexOf("率")!=-1){ //？
+                            if(p[i].seriesName.indexOf("增长率")!=-1){ //？
                                 result += p[i].seriesName + ": " + p[i].value + "%</br>";
                             }else{
                                 result += p[i].seriesName + ": " + p[i].value + "("+ this.vUnit + ")</br>";

@@ -32,10 +32,11 @@ function makeBarTable(data){
         }else{ //不需要转成%
             if(yUnit){
                 arr.forEach(function(val, i){
-                    arr[i] = val + vUnit;
+                    arr[i] = val;
                 });
             }
-            arr.unshift(legenddata[index] + setUnit(yUnit));
+            let unit = (legenddata[index].indexOf("增长率")!=-1)? "%": yUnit;
+            arr.unshift(legenddata[index] + setUnit(unit));
         } 
     });
 
