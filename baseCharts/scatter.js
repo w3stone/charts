@@ -119,8 +119,8 @@ class ScatterChart extends BaseChart {
             },
             grid: {
                 top:'20%',
-                left: '6%',
-                right: '8%',
+                left: '2%',
+                right: '6%',
                 bottom: '6%',
                 containLabel: true
             }
