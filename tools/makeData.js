@@ -109,13 +109,13 @@ function makeBarData(chartData, xUnit, nUnit, dataType, perMode) {
         });
     }
 
-    //如果x轴是年份月份补上单位
-    if(yearOrMonth(xUnit)){ 
-        xdata = xdata.map(o=>{return o + xUnit});
-    }
-    if(yearOrMonth(nUnit)){
-        legenddata = legenddata.map(o=>{return o + nUnit});
-    }
+    // //如果x轴是年份月份补上单位
+    // if(yearOrMonth(xUnit)){ 
+    //     xdata = xdata.map(o=>{return o + xUnit});
+    // }
+    // if(yearOrMonth(nUnit)){
+    //     legenddata = legenddata.map(o=>{return o + nUnit});
+    // }
 
     // console.log(xdata);
     // console.log(legenddata);
@@ -179,16 +179,18 @@ function makeLineData(chartData) {
 //拼散点图格式(legenddata,chartData,valueMax,xMin,xMax,yMin,yMax)
 function makeScatterData(chartData, nUnit) {
     let legenddata = Enumerable.from(chartData).select(o=>o.name).toArray();
-    if(yearOrMonth(nUnit)){
-        legenddata = legenddata.map(o=>{return o + nUnit});
-    }
+    
+    // if(yearOrMonth(nUnit)){
+    //     legenddata = legenddata.map(o=>{return o + nUnit});
+    // }
     
     chartData = chartData.map(o=>{
         return {
             "x": trans2number(o.x), 
             "y": trans2number(o.y),
             "value": o.value,
-            "name": yearOrMonth(nUnit)? o.name + nUnit :o.name,
+            //"name": yearOrMonth(nUnit)? o.name + nUnit :o.name,
+            "name": o.name,
             "type": trans2number(o.type)
         }
     });
