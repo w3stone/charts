@@ -20,10 +20,11 @@ class SuCharts{
      * }
      * **/
     //构建器
-    constructor(data, panelId, chartType){
+    constructor(data, panelId, chartType, theme){
         this.data = data; //传入数据
         this.panelId = panelId; //dom节点id名
         this.chartType = chartType; //图表类型
+        this.theme = theme; //echart主题
         this.echart = {}; //创建的echarts对象
         this.chartObj = {}; //含data中的数据，及xdata, ydata, vdata等处理过的数据...
     }
@@ -72,7 +73,7 @@ class SuCharts{
                 break;
             case 113: //柱状图动态求和
                 this.chartObj = new BarChart(this.data);
-                let echart = echarts.init(document.getElementById(this.panelId), "macarons"); //用于绑定事件
+                let echart = echarts.init(document.getElementById(this.panelId), this.theme); //用于绑定事件
                 option = this.chartObj.barDynamic(echart, config.barConfig);
                 break;
             case 201: //饼图
@@ -138,7 +139,7 @@ class SuCharts{
 
     //绘制图表
     drawChart(config){
-        this.echart = echarts.init(document.getElementById(this.panelId), "macarons"); //初始化echarts实例
+        this.echart = echarts.init(document.getElementById(this.panelId), this.theme); //初始化echarts实例
         let option = this.setOption(config);
 
         this.echart.setOption(option);  
