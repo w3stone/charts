@@ -117,6 +117,18 @@ class BarChart extends BaseChart {
         return option;
     }
 
+    //设置label
+    _setLabelTop(barConfig){
+        return {
+            normal: {
+                show: true,
+                position: 'top',
+                fontSize: barConfig.labelFontSize,
+                fontWeight: barConfig.labelFontWeight,
+                color: barConfig.labelColor
+            }
+        }
+    }
 
     //普通柱状图
     bar(isAvg, barConfig){
@@ -130,12 +142,7 @@ class BarChart extends BaseChart {
                 type: 'bar',
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                }
+                label: this._setLabelTop(barConfig)
             };
 
             //添加平均线
@@ -180,17 +187,14 @@ class BarChart extends BaseChart {
                 stack:'堆积',
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
-                label:{
-                    normal:{
-                        show: true,
-                        position: index%2 ? 'left': 'right',
-                        color: "#303133",
-                        formatter: (p)=>{
-                            return (p.value=="0.00")? "": p.value + "%";
-                        }
-                    }	
-                }
+                label: this._setLabelTop(barConfig)
             };
+            //修改覆盖
+            bs.label.normal.position = index%2 ? 'left': 'right';
+            bs.label.normal.formatter = (p)=>{
+                return (p.value=="0.00")? "": p.value + "%";
+            };
+
             series.push(bs);
         });
 
@@ -212,17 +216,13 @@ class BarChart extends BaseChart {
                 type: 'bar',
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
-                label:{
-                    normal:{
-                        show: true,
-                        position: 'top',
-                        color: "#303133",
-                        formatter: function(p){
-                            return (p.value=="0.00")? "": p.value + "%";
-                        }
-                    }
-                }
+                label: this._setLabelTop(barConfig)
             };
+            //修改覆盖
+            bs.label.normal.formatter = (p)=>{
+                return (p.value=="0.00")? "": p.value + "%";
+            };
+
             series.push(bs);
         });
 
@@ -270,7 +270,7 @@ class BarChart extends BaseChart {
                     data: val,
                     barMaxWidth: barConfig.barMaxWidth,
                     itemStyle:{normal:{color:''}},
-                    label: {normal: {show: true,position: 'top'}},
+                    label: this._setLabelTop(barConfig)
                 };
                 series.push(bs);
             }else{ //增长率
@@ -342,12 +342,7 @@ class BarChart extends BaseChart {
             lineStyle: {
                 normal:{ color: "none" }
             },
-            label: {
-                normal:{
-                    show:true,
-                    position: 'top'
-                }
-            },
+            label: this._setLabelTop(barConfig),
             markLine: {
                 lineStyle: {
                     normal: { color: '#fc97af'}
@@ -429,12 +424,7 @@ class BarChart extends BaseChart {
                 yAxisIndex: 0,
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                }
+                label: this._setLabelTop(barConfig)
             };
             series.push(bs);
         });

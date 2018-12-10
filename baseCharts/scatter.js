@@ -133,6 +133,17 @@ class ScatterChart extends BaseChart {
     _setItemSymbolSize(value){
         return this.valueMax? (value/this.valueMax)*this.defaultSymbolSize :this.defaultSymbolSize; //实际散点大小
     }
+
+    //设置label
+    _setLabel(scatterConfig){
+        return {
+            normal: {
+                fontSize: scatterConfig.labelFontSize,
+                fontWeight: scatterConfig.labelFontWeight,
+                color: scatterConfig.labelColor
+            }
+        }
+    }
     
     //普通散点图(颜色不同)
     scatter(scatterConfig){
@@ -179,11 +190,7 @@ class ScatterChart extends BaseChart {
                     data: [{
                         name: item.name,
                         value: [item.x, item.y],
-                        label:{
-                            normal:{
-                                fontSize: scatterConfig.labelFontSize
-                            }
-                        },
+                        label: this._setLabel(scatterConfig),
                         symbolSize: this._setItemSymbolSize(item.value) //散点大小
                     }]
                 } 
@@ -248,11 +255,7 @@ class ScatterChart extends BaseChart {
                 let each = {
                     name: item.name,
                     value: [item.x, item.y],
-                    label:{
-                        normal:{
-                            fontSize: scatterConfig.labelFontSize
-                        }
-                    },
+                    label: this._setLabel(scatterConfig),
                     symbolSize: this._setItemSymbolSize(item.value) //散点大小
                 }
                 seriesData.push(each);
@@ -322,11 +325,7 @@ class ScatterChart extends BaseChart {
                 data: [{
                     name: item.name,
                     value: [item.x, item.y],
-                    label:{
-                        normal:{
-                            fontSize: scatterConfig.labelFontSize
-                        }
-                    },
+                    label: this._setLabel(scatterConfig),
                     symbolSize: this._setItemSymbolSize(item.value) //散点大小
                 }]
             } 
@@ -402,11 +401,7 @@ class ScatterChart extends BaseChart {
                 let bd = {
                     name: item.name,
                     value: [item.x, item.y],
-                    label:{
-                        normal:{
-                            fontSize: scatterConfig.labelFontSize
-                        }
-                    },
+                    label: this._setLabel(scatterConfig),
                     symbolSize: this._setItemSymbolSize(item.value)
                 }
         

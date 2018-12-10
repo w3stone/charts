@@ -86,11 +86,11 @@ class SuCharts{
                 break;
             case 301: //折线图普通
                 this.chartObj = new LineChart(this.data);
-                option = this.chartObj.line(false);
+                option = this.chartObj.line(false, config.lineConfig);
                 break;
             case 302: //折线图普通(含平均线)
                 this.chartObj = new LineChart(this.data);
-                option = this.chartObj.line(true);
+                option = this.chartObj.line(true, config.lineConfig);
                 break;
             case 401: //普通散点图
                 this.chartObj = new ScatterChart(this.data);

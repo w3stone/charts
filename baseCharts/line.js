@@ -94,9 +94,22 @@ class LineChart extends BaseChart{
         return option;
     }
 
+    //设置label
+    _setLabelTop(barConfig){
+        return {
+            normal: {
+                show: true,
+                position: 'top',
+                fontSize: barConfig.labelFontSize,
+                fontWeight: barConfig.labelFontWeight,
+                color: barConfig.labelColor
+            }
+        }
+    }
+
     
     //普通折线图
-    line(isAvg){
+    line(isAvg, lineConfig){
         this._init();
         let series = [];
 
@@ -107,12 +120,7 @@ class LineChart extends BaseChart{
                 type: 'line',
                 itemStyle: {normal: {}},
                 data: val,
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                }
+                label: this._setLabelTop(lineConfig)
             };
 
             //添加平均线
