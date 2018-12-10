@@ -24,9 +24,12 @@ let defaultConfig = {
     },
     //饼图配置项
     pieConfig: {
+        pieLabelShow: true, //饼图数据显示
+        labelFontSize: labelFontSize, //label字体大小
+        labelFontWeight: labelFontWeight,
+        labelColor: labelColor,
         innerRadius: '0', //内圈半径
         outerRadius: '60%', //外圈半径
-        pieLabelShow: true, //饼图数据显示
         xCenter: '50%', //
         yCenter: '60%' //
     },

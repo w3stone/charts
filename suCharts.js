@@ -119,7 +119,7 @@ class SuCharts{
                 break;
             case 993: //饼图百分比
                 this.chartObj = new SpecialChart(this.data);
-                option = this.chartObj.special03();
+                option = this.chartObj.special03(config.pieConfig);
                 break;
             default:
                 option = {};  

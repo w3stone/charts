@@ -3,13 +3,10 @@ function makeBarData(chartData, xUnit, nUnit, dataType, perMode) {
     //perMode: ex相同xdata和为100%, ey相同legenddata和为100%
     perMode = perMode || "normal";
 
-    let xdata = [];
+    let xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();;
     let legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
     let vdata = [];
     let extraChartData = []; //存储被过滤后再还原的项
-
-    xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
-    legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
 
     if(dataType){ //需要转换
         let allSum = Enumerable.from(chartData).sum(o=>o.value); //所有数据求和

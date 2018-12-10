@@ -8,20 +8,20 @@ class SpecialChart extends BaseChart {
     constructor(data){
         super(data);
         this.xdata = [];
-        this.ydata = [];
+        this.legenddata = [];
         this.vdata = [];
     }
 
-    _init(need2Per){
-        let workedData = makeBarData(this.chartData, need2Per);
+    _init(perMode){
+        let workedData = makeBarData(this.chartData, this.xUnit, this.nUnit, this.dataType, perMode);
         this.xdata = workedData.xdata;
-        this.ydata = workedData.ydata;
+        this.legenddata = workedData.legenddata;
         this.vdata = workedData.vdata;
     }
 
     //数量&增长率分开
     special01(){
-        this._init(false);
+        this._init();
         let series1 = [];
         let series2 = [];
         let raiseVdata = []; //增长率数组
@@ -29,7 +29,7 @@ class SpecialChart extends BaseChart {
         this.vdata.forEach((arr, index) => {
             //设置数量series配置项
             let bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type: 'bar',
                 xAxisIndex: 0,
                 yAxisIndex: 0,
@@ -61,7 +61,7 @@ class SpecialChart extends BaseChart {
         //设置增长率series配置项
         raiseVdata.forEach((val, index) => {
             let bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type: 'line',
                 xAxisIndex: 1,
                 yAxisIndex: 1,
@@ -79,7 +79,7 @@ class SpecialChart extends BaseChart {
         
         let option = {
             legend: {
-                data: this.ydata, type:'scroll', top:'10%'
+                data: this.legenddata, type:'scroll', top:'10%'
             },
             tooltip: {
                 trigger: 'axis',
@@ -150,7 +150,7 @@ class SpecialChart extends BaseChart {
 
     //高级百分比
     special02(){
-        this._init(true);
+        this._init("ex");
   
         var series = [];
         var placeHoledStyle = {
@@ -175,7 +175,7 @@ class SpecialChart extends BaseChart {
 
         this.vdata.forEach((arr,index)=>{
             var bs = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type:'bar',
                 stack: '总量',
                 itemStyle : dataStyle,
@@ -189,7 +189,7 @@ class SpecialChart extends BaseChart {
             });
 
             var ts = {
-                name: this.ydata[index],
+                name: this.legenddata[index],
                 type:'bar',
                 stack: '总量',
                 itemStyle: placeHoledStyle,
@@ -214,7 +214,7 @@ class SpecialChart extends BaseChart {
                 }
             },
             legend: {
-                data: this.ydata, type:'scroll', top:'10%'
+                data: this.legenddata, type:'scroll', top:'10%'
             },
             grid: {
                 y: 60,
@@ -243,21 +243,22 @@ class SpecialChart extends BaseChart {
     }
 
     //饼图百分比
-    special03(){
-        this._init(true);
+    special03(pieConfig){
+        this._init("ex");
 
-        var length = this.xdata.length;
-        var space = parseInt( 100 / (length+1) ); //间距
-        var series = [];
+        let xdata = yearOrMonth(this.xUnit)? Enumerable.from(this.chartData).select(o=>o.x).distinct().toArray(): this.xdata;
+        let length = xdata.length;
+        let space = parseInt( 100 / (length+1) ); //间距
+        let series = [];
 
-        this.xdata.forEach((xitem, index)=>{
-            var useableData = this.chartData.filter((o)=>{return o.x == xitem});
-            var data = useableData.filter((o)=>{return o.name = o.y});
+        xdata.forEach((xitem, index)=>{
+            let useableData = this.chartData.filter(o => {return o.x == xitem});
+            let data = useableData.filter(o =>{return o.name = o.y});
             
-            var xCenter = space*(index+1) + "%";
+            let xCenter = space*(index+1) + "%";
 
-            var ps = {
-                name: this.xdata[index],
+            let ps = {
+                name: xdata[index],
                 type: 'pie',
                 //roseType:'radius',
                 radius : '40%',
@@ -268,8 +269,9 @@ class SpecialChart extends BaseChart {
                         position: 'outside',
                         formatter: '{d}%',
                         textStyle: {
-                            color: '#303133',
-                            fontSize: 14
+                            color: pieConfig.labelColor,
+                            fontSize: pieConfig.labelFontSize,
+                            fontWeight: pieConfig.labelFontWeight
                         }
                     }
                 },
@@ -294,12 +296,12 @@ class SpecialChart extends BaseChart {
                 }
             },
             legend: {
-                data: this.ydata, type:'scroll', top:'10%'
+                data: this.legenddata, type:'scroll', top:'10%'
             },
             // legend: {
             //     orient: 'vertical',
             //     left: 'left',
-            //     data: this.ydata
+            //     data: this.legenddata
             // },
             // grid: [
             //     {x: '7.5%',y: '65%', width: '88%', height: '60%'},
@@ -312,7 +314,7 @@ class SpecialChart extends BaseChart {
                 },
                 data: this.xdata
             },
-            yAxis: {gridIndex: 0, name:'year',show: false},
+            yAxis: {gridIndex: 0, name:'year', show: false},
             series:series
         };
 
@@ -324,3 +326,9 @@ class SpecialChart extends BaseChart {
 
 //导出
 export { SpecialChart }
+
+
+//单位是否为年或月
+function yearOrMonth(unit){
+    return (unit=="月" || unit=="年")? true: false;
+}
