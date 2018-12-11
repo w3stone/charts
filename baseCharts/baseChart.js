@@ -46,9 +46,9 @@ class BaseChart{
     }
 
     //设置tooltip标题
-    setTooltipTitle(name){
+    setTooltipTitle(name, unit){
         return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-            name + '</div>';
+        (this.yearOrMonth(unit)? name+unit: name) + '</div>';
     }
 
     //设置显示(长度大于5省略，xUnit为年或月舔加单位)

@@ -1,112 +1,105 @@
-/**柱状图表格
-    data: {xdata,legenddata,vdata, xUnit, yUnit...}
-**/
-function makeBarTable(data){
-    var copydata = JSON.parse(JSON.stringify(data)); //深拷贝
-    var xdata = copydata.xdata || [];
-    var legenddata = copydata.legenddata || [];
-    var vdata = copydata.vdata || [];
-    //var xTitle = copydata.xTitle || ""; //x轴标题
-    //var yTitle = copydata.yTitle || ""; //y轴标题
-    var xUnit = copydata.xUnit || ""; //x轴单位
-    var yUnit = copydata.yUnit || ""; //y轴单位
-    var vUnit = copydata.vUnit || ""; //value单位
-    var chartType = copydata.chartType;
+class Table {
     
-    xdata.unshift(""); //在xdata前插入空字符串
-
-    if(xUnit){ //如果有x轴单位
-        xdata.forEach(function(item, index){
-            if(index != 0){
-                xdata[index] = item + setUnit(xUnit);
-            }
-        });
+    constructor(data){
+        this.copydata = JSON.parse(JSON.stringify(data)); //深拷贝
+        this.xdata = this.copydata.xdata || [];
+        this.vdata = this.copydata.vdata || [];
+        this.xTitle = this.copydata.xTitle || ""; //x轴标题
+        this.yTitle = this.copydata.yTitle || ""; //y轴标题
+        this.vTitle = this.copydata.vTitle || ""; //value标题
+        this.nTitle = this.copydata.nTitle || ""; //name标题
+        this.xUnit = this.copydata.xUnit || ""; //x轴单位
+        this.yUnit = this.copydata.yUnit || ""; //y轴单位
+        this.vUnit = this.copydata.vUnit || ""; //value单位
+        this.nUnit = this.copydata.nUnit || ""; //name单位
+        this.legenddata = this.copydata.legenddata || [];
+        this.chartData = this.copydata.chartData || []; //原始数据
     }
 
-    vdata.forEach(function(arr, index){
-        if(chartType==105 || chartType==106 || chartType==107){ //需要转成%
-            arr.forEach(function(val, i){
-                arr[i] = val+"%";
-            });
-            arr.unshift(legenddata[index]);
-        }else{ //不需要转成%
-            if(yUnit){
-                arr.forEach(function(val, i){
-                    arr[i] = val;
-                });
-            }
-            let unit = (legenddata[index].indexOf("增长率")!=-1)? "%": yUnit;
-            arr.unshift(legenddata[index] + setUnit(unit));
-        } 
-    });
-
-    return {
-        thead: xdata,
-        tbody: vdata
-    };
-}
-
-//
-function make2DTable(data, isPer){
-    isPer = (isPer!=undefined)? isPer: true; //默认需要转成比例
-    var copydata = JSON.parse(JSON.stringify(data)); //深拷贝
-    var chartData = copydata.chartdata || copydata.chartData;
-    var vTitle = copydata.vTitle; //value标题
-    var nTitle = copydata.nTitle; //name标题
-    var vUnit = copydata.vUnit || ""; //value单位
-    
-    var sum = 0;
-    var tbody = [];
-
-    if(isPer)
-        sum = Enumerable.from(chartData).sum(o=>o.value);
-
-    chartData.forEach((item)=>{
-        var arr = isPer? [item.name, ((item.value/sum)*100).toFixed(2)+"%"]: [item.name, item.value];
-        tbody.push(arr);
-    })
-
-    return {
-        thead: isPer? [nTitle || "名称", "占比"]: [nTitle || "名称", vTitle+setUnit(vUnit)],
-        tbody: tbody
-    };
-}
-
-//
-function make4DTable(data){
-    var copydata = JSON.parse(JSON.stringify(data)); //深拷贝
-    var chartData = copydata.chartData;
-    var xTitle = copydata.xTitle; //x轴标题
-    var yTitle = copydata.yTitle; //y轴标题
-    var vTitle = copydata.vTitle; //value标题
-    var nTitle = copydata.nTitle; //name标题
-    var xUnit = copydata.xUnit || ""; //x轴单位
-    var yUnit = copydata.yUnit || ""; //y轴单位
-    var vUnit = copydata.vUnit || ""; //value单位
-    var tbody = [];
-
-    chartData.forEach((item)=>{
-        var arr = [];
-        if(vTitle){
-            arr = [item.name, item.x, item.y, item.value];
-        }else{
-            arr = [item.name, item.x, item.y];
+    //初始化
+    _init(){
+        if(yearOrMonth(this.nUnit)){
+            this.legenddata = this.legenddata.map(o=>{return o+this.nUnit});
         }
-        tbody.push(arr);
-    })
+    }
 
-    return {
-        thead: vTitle? [nTitle || "名称", xTitle+setUnit(xUnit), yTitle+setUnit(yUnit), vTitle+setUnit(vUnit)]: 
-            [nTitle || "名称", xTitle+setUnit(xUnit), yTitle+setUnit(yUnit)],
-        tbody: tbody
-    };
+    make3DTable(){
+        this._init();
+        this.xdata.unshift(""); //在xdata前插入空字符串
+        let legenddata = this.legenddata;
+    
+        this.xdata.forEach((item, index) => {
+            if(index != 0){
+                this.xdata[index] = item + setUnit(this.xUnit);
+            }
+        });
+    
+        this.vdata.forEach((tr, index) => {
+            let trFirst = legenddata[index].toString().indexOf("增长率")!=-1? 
+                legenddata[index]+setUnit(this.yUnit): legenddata[index]+setUnit("%");
+            tr.unshift(trFirst);
+        });
+    
+        return {
+            thead: this.xdata,
+            tbody: this.vdata
+        };
+    }
+
+    make2DTable(){
+        let isPer = this.vUnit=="%"? true: false; //默认需要转成比例
+        let sum = 0;
+        let tbody = [];
+    
+        if(isPer) sum = Enumerable.from(this.chartData).sum(o=>o.value);
+    
+        this.chartData.forEach(item => {
+            let tr = isPer? [item.name, ((item.value/sum)*100).toFixed(2)]: [item.name, item.value];
+            tbody.push(tr);
+        })
+
+        return {
+            thead: [(this.nTitle || "名称"), this.vTitle+setUnit(this.vUnit)],
+            tbody: tbody
+        };
+    }
+
+    make4DTable(){
+        let tbody = [];
+        let xUnit = this.xUnit;
+        let yUnit = this.yUnit;
+        let vUnit = this.vUnit;
+    
+        this.chartData.forEach(item => {
+            let tr = [];
+            let name = yearOrMonth(this.nUnit)? item.name+this.nUnit: item.name;
+
+            if(this.vTitle){
+                tr = [name, item.x, item.y, item.value];
+            }else{
+                tr = [name, item.x, item.y];
+            }
+            tbody.push(tr);
+        })
+    
+        return {
+            thead: this.vTitle? 
+                [(this.nTitle || "名称"), this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit), this.vTitle+setUnit(vUnit)]: 
+                [(this.nTitle || "名称"), this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit)],
+            tbody: tbody
+        };
+    }
+
 }
 
-export{
-    makeBarTable, make2DTable, make4DTable
+export{Table}
+
+//年或月
+function yearOrMonth(unit){
+    return (unit=="月" || unit=="年")? true: false;
 }
 
 //设置单位
 function setUnit(unit){
-    return (unit && unit!="年" && unit!="月")? "(" + unit + ")": "";
+    return ( unit && !yearOrMonth(unit) )? "(" + unit + ")": "";
 }
