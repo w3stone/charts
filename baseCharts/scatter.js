@@ -35,7 +35,10 @@ class ScatterChart extends BaseChart {
             legend: {
                 data: this.legenddata,
                 type: 'scroll',
-                top: '8%'
+                top: '8%',
+                formatter: (name)=>{
+                    return this.yearOrMonth(this.nUnit)? name+this.nUnit: name;
+                }
             },
             tooltip: {
                 trigger: 'item',

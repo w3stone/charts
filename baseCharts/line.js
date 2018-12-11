@@ -24,7 +24,10 @@ class LineChart extends BaseChart{
             legend: {
                 data: this.legenddata, 
                 type:'scroll', 
-                top:'8%'
+                top:'8%',
+                formatter: (name)=>{
+                    return this.yearOrMonth(this.nUnit)? name+this.nUnit: name;
+                }
             },
             tooltip: {
                 trigger: 'axis',
@@ -56,7 +59,7 @@ class LineChart extends BaseChart{
                         interval:0, 
                         rotate: 30,
                         formatter: (name)=>{
-                            return this.setNameOmit(name);
+                            return this.setxNameOmit(name);
                         },
                         textStyle:{color:'#000'}
                     }

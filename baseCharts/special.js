@@ -246,7 +246,7 @@ class SpecialChart extends BaseChart {
     special03(pieConfig){
         this._init("ex");
 
-        let xdata = yearOrMonth(this.xUnit)? Enumerable.from(this.chartData).select(o=>o.x).distinct().toArray(): this.xdata;
+        let xdata = this.xdata;
         let length = xdata.length;
         let space = parseInt( 100 / (length+1) ); //间距
         let series = [];
@@ -312,7 +312,15 @@ class SpecialChart extends BaseChart {
                 axisTick: {
                     alignWithLabel: true
                 },
-                data: this.xdata
+                data: this.xdata,
+                axisLabel: {
+                    interval:0, 
+                    rotate: 30,
+                    formatter: (name)=>{
+                        return this.setxNameOmit(name);
+                    },
+                    textStyle:{color:'#000'}
+                }
             },
             yAxis: {gridIndex: 0, name:'year', show: false},
             series:series

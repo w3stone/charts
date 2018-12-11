@@ -109,14 +109,6 @@ function makeBarData(chartData, xUnit, nUnit, dataType, perMode) {
         });
     }
 
-    // //如果x轴是年份月份补上单位
-    // if(yearOrMonth(xUnit)){ 
-    //     xdata = xdata.map(o=>{return o + xUnit});
-    // }
-    // if(yearOrMonth(nUnit)){
-    //     legenddata = legenddata.map(o=>{return o + nUnit});
-    // }
-
     // console.log(xdata);
     // console.log(legenddata);
     // console.log(vdata);
@@ -180,10 +172,6 @@ function makeLineData(chartData) {
 function makeScatterData(chartData, nUnit) {
     let legenddata = Enumerable.from(chartData).select(o=>o.name).toArray();
     
-    // if(yearOrMonth(nUnit)){
-    //     legenddata = legenddata.map(o=>{return o + nUnit});
-    // }
-    
     chartData = chartData.map(o=>{
         return {
             "x": trans2number(o.x), 
@@ -216,11 +204,6 @@ export{
     makeBarData, makePieData, makeLineData, makeScatterData
 }
 
-
-//单位是否为年或月
-function yearOrMonth(unit){
-    return (unit=="月" || unit=="年")? true: false;
-}
 
 //数字string串转number
 function trans2number(val){

@@ -40,18 +40,23 @@ class BaseChart{
         }
     }
 
+    //单位是否为年或月
+    yearOrMonth(unit){
+        return (unit=="月" || unit=="年")? true: false;
+    }
+
     //设置tooltip标题
     setTooltipTitle(name){
         return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
             name + '</div>';
     }
 
-    //设置tooltip标题
-    setNameOmit(name){
-        if(this.xUnit !="年" && this.xUnit !="月"){
+    //设置显示(长度大于5省略，xUnit为年或月舔加单位)
+    setxNameOmit(name){
+        if(!this.yearOrMonth(this.xUnit)){
             return name.length>5? name.slice(0,5)+"...": name;
         }else{
-            return name;
+            return name + this.xUnit;
         }
     }
     
