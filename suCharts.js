@@ -39,9 +39,9 @@ class SuCharts{
                 this.chartObj = new TreeChart(this.data);
                 option = this.chartObj.tree(this.echart);
                 break;
-            case 99: //地图
+            case 99: //中国地图
                 this.chartObj = new MapChart(this.data);
-                option = this.chartObj.map();
+                option = this.chartObj.chinaMap(config.mapConfig);
                 break;
             case 101: //柱状图普通
                 this.chartObj = new BarChart(this.data);
