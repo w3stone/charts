@@ -26,7 +26,7 @@ class LineChart extends BaseChart{
                 type:'scroll', 
                 top:'8%',
                 formatter: (name)=>{
-                    return this.yearOrMonth(this.nUnit)? name+this.nUnit: name;
+                    return this.setVisibleName(name, this.nUnit)
                 }
             },
             tooltip: {

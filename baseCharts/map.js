@@ -46,31 +46,21 @@ class MapChart extends BaseChart{
 			{"name":"南海诸岛","en":""}
         ];
         
-        provinceList.forEach(item => {
-            let valueArr = this.chartData.filter(o=>{return o.name==item.name});
-            let value = valueArr.length>0? valueArr[0].value: "";
-            
+        this.chartData.forEach(item => {
             let p = {
                 name: item.name, 
-                value: value,
+                value: item.value,
                 itemStyle: {
                     normal: {
+                        areaColor: "#349eea",
+                        borderColor: "#fff"
+                    },
+                    emphasis: {
                         areaColor: "#349eea",
                         borderColor: "#fff"
                     }
                 }
             };
-            //如果没有值
-            if(!value){
-                p.itemStyle.normal = {
-                    borderColor: '#ccc',
-                    areaColor: '#f3f3f3'
-                }
-                p.itemStyle.emphasis = {
-                    borderColor: '#ccc',
-                    areaColor: '#f3f3f3'
-                }
-            }
             seriesData.push(p);
         });
 
@@ -118,10 +108,24 @@ class MapChart extends BaseChart{
                             color: "#000"
                         }
                     },
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#ccc',
+                            areaColor: '#f3f3f3',
+                        },
+                        emphasis: {
+                            borderColor: '#ccc',
+                            areaColor: '#f3f3f3'
+                        }
+                    },
                     data: seriesData
                 }
             ]
         };
+
+        if(mapConfig.rangeHighColor && mapConfig.rangeLowColor){
+            option.dataRange.color = [mapConfig.rangeHighColor, mapConfig.rangeLowColor];
+        }
 
         return option;
     }

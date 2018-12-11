@@ -41,8 +41,11 @@ let defaultConfig = {
         labelColor: labelColor,
         scatterGroup: [{"name":"三级医院", "type":3}, {"name":"二级医院", "type":2}] //分组
     },
+    //地图配置项
     mapConfig:{
-        labelFontSize: labelFontSize
+        labelFontSize: labelFontSize,
+        rangeHighColor: "",
+        rangeLowColor: ""
     }
 }
 

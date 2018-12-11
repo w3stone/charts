@@ -48,7 +48,17 @@ class BaseChart{
     //设置tooltip标题
     setTooltipTitle(name, unit){
         return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-        (this.yearOrMonth(unit)? name+unit: name) + '</div>';
+        this.setVisibleName(name, unit) + '</div>';
+    }
+
+    //设置显示的名称(如果单位为年或月,在数字后插入单位)
+    setVisibleName(name, unit){
+        if(this.yearOrMonth(unit)){
+            let strNum = name.replace(/[^0-9]/g,"");
+            return name.replace(strNum, strNum+unit); 
+        }else{
+            return name;
+        }
     }
 
     //设置显示(长度大于5省略，xUnit为年或月舔加单位)
@@ -56,7 +66,7 @@ class BaseChart{
         if(!this.yearOrMonth(this.xUnit)){
             return name.length>5? name.slice(0,5)+"...": name;
         }else{
-            return name + this.xUnit;
+            return this.setVisibleName(name, this.xUnit);
         }
     }
     

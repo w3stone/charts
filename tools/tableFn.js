@@ -19,29 +19,32 @@ class Table {
     //初始化
     _init(){
         if(yearOrMonth(this.nUnit)){
-            this.legenddata = this.legenddata.map(o=>{return o+this.nUnit});
+            this.legenddata = this.legenddata.map(name=>{return setVisibleName(name, this.nUnit)});
         }
     }
 
     make3DTable(){
         this._init();
-        this.xdata.unshift(""); //在xdata前插入空字符串
+
         let legenddata = this.legenddata;
-    
-        this.xdata.forEach((item, index) => {
+        let thead = yearOrMonth(this.xUnit)? this.xdata.map(name=>{return setVisibleName(name, this.xUnit)}): this.xdata;
+        thead.unshift(""); //在thead前插入空字符串
+
+        thead.forEach((item, index) => {
             if(index != 0){
-                this.xdata[index] = item + setUnit(this.xUnit);
+                thead[index] = item + setUnit(this.xUnit);
             }
         });
     
         this.vdata.forEach((tr, index) => {
+            //第一列补充单位
             let trFirst = legenddata[index].toString().indexOf("增长率")!=-1? 
-                legenddata[index]+setUnit(this.yUnit): legenddata[index]+setUnit("%");
+                legenddata[index]+setUnit("%"): legenddata[index]+setUnit(this.vUnit || this.yUnit);
             tr.unshift(trFirst);
         });
     
         return {
-            thead: this.xdata,
+            thead: thead,
             tbody: this.vdata
         };
     }
@@ -72,7 +75,7 @@ class Table {
     
         this.chartData.forEach(item => {
             let tr = [];
-            let name = yearOrMonth(this.nUnit)? item.name+this.nUnit: item.name;
+            let name = setVisibleName(item.name, this.nUnit);
 
             if(this.vTitle){
                 tr = [name, item.x, item.y, item.value];
@@ -102,4 +105,14 @@ function yearOrMonth(unit){
 //设置单位
 function setUnit(unit){
     return ( unit && !yearOrMonth(unit) )? "(" + unit + ")": "";
+}
+
+//设置显示的名称(如果单位为年或月,在数字后插入单位)
+function setVisibleName(name, unit){
+    if(yearOrMonth(unit)){
+        let strNum = name.replace(/[^0-9]/g,"");
+        return name.replace(strNum, strNum+unit); 
+    }else{
+        return name;
+    }
 }

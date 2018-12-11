@@ -28,7 +28,7 @@ class BarChart extends BaseChart {
                 type:'scroll', 
                 top:'8%',
                 formatter: (name)=>{
-                    return this.yearOrMonth(this.nUnit)? name+this.nUnit: name;
+                    return this.setVisibleName(name, this.nUnit)
                 }
             },
             tooltip: {
@@ -50,7 +50,7 @@ class BarChart extends BaseChart {
                             if(p[i].seriesName.indexOf("增长率")!=-1){ //？
                                 result += p[i].seriesName + ": " + p[i].value + "%</br>";
                             }else{
-                                result += p[i].seriesName + ": " + this.setTitle(p[i].value, this.vUnit) + "</br>";
+                                result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
                             }
                         }
                     }

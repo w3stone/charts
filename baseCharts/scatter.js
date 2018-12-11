@@ -37,7 +37,7 @@ class ScatterChart extends BaseChart {
                 type: 'scroll',
                 top: '8%',
                 formatter: (name)=>{
-                    return this.yearOrMonth(this.nUnit)? name+this.nUnit: name;
+                    return this.setVisibleName(name, this.nUnit);
                 }
             },
             tooltip: {
@@ -52,13 +52,13 @@ class ScatterChart extends BaseChart {
                 },
                 formatter: obj => {
                     if (obj.componentType == "series") {
-                        let result = this.setTooltipTitle(obj.name);
+                        let result = this.setTooltipTitle(obj.name, this.nUnit);
                         result += '<span>' + this.xTitle + ': ' + obj.data.value[0] + this.xUnit + '</span><br/>' +
                             '<span>' + this.yTitle + ': ' + obj.data.value[1] + this.yUnit + '</span>';
-                        //还原value
-                        if(this.valueMax){ 
+                        
+                        if(this.vTitle){ //如果有vTitle
                             result += '<br/><span>' + this.vTitle + ': ' 
-                            + (obj.data.symbolSize*this.valueMax/this.defaultSymbolSize).toFixed(2) + this.vUnit +  '</span>'; 
+                            + this.chartData.filter(o=>{return o.name==obj.name})[0].value + this.vUnit +  '</span>'; 
                         }
                         return result;
                     }
@@ -69,7 +69,7 @@ class ScatterChart extends BaseChart {
                     show: true,
                     position: 'bottom',
                     formatter: params => {
-                        return params.name
+                        return this.setVisibleName(params.name, this.nUnit);
                     }
                 },
                 emphasis: {
