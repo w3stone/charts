@@ -55,7 +55,7 @@ class BaseChart{
     setVisibleName(name, unit){
         if(this.yearOrMonth(unit)){
             let strNum = name.replace(/[^0-9]/g,"");
-            return name.replace(strNum, strNum+unit); 
+            return strNum!=""? name.replace(strNum, strNum+unit): name; 
         }else{
             return name;
         }
