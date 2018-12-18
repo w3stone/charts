@@ -438,12 +438,7 @@ class BarChart extends BaseChart {
                 type: 'line',
                 yAxisIndex: 1,
                 data: val,
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                }
+                label: this._setLabelTop(barConfig)
             };
             series.push(ls);
         });
