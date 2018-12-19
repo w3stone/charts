@@ -133,6 +133,9 @@ class SuCharts{
         if(config.ifToolBox==true){
             option.toolbox = addToolbox(this.data, this.panelId);
         }
+        if(config.ifDataZoom==false){//删除dataZoom属性
+            delDataZoom(option);
+        }
 
         return option;
     }
@@ -198,4 +201,11 @@ function addToolbox(data, panelId){
         }
     };
     return toolbox;
+}
+
+//设置dataZoom
+function delDataZoom(obj){
+    if(obj.hasOwnProperty("dataZoom")){
+        delete obj.dataZoom;
+    }
 }

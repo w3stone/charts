@@ -8,6 +8,7 @@ let labelColor = "auto";
 let defaultConfig = {
     ifTitle: false, //标题
     ifToolBox: true, //工具栏
+    ifDataZoom: true, //默认自动
     //柱状图配置项
     barConfig:{
         labelFontSize: labelFontSize, //label字体大小
