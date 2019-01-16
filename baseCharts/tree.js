@@ -5,7 +5,7 @@ class TreeChart extends BaseChart {
     
     constructor(data){
         super(data);
-        this.treeData = data.treedata || [];
+        this.treeData = data.treeData || [];
     }
 
     //占比饼图
