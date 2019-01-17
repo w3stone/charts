@@ -81,8 +81,8 @@ class ScatterChart extends BaseChart {
                 name: this.setTitle(this.xTitle, this.xUnit),
                 type: 'value',
                 scale: true,
-                //min: (this.xUnit!="%")? parseInt(0.85*this.xMin): parseInt((this.xMin-15)),
-                max: (this.xUnit!="%")? parseInt(1.15*this.xMax): parseInt((this.xMax+15)),
+                //min: (this.xUnit!="%")? parseFloat(0.85*this.xMin): parseFloat((this.xMin-15)),
+                max: (this.xUnit!="%")? parseFloat(1.15*this.xMax): parseFloat((this.xMax+15)),
                 nameTextStyle:{
                     fontSize: 14
                 },
@@ -102,8 +102,8 @@ class ScatterChart extends BaseChart {
                 name: this.setTitle(this.yTitle, this.yUnit),
                 type: 'value',
                 scale: true,
-                //min: (this.yUnit!="%")? parseInt(0.85*this.yMin): parseInt((this.yMin-15)),
-                max: (this.yUnit!="%")? parseInt(1.15*this.yMax): parseInt((this.yMax+15)),
+                //min: (this.yUnit!="%")? parseFloat(0.85*this.yMin): parseFloat((this.yMin-15)),
+                max: (this.yUnit!="%")? parseFloat(1.15*this.yMax): parseFloat((this.yMax+15)),
                 nameTextStyle:{
                     fontSize: 14
                 },
