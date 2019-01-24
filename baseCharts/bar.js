@@ -21,7 +21,16 @@ class BarChart extends BaseChart {
     }
 
     //基础配置
-    _baseBarOption(isPer){
+    _baseBarOption(ifMobile, isPer){
+        if(ifMobile){
+            return this._baseBarOption_mobile(isPer);
+        }else{
+            return this._baseBarOption_pc(isPer);
+        }
+    }
+
+    //基础配置详情(pc端)
+    _baseBarOption_pc(isPer){
         let option = {
             legend: {
                 data: this.legenddata, 
@@ -67,6 +76,7 @@ class BarChart extends BaseChart {
             xAxis: [
                 {
                     name: this.setTitle(this.xTitle, this.xUnit),
+                    nameLocation: 'end',
                     type: 'category',
                     axisLine:{lineStyle:{color:'#000'}},
                     data: this.xdata,
@@ -102,7 +112,7 @@ class BarChart extends BaseChart {
         }
         //显示滚动条
         let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
-        if((this.xdata.length*legenddataLength > 20) && this.xUnit!="年" && this.xUnit!="月"){
+        if((this.xdata.length*legenddataLength > 20) && !this.yearOrMonth(this.xUnit)){
             //?
             let endlength = !(this.xdata.length>5 && legenddataLength>10)? parseInt(20/this.legenddata.length)-1: 4;
 
@@ -114,6 +124,96 @@ class BarChart extends BaseChart {
                 startValue: this.xdata[0],
                 endValue: this.xdata[endlength],
                 handleSize: '110%',
+            }, {type: 'inside'}];
+        }
+
+        return option;
+    }
+
+    //基础配置详情(移动端)
+    _baseBarOption_mobile(isPer){
+        let option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {          
+                    type: 'shadow'     
+                },
+                formatter: (p)=>{
+                    let result = this.setTooltipTitle(p[0].name, this.xUnit);
+
+                    if(isPer){ //需要转成百分比
+                        for(let i=0;i<p.length;i++){
+                            if(p[i].value>0){
+                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                            }
+                        }
+                    }else{ //不需要转成百分比
+                        for(let i=0;i<p.length;i++){
+                            if(p[i].seriesName.indexOf("增长率")!=-1){ //？
+                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                            }else{
+                                result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
+                            }
+                        }
+                    }
+                    return result;
+                },
+            },
+            grid: {
+                top:'20%',
+                left: '5%',
+                right: '10%',
+                bottom: '10%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    name: this.setTitle(this.xTitle, this.xUnit),
+                    nameLocation: 'center', 
+                    nameGap: 25,
+                    type: 'category',
+                    axisLine:{lineStyle:{color:'#000'}},
+                    data: this.xdata,
+                    axisLabel: {
+                        interval:0, 
+                        rotate: 0,
+                        formatter: (name)=>{
+                            return this.setxNameOmit(name);
+                        },
+                        textStyle:{color:'#000'}
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    name: this.setTitle(this.yTitle , (isPer? "%": this.yUnit)),
+                    type: 'value',
+                    axisLine:{lineStyle:{color:'#000'}},
+                    axisLabel: {
+                        textStyle:{color:'#000'},
+                        formatter: (value)=>{
+                            return this.setUnit(value);
+                        }
+                    }
+                }
+            ],
+            series: []
+        };
+        
+        //如果是百分比y轴最多为100
+        if(isPer) {
+            //option.yAxis[0].max = 100;
+        }
+        //显示滚动条? 
+        if(!this.yearOrMonth(this.xUnit)){
+            let endlength = this.xdata.length>4? 3: this.xdata.length-1;
+
+            option.dataZoom = [{
+                show: true,
+                height: 20,
+                bottom: 0,
+                startValue: this.xdata[0],
+                endValue: this.xdata[endlength],
             }, {type: 'inside'}];
         }
 
@@ -171,7 +271,7 @@ class BarChart extends BaseChart {
             series.push(bs);
         });
         
-        let option = this._baseBarOption(false);
+        let option = this._baseBarOption(barConfig.ifMobile, false);
         option.series = series;
         
         return option;
@@ -201,7 +301,7 @@ class BarChart extends BaseChart {
             series.push(bs);
         });
 
-        let option = this._baseBarOption(true);
+        let option = this._baseBarOption(barConfig.ifMobile, true);
         option.series = series;
         
         return option;
@@ -229,7 +329,7 @@ class BarChart extends BaseChart {
             series.push(bs);
         });
 
-        let option = this._baseBarOption(true);
+        let option = this._baseBarOption(barConfig.ifMobile, true);
         option.series = series;
         
         return option;
@@ -289,12 +389,17 @@ class BarChart extends BaseChart {
             }
         });
 
-        let option = this._baseBarOption(false);
+        let option = this._baseBarOption(barConfig.ifMobile, false);
         this.legenddata = legenddata;
         this.vdata = vdata;
-
-        option.legend.data = legenddata;
-        option.xAxis[0].nameGap = 40;
+        
+        //重新赋值option.legend.data
+        if(option.hasOwnProperty("legend"))
+            option.legend.data = legenddata;
+        
+        if(option.xAxis[0].nameLocation=="end")
+            option.xAxis[0].nameGap = 40;
+        
         option.yAxis[1] = {   
             name:'增长率(%)',
             type:'value',
@@ -361,7 +466,7 @@ class BarChart extends BaseChart {
         };
         series.push(config);
 
-        let option = this._baseBarOption(false);
+        let option = this._baseBarOption(barConfig.ifMobile, false);
         option.series = series;
 
         //lengend点击事件
@@ -445,7 +550,7 @@ class BarChart extends BaseChart {
 
         this.legenddata = bar_legenddata.concat(line_legenddata);
         this.vdata = bar_vdata.concat(line_vdata);
-        let option = this._baseBarOption(false);
+        let option = this._baseBarOption(barConfig.ifMobile, false);
         
         option.xAxis[0].nameGap = 40;
         option.yAxis[1] = {

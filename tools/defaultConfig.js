@@ -11,6 +11,7 @@ let defaultConfig = {
     ifDataZoom: true, //默认自动
     //柱状图配置项
     barConfig:{
+        ifMobile: false, //是否手机端
         labelFontSize: labelFontSize, //label字体大小
         labelFontWeight: labelFontWeight,
         labelColor: labelColor,
@@ -36,6 +37,7 @@ let defaultConfig = {
     },
     //散点图配置项
     scatterConfig:{
+        ifMobile: false, //是否手机端
         symbolSize: 30, //默认散点大小
         labelFontSize: labelFontSize, //label字体大小
         labelFontWeight: labelFontWeight,
