@@ -30,7 +30,16 @@ class ScatterChart extends BaseChart {
     }
 
     //基础配置
-    _baseScatterOption(){
+    _baseScatterOption(ifMobile){
+        if(ifMobile){
+            return this._baseScatterOption_mobile();
+        }else{
+            return this._baseScatterOption_pc();
+        }
+    }
+
+    //基础配置详情(pc端)
+    _baseScatterOption_pc(){
         let option = {
             legend: {
                 data: this.legenddata,
@@ -87,15 +96,14 @@ class ScatterChart extends BaseChart {
                     fontSize: 14
                 },
                 axisLabel: {
-                    formatter: '{value}'
+                    formatter: '{value}',
+                    textStyle: {color:'#000'}
                 },
                 splitLine: {
                     show: false
                 },
                 axisLine: {
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
+                    lineStyle: {color: '#3259B8'}
                 }
             },
             yAxis: {
@@ -108,16 +116,15 @@ class ScatterChart extends BaseChart {
                     fontSize: 14
                 },
                 axisLabel: {
-                    formatter: '{value}'
+                    formatter: '{value}',
+                    textStyle: {color:'#000'}
                 },
                 splitLine: {
                     show: false
                 },
                 axisLine: {
                     onZero: false,
-                    lineStyle: {
-                        color: '#3259B8'
-                    }
+                    lineStyle: {color: '#3259B8'}
                 }
             },
             grid: {
@@ -125,6 +132,95 @@ class ScatterChart extends BaseChart {
                 left: '2%',
                 right: '6%',
                 bottom: '6%',
+                containLabel: true
+            }
+        };
+
+        return option;
+    }
+
+    //基础配置详情(移动端)
+    _baseScatterOption_mobile(){
+        let option = {
+            tooltip: {
+                trigger: 'item',
+                axisPointer: {
+                    show: true,
+                    type: 'cross',
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1
+                    },
+                },
+                formatter: obj => {
+                    if (obj.componentType == "series") {
+                        let result = this.setTooltipTitle(obj.name, this.nUnit);
+                        result += '<span>' + this.xTitle + ': ' + obj.data.value[0] + this.xUnit + '</span><br/>' +
+                            '<span>' + this.yTitle + ': ' + obj.data.value[1] + this.yUnit + '</span>';
+                        
+                        if(this.vTitle){ //如果有vTitle
+                            result += '<br/><span>' + this.vTitle + ': ' 
+                            + this.chartData.filter(o=>{return o.name==obj.name})[0].value + this.vUnit +  '</span>'; 
+                        }
+                        return result;
+                    }
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'bottom',
+                    formatter: params => {
+                        return this.setVisibleName(params.name, this.nUnit);
+                    }
+                },
+                emphasis: {
+                    show: true,
+                    position: 'bottom',
+                }
+            },
+            xAxis: {
+                name: this.setTitle(this.xTitle, this.xUnit),
+                nameLocation: 'center', 
+                nameGap: 25,
+                type: 'value',
+                scale: true,
+                //min: (this.xUnit!="%")? parseFloat(0.85*this.xMin): parseFloat((this.xMin-15)),
+                max: (this.xUnit!="%")? parseFloat(1.15*this.xMax): parseFloat((this.xMax+15)),
+                axisLabel: {
+                    formatter: '{value}',
+                    textStyle: {color:'#000'}
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {color: '#3259B8'}
+                }
+            },
+            yAxis: {
+                name: this.setTitle(this.yTitle, this.yUnit),
+                type: 'value',
+                scale: true,
+                //min: (this.yUnit!="%")? parseFloat(0.85*this.yMin): parseFloat((this.yMin-15)),
+                max: (this.yUnit!="%")? parseFloat(1.15*this.yMax): parseFloat((this.yMax+15)),
+                axisLabel: {
+                    formatter: '{value}',
+                    textStyle: {color:'#000'}
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    onZero: false,
+                    lineStyle: {color: '#3259B8'}
+                }
+            },
+            grid: {
+                top:'20%',
+                left: '4%',
+                right: '6%',
+                bottom: '10%',
                 containLabel: true
             }
         };
@@ -201,7 +297,7 @@ class ScatterChart extends BaseChart {
             }
         });
 
-        let option = this._baseScatterOption();
+        let option = this._baseScatterOption(scatterConfig.ifMobile);
         option.series = series;
 
         return option;
@@ -274,7 +370,7 @@ class ScatterChart extends BaseChart {
         series.push(bs);
 
         //
-        let option = this._baseScatterOption();
+        let option = this._baseScatterOption(scatterConfig.ifMobile);
         option.series = series;
 
         return option;
@@ -335,7 +431,7 @@ class ScatterChart extends BaseChart {
             series.push(bs);
         });
 
-        let option = this._baseScatterOption();
+        let option = this._baseScatterOption(scatterConfig.ifMobile);
         option.series = series;
 
         return option;
@@ -433,7 +529,7 @@ class ScatterChart extends BaseChart {
             series.push(bs2);
         })();
 
-        let option = this._baseScatterOption();
+        let option = this._baseScatterOption(scatterConfig.ifMobile);
         option.series = series;
 
         return option;
