@@ -224,7 +224,7 @@ class BarChart extends BaseChart {
     _setLabelTop(barConfig){
         return {
             normal: {
-                show: true,
+                show: !barConfig.ifMobile,
                 position: 'top',
                 fontSize: barConfig.labelFontSize,
                 fontWeight: barConfig.labelFontWeight,
