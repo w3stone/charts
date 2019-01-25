@@ -99,7 +99,7 @@ class Table {
         this._init();
 
         let legenddata = this.legenddata;
-        console.log(this.legenddata);
+        //console.log(this.legenddata);
 
         let thead = this.xdata.map(o=>{return o.replace(",","，")});
         thead.unshift(""); //在thead前插入空字符串
@@ -107,24 +107,24 @@ class Table {
         let rateList = [];
 
         //如果charttype为101, 插入增长率行
-        if(this.chartType==101){ 
-            this.vdata.forEach((tr, index) => { 
-                if(index>0){
-                    let rateTr = [];
-                    for(var j=0; j<tr.length; j++){
-                        let rate = 0;
-                        if(this.vdata[index-1][j]!=0){
-                            rate = (this.vdata[index][j]-this.vdata[index-1][j])/this.vdata[index-1][j];
-                        }else{
-                            rate = 1;
-                        }
-                        rateTr.push( parseFloat((rate*100).toFixed(2)) );
-                    }
-                    rateTr.unshift(legenddata[index]+'增长率');
-                    rateList.push(rateTr);
-                }
-            });
-        }
+        // if(this.chartType==101){ 
+        //     this.vdata.forEach((tr, index) => { 
+        //         if(index>0){
+        //             let rateTr = [];
+        //             for(var j=0; j<tr.length; j++){
+        //                 let rate = 0;
+        //                 if(this.vdata[index-1][j]!=0){
+        //                     rate = (this.vdata[index][j]-this.vdata[index-1][j])/this.vdata[index-1][j];
+        //                 }else{
+        //                     rate = 1;
+        //                 }
+        //                 rateTr.push( parseFloat((rate*100).toFixed(2)) );
+        //             }
+        //             rateTr.unshift(legenddata[index]+'增长率');
+        //             rateList.push(rateTr);
+        //         }
+        //     });
+        // }
 
         //在自己行最前面插入标题
         this.vdata.forEach((tr, index) => { 
