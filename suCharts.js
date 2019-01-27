@@ -7,6 +7,7 @@ import {SpecialChart} from "./baseCharts/special.js";
 import {TreeChart} from "./baseCharts/tree.js";
 import {defaultConfig} from "./tools/defaultConfig.js"
 import {mergeJson, exportExcel} from "./tools/otherFn.js"
+import { type } from "os";
 
 
 class SuCharts{
@@ -33,6 +34,8 @@ class SuCharts{
     setOption(config){
         let option = {}; //option配置对象
         config = config? mergeJson(defaultConfig, config): defaultConfig; //合并对象
+        checkMobileConfig(config);
+        console.log(config);
 
         switch (this.chartType){
             case 98: //纵向树状图
@@ -127,7 +130,7 @@ class SuCharts{
 
         //补充添加配置项
         if(config.ifTitle==true){
-            option.title = addTitle(this.data.title);
+            option.title = addTitle(this.data.title, config);
             //option.grid.top = '20%'
         }
         if(config.ifToolBox==true){
@@ -169,12 +172,17 @@ export { SuCharts }
 
 
 //添加标题
-function addTitle(chartTitle){
+function addTitle(chartTitle, config){
     let title = {
         text: chartTitle,
         right:'center'
         //top: 10
     };
+    if(config.ifMobile){ //移动端
+        title.textStyle = {
+            fontSize: 14
+        }
+    }
     return title;
 }
 
@@ -207,5 +215,14 @@ function addToolbox(data, panelId){
 function delDataZoom(obj){
     if(obj.hasOwnProperty("dataZoom")){
         delete obj.dataZoom;
+    }
+}
+
+//补充每一种图表类型的移动端适配
+function checkMobileConfig(config){
+    for(var key in config){
+        if(typeof config[key] == "object"){
+            config[key].ifMobile = config.ifMobile;
+        }
     }
 }
