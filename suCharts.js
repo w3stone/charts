@@ -35,7 +35,7 @@ class SuCharts{
         let option = {}; //option配置对象
         config = config? mergeJson(defaultConfig, config): defaultConfig; //合并对象
         checkMobileConfig(config);
-        console.log(config);
+        //console.log(config);
 
         switch (this.chartType){
             case 98: //纵向树状图
