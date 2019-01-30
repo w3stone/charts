@@ -383,6 +383,7 @@ class BarChart extends BaseChart {
                     itemStyle:{normal:{color:''}},
                     yAxisIndex: 1,
                     smooth: true,
+                    animation: barConfig.animation, //动画效果 
                     data: val
                 }
                 series.push(rs);

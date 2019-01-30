@@ -16,7 +16,8 @@ let defaultConfig = {
         labelFontWeight: labelFontWeight,
         labelColor: labelColor,
         barWidth: "30%", //柱状图宽度
-        barMaxWidth: "25%" //最大宽度
+        barMaxWidth: "25%", //最大宽度
+        animation: true //动画效果
     },
     //折线图配置
     lineConfig:{
