@@ -24,6 +24,7 @@ class Table {
         }
     }
 
+    //柱图、折线图表格数据
     make3DTable(){
         this._init();
 
@@ -45,11 +46,13 @@ class Table {
         });
     
         return {
-            thead: thead,
-            tbody: this.vdata
+            "thead": thead,
+            "tbody": this.vdata,
+            "tabledata": arr2obj(thead, this.vdata)
         };
     }
 
+    //饼图表格数据
     make2DTable(){
         let isPer = this.vUnit=="%"? true: false; //默认需要转成比例
         let sum = 0;
@@ -63,11 +66,13 @@ class Table {
         })
 
         return {
-            thead: [(this.nTitle || "名称"), this.vTitle+setUnit(this.vUnit)],
-            tbody: tbody
+            "thead": [(this.nTitle || "名称"), this.vTitle+setUnit(this.vUnit)],
+            "tbody": tbody,
+            "tabledata": this.chartData
         };
     }
 
+    //散点图表格数据
     make4DTable(){
         let tbody = [];
         let xUnit = this.xUnit;
@@ -87,10 +92,11 @@ class Table {
         })
     
         return {
-            thead: this.vTitle? 
+            "thead": this.vTitle? 
                 [(this.nTitle || "名称"), this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit), this.vTitle+setUnit(vUnit)]: 
                 [(this.nTitle || "名称"), this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit)],
-            tbody: tbody
+            "tbody": tbody,
+            "tabledata": this.chartData
         };
     }
 
@@ -103,37 +109,16 @@ class Table {
 
         let thead = this.xdata.map(o=>{return o.replace(",","，")});
         thead.unshift(""); //在thead前插入空字符串
-
-        let rateList = [];
-
-        //如果charttype为101, 插入增长率行
-        // if(this.chartType==101){ 
-        //     this.vdata.forEach((tr, index) => { 
-        //         if(index>0){
-        //             let rateTr = [];
-        //             for(var j=0; j<tr.length; j++){
-        //                 let rate = 0;
-        //                 if(this.vdata[index-1][j]!=0){
-        //                     rate = (this.vdata[index][j]-this.vdata[index-1][j])/this.vdata[index-1][j];
-        //                 }else{
-        //                     rate = 1;
-        //                 }
-        //                 rateTr.push( parseFloat((rate*100).toFixed(2)) );
-        //             }
-        //             rateTr.unshift(legenddata[index]+'增长率');
-        //             rateList.push(rateTr);
-        //         }
-        //     });
-        // }
-
+        
         //在自己行最前面插入标题
         this.vdata.forEach((tr, index) => { 
             tr.unshift(legenddata[index]); 
         });
     
         return {
-            thead: thead,
-            tbody: this.vdata.concat(rateList)
+            "thead": thead,
+            "tbody": this.vdata,
+            "tabledata": arr2obj(thead, this.vdata)
         };
     }
 
@@ -160,4 +145,21 @@ function setVisibleName(name, unit){
     }else{
         return name;
     }
+}
+
+//二维数组转成JSON集合, eq:[["","2016","2017","2018"],["肺炎,病原体未特指",6857110,7096301,2441],["肺炎,病原体未特指增长率",0,3.49,-99.97]]
+function arr2obj(thead, tbody){
+    var arr = [];
+    arr.push(thead);
+    tbody.forEach(item=>{
+        arr.push(item);
+    });
+
+    var newList = [];
+    for (var i=1; i<arr[0].length; i++){
+        for(var j=1; j<arr.length; j++){
+            newList.push({"x":arr[0][i], "y":arr[j][0], "value":arr[j][i] });
+        }
+    }
+    return newList;
 }
