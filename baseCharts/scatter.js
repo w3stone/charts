@@ -90,8 +90,8 @@ class ScatterChart extends BaseChart {
                 name: this.setTitle(this.xTitle, this.xUnit),
                 type: 'value',
                 scale: true,
-                //min: (this.xUnit!="%")? parseFloat(0.85*this.xMin): parseFloat((this.xMin-15)),
-                max: (this.xUnit!="%")? parseFloat(1.15*this.xMax): parseFloat((this.xMax+15)),
+                //min: (this.xUnit!="%")? this.round(0.85*this.xMin, 0): this.round((this.xMin-15), 0),
+                max: (this.xUnit!="%")? this.round(1.15*this.xMax, 0): this.round((this.xMax+15), 0),
                 nameTextStyle:{
                     fontSize: 14
                 },
@@ -106,15 +106,17 @@ class ScatterChart extends BaseChart {
                 name: this.setTitle(this.yTitle, this.yUnit),
                 type: 'value',
                 scale: true,
-                //min: (this.yUnit!="%")? parseFloat(0.85*this.yMin): parseFloat((this.yMin-15)),
-                max: (this.yUnit!="%")? parseFloat(1.15*this.yMax): parseFloat((this.yMax+15)),
+                //min: (this.yUnit!="%")? this.round(0.85*this.yMin, 0): this.round((this.yMin-15), 1),
+                max: (this.yUnit!="%")? this.round(1.15*this.yMax, 0): this.round((this.yMax+15), 0),
                 nameTextStyle:{
                     fontSize: 14
                 },
                 axisLine:{lineStyle:{color:'#000'}},
                 axisLabel: {
-                    formatter: '{value}',
-                    textStyle: {color:'#000'}
+                    textStyle:{color:'#000'},
+                    formatter: (value)=>{
+                        return this.setUnit(value);
+                    },
                 },
                 splitLine: {show: false}
             },
@@ -180,10 +182,10 @@ class ScatterChart extends BaseChart {
                 max: (this.xUnit!="%")? parseFloat(1.15*this.xMax): parseFloat((this.xMax+15)),
                 axisLine:{lineStyle:{color:'#000'}},
                 axisLabel: {
+                    textStyle:{color:'#000'},
                     formatter: (value)=>{
                         return this.setUnit(value);
-                    },
-                    textStyle: {color:'#000'}
+                    }
                 },
                 splitLine: { show: false }
             },
@@ -195,10 +197,10 @@ class ScatterChart extends BaseChart {
                 max: (this.yUnit!="%")? parseFloat(1.15*this.yMax): parseFloat((this.yMax+15)),
                 axisLine:{lineStyle:{color:'#000'}},
                 axisLabel: {
+                    textStyle:{color:'#000'},
                     formatter: (value)=>{
                         return this.setUnit(value);
-                    },
-                    textStyle: {color:'#000'}
+                    }
                 },
                 splitLine: { show: false}
             },

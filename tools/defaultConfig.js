@@ -17,7 +17,8 @@ let defaultConfig = {
         labelColor: labelColor,
         barWidth: "30%", //柱状图宽度
         barMaxWidth: "25%", //最大宽度
-        animation: true //动画效果
+        animation: true, //动画效果
+        setLabelUnit: false //是否处理单位(万&亿)
     },
     //折线图配置
     lineConfig:{

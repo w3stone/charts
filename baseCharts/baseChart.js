@@ -69,6 +69,11 @@ class BaseChart{
             return this.setVisibleName(name, this.xUnit);
         }
     }
+
+    //保留小数
+    round(value, decimal){
+        return parseFloat(value.toFixed(decimal));
+    }
     
 }
 

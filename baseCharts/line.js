@@ -105,7 +105,10 @@ class LineChart extends BaseChart{
                 position: 'top',
                 fontSize: barConfig.labelFontSize,
                 fontWeight: barConfig.labelFontWeight,
-                color: barConfig.labelColor
+                color: barConfig.labelColor,
+                formatter: ((p)=>{
+                    return this.setUnit(p.value);
+                })
             }
         }
     }
