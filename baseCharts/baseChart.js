@@ -18,12 +18,12 @@ class BaseChart{
 
     //设置单位
     setUnit(value) {
-        if(value >= 100000000) {
-            return value / 100000000 + ' 亿'
-        } else if(value >= 1000000) {
-            return value / 10000 + ' 万'
+        if(value>=100000000) {
+            return (value/100000000).toFixed(2) + '亿';
+        } else if(value>=1000000) {
+            return (value/10000).toFixed(2) + '万';
         } else {
-            return value + ''
+            return value.toFixed(2) + '';
         }
     }
 
