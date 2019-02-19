@@ -18,6 +18,10 @@ class BaseChart{
 
     //设置单位
     setUnit(value) {
+        let reg = new RegExp("^[-+]?[0-9]+(\\.[0-9]+)?$"); //正负整数或小数
+        if(typeof value!="number" && !reg.test(value)) return value;
+        value = parseFloat(value);
+
         if(value>=100000000) {
             return (value/100000000).toFixed(2) + '亿';
         } else if(value>=1000000) {

@@ -430,7 +430,7 @@ class BarChart extends BaseChart {
                 for(let j=0; j<this.vdata.length; j++){
                     sum += this.vdata[j][i];
                 }
-                sumData[i] = sum.toFixed(1);
+                sumData[i] = parseFloat(sum.toFixed(2));
             }
         })();
 
@@ -485,7 +485,7 @@ class BarChart extends BaseChart {
                         sum += this.vdata[j][i]; //实时求每一列的和
                     }
                 }
-                sumData[i] = sum.toFixed(1);
+                sumData[i] = parseFloat(sum.toFixed(2));
             }
             chart.setOption(option);
         });
