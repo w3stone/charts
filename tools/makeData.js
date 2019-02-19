@@ -188,7 +188,7 @@ function makeScatterData(chartData, nUnit) {
     let xMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.x): 0; //x最大值
     let yMin = chartData.length>0? Enumerable.from(chartData).min(o=>o.y): 0; //x最小值
     let yMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.y): 0; //x最大值
-    console.log(xMin, xMax, yMin, yMax);
+    //console.log(xMin, xMax, yMin, yMax);
 
     return {
         "legenddata": legenddata,
