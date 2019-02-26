@@ -21,16 +21,16 @@ class BarChart extends BaseChart {
     }
 
     //基础配置
-    _baseBarOption(ifMobile, isPer){
-        if(ifMobile){
-            return this._baseBarOption_mobile(isPer);
+    _baseBarOption(barConfig, isPer){
+        if(barConfig.ifMobile){
+            return this._baseBarOption_mobile(barConfig, isPer);
         }else{
-            return this._baseBarOption_pc(isPer);
+            return this._baseBarOption_pc(barConfig, isPer);
         }
     }
 
     //基础配置详情(pc端)
-    _baseBarOption_pc(isPer){
+    _baseBarOption_pc(barConfig, isPer){
         let option = {
             legend: {
                 data: this.legenddata, 
@@ -110,28 +110,22 @@ class BarChart extends BaseChart {
         if(isPer) {
             option.yAxis[0].max = 100;
         }
+        
         //显示滚动条
         let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
-        if((this.xdata.length*legenddataLength > 20) && !this.yearOrMonth(this.xUnit)){
-            //?
-            let endlength = !(this.xdata.length>5 && legenddataLength>10)? parseInt(20/this.legenddata.length)-1: 4;
+        
+        if((this.xdata.length*legenddataLength > 20) && !this.yearOrMonth(this.xUnit)){ //触发规则?
+            let endIndex = !(this.xdata.length>5 && legenddataLength>10)? parseInt(20/this.legenddata.length)-1: 4;
 
             option.grid.bottom = "5%";
-            option.dataZoom = [{
-                show: true,
-                height: 30,
-                bottom: 10,
-                startValue: this.xdata[0],
-                endValue: this.xdata[endlength],
-                handleSize: '110%',
-            }, {type: 'inside'}];
+            option.dataZoom = this._setDataZoom(barConfig, endIndex);
         }
 
         return option;
     }
 
     //基础配置详情(移动端)
-    _baseBarOption_mobile(isPer){
+    _baseBarOption_mobile(barConfig, isPer){
         let option = {
             tooltip: {
                 trigger: 'axis',
@@ -206,18 +200,39 @@ class BarChart extends BaseChart {
         }
         //显示滚动条? 
         if(!this.yearOrMonth(this.xUnit)){
-            let endlength = this.xdata.length>4? 3: this.xdata.length-1;
-
-            option.dataZoom = [{
-                show: true,
-                height: 20,
-                bottom: 0,
-                startValue: this.xdata[0],
-                endValue: this.xdata[endlength],
-            }, {type: 'inside'}];
+            let endIndex = this.xdata.length>4? 3: this.xdata.length-1;
+            option.dataZoom = this._setDataZoom(barConfig, endIndex);
         }
 
         return option;
+    }
+
+    //设置缩放
+    _setDataZoom(barConfig, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
+        endIndex = barConfig.dataRange || endIndex; //默认取配置项里的dataRange
+    
+        let config = {};
+        if(!barConfig.ifMobile){ //PC端
+            config = {
+                height: 30,
+                bottom: 10,
+                handleSize: '110%'
+            };
+
+        }else{ //移动端
+            config = {
+                height: 20,
+                bottom: 0
+            };
+        }
+
+        config.show = !barConfig.dataRange? true: false;
+        //config.show = true;
+        config.startValue = this.xdata[0];
+        config.endValue = this.xdata[endIndex];
+
+        return [config, {type: 'inside'}];
+
     }
 
     //设置label
@@ -274,7 +289,7 @@ class BarChart extends BaseChart {
             series.push(bs);
         });
         
-        let option = this._baseBarOption(barConfig.ifMobile, false);
+        let option = this._baseBarOption(barConfig, false);
         option.series = series;
         
         return option;
@@ -304,7 +319,7 @@ class BarChart extends BaseChart {
             series.push(bs);
         });
 
-        let option = this._baseBarOption(barConfig.ifMobile, true);
+        let option = this._baseBarOption(barConfig, true);
         option.series = series;
         
         return option;
@@ -332,7 +347,7 @@ class BarChart extends BaseChart {
             series.push(bs);
         });
 
-        let option = this._baseBarOption(barConfig.ifMobile, true);
+        let option = this._baseBarOption(barConfig, true);
         option.series = series;
         
         return option;
@@ -393,7 +408,7 @@ class BarChart extends BaseChart {
             }
         });
 
-        let option = this._baseBarOption(barConfig.ifMobile, false);
+        let option = this._baseBarOption(barConfig, false);
         this.legenddata = legenddata;
         this.vdata = vdata;
         
@@ -470,7 +485,7 @@ class BarChart extends BaseChart {
         };
         series.push(config);
 
-        let option = this._baseBarOption(barConfig.ifMobile, false);
+        let option = this._baseBarOption(barConfig, false);
         option.series = series;
 
         //lengend点击事件
@@ -554,7 +569,7 @@ class BarChart extends BaseChart {
 
         this.legenddata = bar_legenddata.concat(line_legenddata);
         this.vdata = bar_vdata.concat(line_vdata);
-        let option = this._baseBarOption(barConfig.ifMobile, false);
+        let option = this._baseBarOption(barConfig, false);
         
         option.xAxis[0].nameGap = 40;
         option.yAxis[1] = {

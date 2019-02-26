@@ -18,7 +18,8 @@ let defaultConfig = {
         barWidth: "30%", //柱状图宽度
         barMaxWidth: "25%", //最大宽度
         animation: true, //动画效果
-        setLabelUnit: false //是否处理单位(万&亿)
+        setLabelUnit: false, //是否处理单位(万&亿)
+        dataRange: 0 //x轴显示多少列(默认不固定)
     },
     //折线图配置
     lineConfig:{
