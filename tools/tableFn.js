@@ -151,11 +151,12 @@ class Table {
 
         this.chartData.forEach(item => {
             let tr = [];
+            let name = yearOrMonth(this.nUnit)? item.name+this.nUnit: item.name;
             //表格行
             if(this.vTitle){
-                tr = [item.name, item.x, item.y, item.value];
+                tr = [name, item.x, item.y, item.value];
             }else{
-                tr = [item.name, item.x, item.y];
+                tr = [name, item.x, item.y];
             }
             tbody.push(tr);
 
