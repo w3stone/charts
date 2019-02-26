@@ -7,7 +7,6 @@ import {SpecialChart} from "./baseCharts/special.js";
 import {TreeChart} from "./baseCharts/tree.js";
 import {defaultConfig} from "./tools/defaultConfig.js"
 import {mergeJson, exportExcel} from "./tools/otherFn.js"
-import { type } from "os";
 
 
 class SuCharts{
@@ -34,7 +33,7 @@ class SuCharts{
     setOption(config){
         let option = {}; //option配置对象
         config = config? mergeJson(defaultConfig, config): defaultConfig; //合并对象
-        checkMobileConfig(config);
+        checkConfig(config);
         //console.log(config);
 
         switch (this.chartType){
@@ -218,11 +217,25 @@ function delDataZoom(obj){
     }
 }
 
-//补充每一种图表类型的移动端适配
-function checkMobileConfig(config){
+//补充每一种图表类型的配置项
+function checkConfig(config){
+    var list = [ //字典表
+        "labelFontSize", 
+        "labelFontWeight", 
+        "labelFontColor",
+        "axisFontSize", 
+        "axisFontColor",
+        "titleFontSize",
+        "titleFontColor",
+        "legendFontSize",
+        "legendFontColor"
+    ];
+    
     for(var key in config){
         if(typeof config[key] == "object"){
-            config[key].ifMobile = config.ifMobile;
+            list.forEach(innerKey=>{
+                config[key][innerKey] = config[innerKey];
+            })
         }
     }
 }

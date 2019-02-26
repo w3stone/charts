@@ -30,16 +30,16 @@ class ScatterChart extends BaseChart {
     }
 
     //基础配置
-    _baseScatterOption(ifMobile){
-        if(ifMobile){
-            return this._baseScatterOption_mobile();
+    _baseScatterOption(scatterConfig){
+        if(scatterConfig.ifMobile){
+            return this._baseScatterOption_mobile(scatterConfig);
         }else{
-            return this._baseScatterOption_pc();
+            return this._baseScatterOption_pc(scatterConfig);
         }
     }
 
     //基础配置详情(pc端)
-    _baseScatterOption_pc(){
+    _baseScatterOption_pc(scatterConfig){
         let option = {
             legend: {
                 data: this.legenddata,
@@ -47,6 +47,10 @@ class ScatterChart extends BaseChart {
                 top: '8%',
                 formatter: (name)=>{
                     return this.setVisibleName(name, this.nUnit);
+                },
+                textStyle: {
+                    color: scatterConfig.legendFontColor,
+                    fontSize: scatterConfig.legendFontSize
                 }
             },
             tooltip: {
@@ -61,7 +65,7 @@ class ScatterChart extends BaseChart {
                 },
                 formatter: obj => {
                     if (obj.componentType == "series") {
-                        let result = this.setTooltipTitle(obj.name, this.nUnit);
+                        let result = this._setTooltipTitle(obj.name, this.nUnit);
                         result += '<span>' + this.xTitle + ': ' + obj.data.value[0] + this.xUnit + '</span><br/>' +
                             '<span>' + this.yTitle + ': ' + obj.data.value[1] + this.yUnit + '</span>';
                         
@@ -133,7 +137,7 @@ class ScatterChart extends BaseChart {
     }
 
     //基础配置详情(移动端)
-    _baseScatterOption_mobile(){
+    _baseScatterOption_mobile(scatterConfig){
         let option = {
             tooltip: {
                 trigger: 'item',
@@ -147,7 +151,7 @@ class ScatterChart extends BaseChart {
                 },
                 formatter: obj => {
                     if (obj.componentType == "series") {
-                        let result = this.setTooltipTitle(obj.name, this.nUnit);
+                        let result = this._setTooltipTitle(obj.name, this.nUnit);
                         result += '<span>' + this.xTitle + ': ' + obj.data.value[0] + this.xUnit + '</span><br/>' +
                             '<span>' + this.yTitle + ': ' + obj.data.value[1] + this.yUnit + '</span>';
                         
@@ -227,7 +231,7 @@ class ScatterChart extends BaseChart {
             normal: {
                 fontSize: scatterConfig.labelFontSize,
                 fontWeight: scatterConfig.labelFontWeight,
-                color: scatterConfig.labelColor
+                color: scatterConfig.labelFontColor
             }
         }
     }
@@ -285,7 +289,7 @@ class ScatterChart extends BaseChart {
             }
         });
 
-        let option = this._baseScatterOption(scatterConfig.ifMobile);
+        let option = this._baseScatterOption(scatterConfig);
         option.series = series;
 
         return option;
@@ -358,7 +362,7 @@ class ScatterChart extends BaseChart {
         series.push(bs);
 
         //
-        let option = this._baseScatterOption(scatterConfig.ifMobile);
+        let option = this._baseScatterOption(scatterConfig);
         option.series = series;
 
         return option;
@@ -419,7 +423,7 @@ class ScatterChart extends BaseChart {
             series.push(bs);
         });
 
-        let option = this._baseScatterOption(scatterConfig.ifMobile);
+        let option = this._baseScatterOption(scatterConfig);
         option.series = series;
 
         return option;
@@ -517,7 +521,7 @@ class ScatterChart extends BaseChart {
             series.push(bs2);
         })();
 
-        let option = this._baseScatterOption(scatterConfig.ifMobile);
+        let option = this._baseScatterOption(scatterConfig);
         option.series = series;
 
         return option;

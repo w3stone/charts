@@ -38,6 +38,10 @@ class BarChart extends BaseChart {
                 top:'8%',
                 formatter: (name)=>{
                     return this.setVisibleName(name, this.nUnit)
+                },
+                textStyle: {
+                    color: barConfig.legendFontColor,
+                    fontSize: barConfig.legendFontSize
                 }
             },
             tooltip: {
@@ -46,7 +50,7 @@ class BarChart extends BaseChart {
                     type: 'shadow'     
                 },
                 formatter: (p)=>{
-                    let result = this.setTooltipTitle(p[0].name, this.xUnit);
+                    let result = this._setTooltipTitle(p[0].name, this.xUnit);
 
                     if(isPer){ //需要转成百分比
                         for(let i=0;i<p.length;i++){
@@ -76,6 +80,10 @@ class BarChart extends BaseChart {
             xAxis: [
                 {
                     name: this.setTitle(this.xTitle, this.xUnit),
+                    nameTextStyle:{
+                        color: barConfig.titleFontColor,
+                        fontSize: barConfig.titleFontSize
+                    },
                     nameLocation: 'end',
                     type: 'category',
                     axisLine:{lineStyle:{color:'#000'}},
@@ -86,20 +94,30 @@ class BarChart extends BaseChart {
                         formatter: (name)=>{
                             return this.setxNameOmit(name);
                         },
-                        textStyle:{color:'#000'}
+                        textStyle:{
+                            color: barConfig.axisFontColor,
+                            fontSize: barConfig.axisFontSize
+                        }
                     }
                 }
             ],
             yAxis: [
                 {
-                    name: this.setTitle(this.yTitle , (isPer? "%": this.yUnit)),
                     type: 'value',
+                    name: this.setTitle(this.yTitle , this.yUnit),
+                    nameTextStyle:{
+                        color: barConfig.titleFontColor,
+                        fontSize: barConfig.titleFontSize
+                    },
                     axisLine:{lineStyle:{color:'#000'}},
                     axisLabel: {
-                        textStyle:{color:'#000'},
+                        textStyle:{
+                            color: barConfig.axisFontColor,
+                            fontSize: barConfig.axisFontSize
+                        },
                         formatter: (value)=>{
                             return this.setUnit(value);
-                        },
+                        }
                     }
                 }
             ],
@@ -133,7 +151,7 @@ class BarChart extends BaseChart {
                     type: 'shadow'     
                 },
                 formatter: (p)=>{
-                    let result = this.setTooltipTitle(p[0].name, this.xUnit);
+                    let result = this._setTooltipTitle(p[0].name, this.xUnit);
 
                     if(isPer){ //需要转成百分比
                         for(let i=0;i<p.length;i++){
@@ -163,6 +181,10 @@ class BarChart extends BaseChart {
             xAxis: [
                 {
                     name: this.setTitle(this.xTitle, this.xUnit),
+                    nameTextStyle:{
+                        color: barConfig.titleFontColor,
+                        fontSize: barConfig.titleFontSize
+                    },
                     nameLocation: 'center', 
                     nameGap: 25,
                     type: 'category',
@@ -174,17 +196,27 @@ class BarChart extends BaseChart {
                         formatter: (name)=>{
                             return this.setxNameOmit(name);
                         },
-                        textStyle:{color:'#000'}
+                        textStyle:{
+                            color: barConfig.axisFontColor,
+                            fontSize: barConfig.axisFontSize
+                        }
                     }
                 }
             ],
             yAxis: [
                 {
-                    name: this.setTitle(this.yTitle , (isPer? "%": this.yUnit)),
+                    name: this.setTitle(this.yTitle , this.yUnit),
+                    nameTextStyle:{
+                        color: barConfig.titleFontColor,
+                        fontSize: barConfig.titleFontSize
+                    },
                     type: 'value',
                     axisLine:{lineStyle:{color:'#000'}},
                     axisLabel: {
-                        textStyle:{color:'#000'},
+                        textStyle:{
+                            color: barConfig.axisFontColor,
+                            fontSize: barConfig.axisFontSize
+                        },
                         formatter: (value)=>{
                             return this.setUnit(value);
                         }
@@ -243,7 +275,7 @@ class BarChart extends BaseChart {
                 position: 'top',
                 fontSize: barConfig.labelFontSize,
                 fontWeight: barConfig.labelFontWeight,
-                color: barConfig.labelColor,
+                color: barConfig.labelFontColor,
                 formatter: ((p)=>{
                     return this.setUnit(p.value);
                 })

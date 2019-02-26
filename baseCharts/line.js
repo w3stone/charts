@@ -35,7 +35,7 @@ class LineChart extends BaseChart{
                     type: 'shadow'     
                 },
                 formatter: (p)=>{
-                    let result = this.setTooltipTitle(p[0].name, this.xUnit);
+                    let result = this._setTooltipTitle(p[0].name, this.xUnit);
                     for(let i=0;i<p.length;i++){
                         result += p[i].seriesName + ":" + p[i].value + "("+ this.vUnit + ")</br>";
                     }
@@ -105,7 +105,7 @@ class LineChart extends BaseChart{
                 position: 'top',
                 fontSize: barConfig.labelFontSize,
                 fontWeight: barConfig.labelFontWeight,
-                color: barConfig.labelColor,
+                color: barConfig.labelFontColor,
                 formatter: ((p)=>{
                     return this.setUnit(p.value);
                 })

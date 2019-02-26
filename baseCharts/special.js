@@ -269,7 +269,7 @@ class SpecialChart extends BaseChart {
                         position: 'outside',
                         formatter: '{d}%',
                         textStyle: {
-                            color: pieConfig.labelColor,
+                            color: pieConfig.labelFontColor,
                             fontSize: pieConfig.labelFontSize,
                             fontWeight: pieConfig.labelFontWeight
                         }

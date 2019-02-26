@@ -16,6 +16,40 @@ class BaseChart{
         this.dataType = data.datatype || data.dataType || 0; //是否需要过滤数据
     }
 
+    //设置tooltip标题(option相关)
+    _setTooltipTitle(name, unit){
+        return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+        this.setVisibleName(name, unit) + '</div>';
+    }
+
+    //设置x轴配置
+    _setXAxis(config){
+        return {
+            name: this.setTitle(this.xTitle, this.xUnit),
+            nameTextStyle:{
+                color: config.titleFontColor,
+                fontSize: config.titleFontSize
+            },
+            nameLocation: 'end',
+            type: 'category',
+            axisLine:{
+                lineStyle:{color:'#000'}
+            },
+            data: this.xdata,
+            axisLabel: {
+                interval:0, 
+                rotate: 30,
+                formatter: ((name)=>{
+                    return this.setxNameOmit(name);
+                }),
+                textStyle:{
+                    color: config.axisFontColor,
+                    fontSize: config.axisFontSize
+                }
+            }
+        };
+    }
+
     //设置单位
     setUnit(value) {
         let reg = new RegExp("^[-+]?[0-9]+(\\.[0-9]+)?$"); //正负整数或小数
@@ -47,12 +81,6 @@ class BaseChart{
     //单位是否为年或月
     yearOrMonth(unit){
         return (unit=="月" || unit=="年")? true: false;
-    }
-
-    //设置tooltip标题
-    setTooltipTitle(name, unit){
-        return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-        this.setVisibleName(name, unit) + '</div>';
     }
 
     //设置显示的名称(如果单位为年或月,在数字后插入单位)
