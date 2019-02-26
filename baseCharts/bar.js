@@ -1,6 +1,7 @@
 /**柱状图封装**/
 import {BaseChart} from './baseChart.js'
 import {makeBarData} from '../tools/makeData.js'
+import {mergeJson} from '../tools/otherFn.js'
 
 class BarChart extends BaseChart {
     
@@ -31,19 +32,32 @@ class BarChart extends BaseChart {
 
     //基础配置详情(pc端)
     _baseBarOption_pc(barConfig, isPer){
-        let option = {
-            legend: {
-                data: this.legenddata, 
-                type:'scroll', 
-                top:'8%',
-                formatter: (name)=>{
-                    return this.setVisibleName(name, this.nUnit)
-                },
-                textStyle: {
-                    color: barConfig.legendFontColor,
-                    fontSize: barConfig.legendFontSize
+        let axis_Base = this._setBaseAxis(barConfig); //x轴/y轴基础配置
+        let xAxis_Own = { //x轴配置
+            name: this.setTitle(this.xTitle, this.xUnit),
+            nameLocation: 'end',
+            type: 'category',
+            data: this.xdata,
+            axisLabel: {
+                interval:0, 
+                rotate: 30,
+                formatter: (name=>{
+                    return this.setxNameOmit(name);
+                })
+            }
+        }
+        let yAxis_Own = { //y轴配置
+            name: this.setTitle(this.yTitle , this.yUnit),
+            type: 'value',
+            axisLabel: {
+                formatter: (value)=>{
+                    return this.setUnit(value);
                 }
-            },
+            }
+        }
+
+        let option = {
+            legend: this._setBaseLegend(barConfig, this.legenddata),
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {          
@@ -77,50 +91,8 @@ class BarChart extends BaseChart {
                 bottom: '0%',
                 containLabel: true
             },
-            xAxis: [
-                {
-                    name: this.setTitle(this.xTitle, this.xUnit),
-                    nameTextStyle:{
-                        color: barConfig.titleFontColor,
-                        fontSize: barConfig.titleFontSize
-                    },
-                    nameLocation: 'end',
-                    type: 'category',
-                    axisLine:{lineStyle:{color:'#000'}},
-                    data: this.xdata,
-                    axisLabel: {
-                        interval:0, 
-                        rotate: 30,
-                        formatter: (name)=>{
-                            return this.setxNameOmit(name);
-                        },
-                        textStyle:{
-                            color: barConfig.axisFontColor,
-                            fontSize: barConfig.axisFontSize
-                        }
-                    }
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    name: this.setTitle(this.yTitle , this.yUnit),
-                    nameTextStyle:{
-                        color: barConfig.titleFontColor,
-                        fontSize: barConfig.titleFontSize
-                    },
-                    axisLine:{lineStyle:{color:'#000'}},
-                    axisLabel: {
-                        textStyle:{
-                            color: barConfig.axisFontColor,
-                            fontSize: barConfig.axisFontSize
-                        },
-                        formatter: (value)=>{
-                            return this.setUnit(value);
-                        }
-                    }
-                }
-            ],
+            xAxis: [mergeJson(axis_Base, xAxis_Own)],
+            yAxis: [mergeJson(axis_Base, yAxis_Own)],
             series: []
         };
         

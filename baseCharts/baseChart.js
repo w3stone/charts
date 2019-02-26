@@ -22,26 +22,33 @@ class BaseChart{
         this.setVisibleName(name, unit) + '</div>';
     }
 
-    //设置x轴配置
-    _setXAxis(config){
+    //设置legend基础配置
+    _setBaseLegend(config, legenddata){
         return {
-            name: this.setTitle(this.xTitle, this.xUnit),
+            data: legenddata, 
+            type:'scroll', 
+            top:'8%',
+            formatter: (name=>{
+                return this.setVisibleName(name, this.nUnit)
+            }),
+            textStyle: {
+                color: config.legendFontColor,
+                fontSize: config.legendFontSize
+            }
+        };
+    }
+
+    //设置x轴/y轴基础配置
+    _setBaseAxis(config){
+        return {
             nameTextStyle:{
                 color: config.titleFontColor,
                 fontSize: config.titleFontSize
             },
-            nameLocation: 'end',
-            type: 'category',
             axisLine:{
                 lineStyle:{color:'#000'}
             },
-            data: this.xdata,
             axisLabel: {
-                interval:0, 
-                rotate: 30,
-                formatter: ((name)=>{
-                    return this.setxNameOmit(name);
-                }),
                 textStyle:{
                     color: config.axisFontColor,
                     fontSize: config.axisFontSize
@@ -57,11 +64,11 @@ class BaseChart{
         value = parseFloat(value);
 
         if(value>=100000000) {
-            return (value/100000000).toFixed(2) + '亿';
+            return parseFloat((value/100000000).toFixed(2)) + '亿';
         } else if(value>=1000000) {
-            return (value/10000).toFixed(2) + '万';
+            return parseFloat((value/10000).toFixed(2)) + '万';
         } else {
-            return value.toFixed(2) + '';
+            return parseFloat(value.toFixed(2)) + '';
         }
     }
 

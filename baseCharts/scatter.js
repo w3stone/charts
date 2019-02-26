@@ -1,6 +1,7 @@
 /**散点图封装**/
 import {BaseChart} from './baseChart.js'
 import {makeScatterData} from '../tools/makeData.js'
+import {mergeJson} from '../tools/otherFn.js'
 
 class ScatterChart extends BaseChart {
 
@@ -40,19 +41,35 @@ class ScatterChart extends BaseChart {
 
     //基础配置详情(pc端)
     _baseScatterOption_pc(scatterConfig){
-        let option = {
-            legend: {
-                data: this.legenddata,
-                type: 'scroll',
-                top: '8%',
-                formatter: (name)=>{
-                    return this.setVisibleName(name, this.nUnit);
-                },
-                textStyle: {
-                    color: scatterConfig.legendFontColor,
-                    fontSize: scatterConfig.legendFontSize
+        let axis_Base = this._setBaseAxis(scatterConfig); //x轴基础配置
+        let xAxis_Own = {
+            name: this.setTitle(this.xTitle, this.xUnit),
+            type: 'value',
+            scale: true,
+            splitLine: {show: false},
+            //min: (this.xUnit!="%")? this.round(0.85*this.xMin, 0): this.round((this.xMin-15), 0),
+            max: (this.xUnit!="%")? this.round(1.15*this.xMax, 0): this.round((this.xMax+15), 0),
+            axisLabel: {
+                formatter: '{value}'
+            }
+        };
+        let yAxis_Own = {
+            name: this.setTitle(this.yTitle, this.yUnit),
+            type: 'value',
+            scale: true,
+            splitLine: {show: false},
+            //min: (this.yUnit!="%")? this.round(0.85*this.yMin, 0): this.round((this.yMin-15), 1),
+            max: (this.yUnit!="%")? this.round(1.15*this.yMax, 0): this.round((this.yMax+15), 0),
+            axisLabel: {
+                formatter: (value)=>{
+                    return this.setUnit(value);
                 }
-            },
+            }
+        };
+
+
+        let option = {
+            legend: this._setBaseLegend(scatterConfig, this.legenddata),
             tooltip: {
                 trigger: 'item',
                 axisPointer: {
@@ -77,7 +94,7 @@ class ScatterChart extends BaseChart {
                     }
                 }
             },
-            label: {
+            label: { //气泡下方文字
                 normal: {
                     show: true,
                     position: 'bottom',
@@ -90,40 +107,8 @@ class ScatterChart extends BaseChart {
                     position: 'bottom',
                 }
             },
-            xAxis: {
-                name: this.setTitle(this.xTitle, this.xUnit),
-                type: 'value',
-                scale: true,
-                //min: (this.xUnit!="%")? this.round(0.85*this.xMin, 0): this.round((this.xMin-15), 0),
-                max: (this.xUnit!="%")? this.round(1.15*this.xMax, 0): this.round((this.xMax+15), 0),
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLine:{lineStyle:{color:'#000'}},
-                axisLabel: {
-                    formatter: '{value}',
-                    textStyle: {color:'#000'}
-                },
-                splitLine: {show: false}
-            },
-            yAxis: {
-                name: this.setTitle(this.yTitle, this.yUnit),
-                type: 'value',
-                scale: true,
-                //min: (this.yUnit!="%")? this.round(0.85*this.yMin, 0): this.round((this.yMin-15), 1),
-                max: (this.yUnit!="%")? this.round(1.15*this.yMax, 0): this.round((this.yMax+15), 0),
-                nameTextStyle:{
-                    fontSize: 14
-                },
-                axisLine:{lineStyle:{color:'#000'}},
-                axisLabel: {
-                    textStyle:{color:'#000'},
-                    formatter: (value)=>{
-                        return this.setUnit(value);
-                    },
-                },
-                splitLine: {show: false}
-            },
+            xAxis: [mergeJson(axis_Base, xAxis_Own)],
+            yAxis: [mergeJson(axis_Base, yAxis_Own)],
             grid: {
                 top:'20%',
                 left: '2%',

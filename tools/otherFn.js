@@ -21,6 +21,14 @@ function mergeJson(prev, next){
             newJson[key] = prev[key];
         }
     }
+
+    //补充next独有的属性
+    for(var key in next){
+        if(!newJson.hasOwnProperty(key)){
+            newJson[key] = next[key];
+        }
+    }
+
     return newJson;
 }
 
