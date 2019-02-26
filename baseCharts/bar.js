@@ -214,7 +214,7 @@ class BarChart extends BaseChart {
     //设置缩放
     _setDataZoom(barConfig, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
         endIndex = barConfig.dataRange || endIndex; //默认取配置项里的dataRange
-    
+
         let config = {};
         if(!barConfig.ifMobile){ //PC端
             config = {
