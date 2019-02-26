@@ -4,13 +4,15 @@ let defaultConfig = {
     ifTitle: false, //标题
     ifToolBox: true, //工具栏
     ifDataZoom: true, //默认自动
+    titleFontSize: 18,
+    titleFontColor: "#000", 
     labelFontSize: 16, //label字体大小
     labelFontWeight: "normal",
     labelFontColor: "auto",
     axisFontSize: 13, //坐标轴字体大小
     axisFontColor: "#000", //坐标轴字体颜色
-    titleFontSize: 13, //坐标轴标题大小
-    titleFontColor: "#000", //坐标轴标题颜色
+    axisTitleFontSize: 13, //坐标轴标题大小
+    axisTitleFontColor: "#000", //坐标轴标题颜色
     legendFontSize: 13,
     legendFontColor: "#000",
 

@@ -154,8 +154,8 @@ class BarChart extends BaseChart {
                 {
                     name: this.setTitle(this.xTitle, this.xUnit),
                     nameTextStyle:{
-                        color: barConfig.titleFontColor,
-                        fontSize: barConfig.titleFontSize
+                        color: barConfig.axisTitleFontColor,
+                        fontSize: barConfig.axisTitleFontSize
                     },
                     nameLocation: 'center', 
                     nameGap: 25,
@@ -179,8 +179,8 @@ class BarChart extends BaseChart {
                 {
                     name: this.setTitle(this.yTitle , this.yUnit),
                     nameTextStyle:{
-                        color: barConfig.titleFontColor,
-                        fontSize: barConfig.titleFontSize
+                        color: barConfig.axisTitleFontColor,
+                        fontSize: barConfig.axisTitleFontSize
                     },
                     type: 'value',
                     axisLine:{lineStyle:{color:'#000'}},

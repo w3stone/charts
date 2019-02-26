@@ -42,8 +42,8 @@ class BaseChart{
     _setBaseAxis(config){
         return {
             nameTextStyle:{
-                color: config.titleFontColor,
-                fontSize: config.titleFontSize
+                color: config.axisTitleFontColor,
+                fontSize: config.axisTitleFontSize
             },
             axisLine:{
                 lineStyle:{color:'#000'}

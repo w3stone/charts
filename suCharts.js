@@ -174,14 +174,12 @@ export { SuCharts }
 function addTitle(chartTitle, config){
     let title = {
         text: chartTitle,
-        right:'center'
-        //top: 10
-    };
-    if(config.ifMobile){ //移动端
-        title.textStyle = {
-            fontSize: 14
+        right:'center',
+        //top: 10,
+        textStyle:{
+            fontSize: config.titleFontSize
         }
-    }
+    };
     return title;
 }
 
@@ -220,13 +218,15 @@ function delDataZoom(obj){
 //补充每一种图表类型的配置项
 function checkConfig(config){
     var list = [ //字典表
+        "titleFontSize",
+        "titleFontColor",
         "labelFontSize", 
         "labelFontWeight", 
         "labelFontColor",
         "axisFontSize", 
         "axisFontColor",
-        "titleFontSize",
-        "titleFontColor",
+        "axisTitleFontSize",
+        "axisTitleFontColor",
         "legendFontSize",
         "legendFontColor"
     ];
