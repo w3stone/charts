@@ -78,25 +78,46 @@ class Table {
         let xUnit = this.xUnit;
         let yUnit = this.yUnit;
         let vUnit = this.vUnit;
-    
+        
+        let lastvals = ["", 0, 0, 0]; //存储上一年的值
         this.chartData.forEach(item => {
             let tr = [];
             let name = setVisibleName(item.name, this.nUnit);
-
+            //表格行
             if(this.vTitle){
                 tr = [name, item.x, item.y, item.value];
             }else{
                 tr = [name, item.x, item.y];
             }
             tbody.push(tr);
+
+            //增长率
+            let raiseTr = [];
+            for (var i=0; i<tr.length; i++){
+                if(i==0){ //如果是第一项
+                    raiseTr.push(tr[i]+"增长率");
+                    
+                }else{
+                    if(lastvals[i] == 0){
+                        raiseTr.push(0);
+                    }else{
+                        let rate = ((tr[i]-lastvals[i])/lastvals[i]*100).toFixed(2);
+                        raiseTr.push(parseFloat(rate) + "%");  
+                    }
+                    lastvals[i] = tr[i];
+                } 
+            }
+            tbody.push(raiseTr);
         })
+
+        let thead = this.vTitle? 
+            [this.nTitle, this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit), this.vTitle+setUnit(vUnit)]: 
+            [this.nTitle, this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit)];
     
         return {
-            "thead": this.vTitle? 
-                [(this.nTitle || "名称"), this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit), this.vTitle+setUnit(vUnit)]: 
-                [(this.nTitle || "名称"), this.xTitle+setUnit(xUnit), this.yTitle+setUnit(yUnit)],
+            "thead": thead,
             "tbody": tbody,
-            "tabledata": this.chartData
+            "tabledata": arr2obj(thead, tbody)
         };
     }
 
@@ -122,6 +143,51 @@ class Table {
         };
     }
 
+
+    //散点图表格数据(去除单位)
+    make4DTableNU(){
+        let tbody = [];
+        let lastvals = ["", 0, 0, 0]; //存储上一年的值
+
+        this.chartData.forEach(item => {
+            let tr = [];
+            //表格行
+            if(this.vTitle){
+                tr = [item.name, item.x, item.y, item.value];
+            }else{
+                tr = [item.name, item.x, item.y];
+            }
+            tbody.push(tr);
+
+            //增长率
+            let raiseTr = [];
+            for (var i=0; i<tr.length; i++){
+                if(i==0){ //如果是第一项
+                    raiseTr.push(tr[i]+"增长率");
+                    
+                }else{
+                    if(lastvals[i] == 0){
+                        raiseTr.push(0);
+                    }else{
+                        let rate = ((tr[i]-lastvals[i])/lastvals[i]*100).toFixed(2);
+                        raiseTr.push(parseFloat(rate));  
+                    }
+                    lastvals[i] = tr[i];
+                } 
+            }
+            tbody.push(raiseTr);
+        })
+
+        let thead = this.vTitle? 
+            [this.nTitle, this.xTitle, this.yTitle, this.vTitle]: 
+            [this.nTitle, this.xTitle, this.yTitle];
+
+        return {
+            "thead": thead,
+            "tbody": tbody,
+            "tabledata": arr2obj(thead, tbody)
+        };
+    }
 
 }
 
