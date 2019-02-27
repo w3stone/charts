@@ -39,7 +39,7 @@ class SuCharts{
         switch (this.chartType){
             case 98: //纵向树状图
                 this.chartObj = new TreeChart(this.data);
-                option = this.chartObj.tree(this.echart);
+                option = this.chartObj.tree(config);
                 break;
             case 99: //中国地图
                 this.chartObj = new MapChart(this.data);
@@ -113,11 +113,11 @@ class SuCharts{
                 break;
             case 991: //数量&增长率分开
                 this.chartObj = new SpecialChart(this.data);
-                option = this.chartObj.special01();
+                option = this.chartObj.special01(config);
                 break;
             case 992: //高级百分比
                 this.chartObj = new SpecialChart(this.data);
-                option = this.chartObj.special02();
+                option = this.chartObj.special02(config);
                 break;
             case 993: //饼图百分比
                 this.chartObj = new SpecialChart(this.data);

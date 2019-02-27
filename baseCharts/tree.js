@@ -9,7 +9,7 @@ class TreeChart extends BaseChart {
     }
 
     //占比饼图
-    tree2(){
+    tree2(config){
         let option = {
             tooltip: {
                 trigger: 'item',
@@ -27,7 +27,7 @@ class TreeChart extends BaseChart {
                             rotate: 0,
                             verticalAlign: 'middle',
                             align: 'right',
-                            fontSize: 16,
+                            fontSize: config.labelFontSize,
                             offset: [10, -20],
                             formatter:(ele)=>{
                                 var data = ele.data;
@@ -43,7 +43,7 @@ class TreeChart extends BaseChart {
                                 rotate: -90,
                                 verticalAlign: 'middle',
                                 align: 'left',
-                                fontSize: 11,
+                                fontSize: config.labelFontSize,
                                 offset: [0, 5]
                             }
                         }
@@ -63,7 +63,7 @@ class TreeChart extends BaseChart {
     }
 
     //横向树状图
-    tree(){
+    tree(config){
         var treeData = this.treeData;
         
         for(var i=0; i<treeData[0].children.length; i++){
@@ -94,7 +94,7 @@ class TreeChart extends BaseChart {
                             rotate: 0,
                             verticalAlign: 'middle',
                             align: 'right',
-                            fontSize: 14,
+                            fontSize: config.labelFontSize,
                             offset: [10, -20],
                             formatter:(ele)=>{
                                 var data = ele.data;
@@ -109,7 +109,7 @@ class TreeChart extends BaseChart {
                                 position: 'bottom',
                                 verticalAlign: 'middle',
                                 align: 'left',
-                                fontSize: 14,
+                                fontSize: config.labelFontSize,
                                 offset: [10, -10]
                             }
                         }

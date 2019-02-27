@@ -1,7 +1,7 @@
 /**柱状图封装**/
 import {BaseChart} from './baseChart.js'
 import {makeBarData} from '../tools/makeData.js'
-import {pieChart} from './pie.js'
+import {mergeJson} from '../tools/otherFn.js'
 
 class SpecialChart extends BaseChart {
     
@@ -287,6 +287,21 @@ class SpecialChart extends BaseChart {
 
         });
 
+        let axis_Base = this._setBaseAxis(pieConfig); //x轴&y轴基础配置
+        let xAxis_Own = { //x轴配置
+            name: this.setTitle(this.xTitle, this.xUnit),
+            nameLocation: 'end',
+            type: 'category',
+            data: this.xdata,
+            axisLabel: {
+                interval:0, 
+                rotate: 30,
+                formatter: (name=>{
+                    return this.setxNameOmit(name);
+                })
+            }
+        }
+
         let option = {
             tooltip : {
                 trigger: 'item',
@@ -295,9 +310,7 @@ class SpecialChart extends BaseChart {
                     fontSize:14
                 }
             },
-            legend: {
-                data: this.legenddata, type:'scroll', top:'10%'
-            },
+            legend:this._setBaseLegend(pieConfig, this.legenddata),
             // legend: {
             //     orient: 'vertical',
             //     left: 'left',
@@ -306,22 +319,7 @@ class SpecialChart extends BaseChart {
             // grid: [
             //     {x: '7.5%',y: '65%', width: '88%', height: '60%'},
             // ],
-            xAxis: 
-            {
-                type: 'category',
-                axisTick: {
-                    alignWithLabel: true
-                },
-                data: this.xdata,
-                axisLabel: {
-                    interval:0, 
-                    rotate: 30,
-                    formatter: (name)=>{
-                        return this.setxNameOmit(name);
-                    },
-                    textStyle:{color:'#000'}
-                }
-            },
+            xAxis: [mergeJson(axis_Base, xAxis_Own)],
             yAxis: {gridIndex: 0, name:'year', show: false},
             series:series
         };
