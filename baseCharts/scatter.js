@@ -50,7 +50,9 @@ class ScatterChart extends BaseChart {
             //min: (this.xUnit!="%")? this.round(0.85*this.xMin, 0): this.round((this.xMin-15), 0),
             max: (this.xUnit!="%")? this.round(1.15*this.xMax, 0): this.round((this.xMax+15), 0),
             axisLabel: {
-                formatter: '{value}'
+                formatter: (value)=>{
+                    return this.setUnit(value);
+                }
             }
         };
         let yAxis_Own = {
