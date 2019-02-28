@@ -14,7 +14,7 @@ class BarChart extends BaseChart {
     }
 
     _init(perMode){
-        let workedData = makeBarData(this.chartData, this.xUnit, this.nUnit, this.dataType, perMode);
+        let workedData = makeBarData(this, perMode);
         this.xdata = workedData.xdata;
         this.legenddata = workedData.legenddata;
         this.vdata = workedData.vdata;

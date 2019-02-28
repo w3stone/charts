@@ -1,13 +1,24 @@
 //拼柱状图格式(xdata, legenddata, vdata)
-function makeBarData(chartData, xUnit, nUnit, dataType, perMode) {
+function makeBarData(data, perMode) {
+    let chartData = data.chartData;
+    let nUnit = data.nUnit;
+    let dataType = data.dataType;
     //perMode: ex相同xdata和为100%, ey相同legenddata和为100%
     perMode = perMode || "normal";
 
-    let xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();;
-    let legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
+    let xdata = [];
     let vdata = [];
     let extraChartData = []; //存储被过滤后再还原的项
+    let legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
 
+    if(nUnit=="年"){
+        //根据最新一年排序
+        xdata = Enumerable.from(chartData).orderByDescending(o=>o.y).select(o=>o.x).distinct().toArray();
+    }else{
+        xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
+    }
+    
+    
     if(dataType){ //需要转换
         let allSum = Enumerable.from(chartData).sum(o=>o.value); //所有数据求和
         //console.log(allSum);
