@@ -44,6 +44,23 @@ function exportExcel(dom, excelName){
     return wbout;
 }
 
+
+//二维数组行专列([[1,2,3,4],[5,6,7,8]]=>[[1,5],[2,6],[3,7],[4,8]])
+function rotateArr(arr){
+    if(!arr) return [];
+    
+    let newArr = [];
+    for(var i=0; i<arr[0].length; i++){
+        var innerArr = [];
+        for(var j=0; j<arr.length; j++){
+            innerArr.push(arr[j][i]);
+        }
+        newArr.push(innerArr);
+    }
+    return newArr;
+}
+
+
 export{
-    mergeJson, exportExcel
+    mergeJson, rotateArr, exportExcel
 }

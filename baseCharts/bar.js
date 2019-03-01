@@ -1,7 +1,7 @@
 /**柱状图封装**/
 import {BaseChart} from './baseChart.js'
 import {makeBarData} from '../tools/makeData.js'
-import {mergeJson} from '../tools/otherFn.js'
+import {mergeJson, rotateArr} from '../tools/otherFn.js'
 
 class BarChart extends BaseChart {
     
@@ -240,7 +240,8 @@ class BarChart extends BaseChart {
     }
 
     //设置label
-    _setLabelTop(barConfig){
+    _setLabelTop(barConfig, unit){
+        unit = unit || "";
         return {
             normal: {
                 show: !barConfig.ifMobile,
@@ -249,16 +250,18 @@ class BarChart extends BaseChart {
                 fontWeight: barConfig.labelFontWeight,
                 color: barConfig.labelFontColor,
                 formatter: ((p)=>{
-                    return this.setUnit(p.value);
+                    return this.setUnit(p.value) + unit;
                 })
             }
         }
     }
 
+
     //普通柱状图
-    bar(isAvg, barConfig){
-        this._init();
+    barNormal(barConfig, perMode, isAvg){
+        this._init(perMode);
         let series = [];
+        let isPer = (perMode=="ex" || perMode=="ey")? true: false;
 
         //设置series配置项
         this.vdata.forEach((val, index) => {
@@ -293,9 +296,99 @@ class BarChart extends BaseChart {
             series.push(bs);
         });
         
-        let option = this._baseBarOption(barConfig, false);
+        
+        let option = this._baseBarOption(barConfig, isPer);
         option.series = series;
         
+        return option;
+    }
+
+
+    //柱状图+增长率
+    barWithRate(barConfig, perMode){
+        this._init(perMode);
+        let legenddata = [];
+        let series = [];
+        let newVdata = [];
+        //true:相同legend, 后一x相较前一x的增长率; 
+        //false:相同x, 后一legend相较前一legend的增长率
+        let rateMode = perMode=="ey"? true: false;
+        let tempData = rateMode? rotateArr(this.vdata): this.vdata;
+        let rateData = []; //增长率数组集合
+
+        //重新拼legenddata
+        this.legenddata.forEach(val => {
+            legenddata.push(val);
+            legenddata.push(val+"增长率");
+        });
+        //求增长率集合
+        tempData.forEach(arr => { //
+            let lastval = 0;
+            let raiseArr = [];
+            arr.forEach(val => {
+                if(lastval != 0){
+                    let rate = ((val-lastval)/lastval*100).toFixed(2);
+                    raiseArr.push( parseFloat(rate) );
+                }else{
+                    raiseArr.push(0);
+                }
+                lastval = val;
+            });
+            rateData.push(raiseArr);
+        });
+        
+        rateData = rateMode? rotateArr(rateData): rateData; //最终增长率集合
+        this.vdata.forEach((val, index)=>{
+            //柱图
+            newVdata.push(val);
+            let bs = {
+                name: legenddata[2*index],
+                type: 'bar',
+                data: val,
+                barMaxWidth: barConfig.barMaxWidth,
+                itemStyle:{normal:{color:''}},
+                label: this._setLabelTop(barConfig)
+            };
+            series.push(bs);
+            
+            //线图
+            newVdata.push(rateData[index]);
+            if(rateMode && index==0) return true;
+            let rs = {
+                name: legenddata[2*index+1],
+                type: 'line',
+                itemStyle:{normal:{color:''}},
+                yAxisIndex: 1,
+                smooth: true,
+                animation: barConfig.animation, //动画效果 
+                data: rateData[index],
+                label: this._setLabelTop(barConfig, "%")
+            }
+            series.push(rs);  
+        });
+
+        let option = this._baseBarOption(barConfig, false);
+        
+        //重新赋值对象实例的legenddata, vdata
+        this.legenddata = legenddata;
+        this.vdata = newVdata;
+        
+        //重新赋值option.legend.data
+        if(option.hasOwnProperty("legend"))
+            option.legend.data = legenddata;
+        
+        if(option.xAxis[0].nameLocation=="end")
+            option.xAxis[0].nameGap = 40;
+        
+        //右坐标轴
+        option.yAxis[1] = {   
+            name:'增长率(%)',
+            type:'value',
+            axisLine:{lineStyle:{color:'#000'}},
+            axisLabel: {textStyle:{color:'#000'}}
+        };
+        option.series = series;
+
         return option;
     }
 
@@ -326,111 +419,6 @@ class BarChart extends BaseChart {
         let option = this._baseBarOption(barConfig, true);
         option.series = series;
         
-        return option;
-    }
-
-
-    //柱状图百分比(数据不堆叠)
-    barPercent(perMode, barConfig){
-        this._init(perMode);
-        let series = [];
-        
-        this.vdata.forEach((val, index)=>{
-            let bs = {
-                name: this.legenddata[index],
-                type: 'bar',
-                data: val,
-                barMaxWidth: barConfig.barMaxWidth,
-                label: this._setLabelTop(barConfig)
-            };
-            //修改覆盖
-            bs.label.normal.formatter = (p)=>{
-                return (p.value=="0.00")? "": p.value + "%";
-            };
-
-            series.push(bs);
-        });
-
-        let option = this._baseBarOption(barConfig, true);
-        option.series = series;
-        
-        return option;
-    }
-
-
-    //柱状图+增长率
-    barWithRate(barConfig){
-        this._init();
-        let legenddata = [];
-        let vdata = [];
-        let series = [];
-
-        //重新拼legenddata
-        this.legenddata.forEach(val => {
-            legenddata.push(val);
-            legenddata.push(val+"增长率");
-        });
-        //重新拼vdata
-        this.vdata.forEach(arr => {
-            vdata.push(arr);
-            let lastval = 0;
-            let raiseArr = [];
-            arr.forEach(val => {
-                if(lastval != 0){
-                    let rate = ((val-lastval)/lastval*100).toFixed(2);
-                    raiseArr.push( parseFloat(rate) );
-                }else{
-                    raiseArr.push(0);
-                }
-                lastval = val;
-            });
-            vdata.push(raiseArr);
-        });
-
-        vdata.forEach((val, index)=>{
-            if( !(index%2) ){ //柱图
-                let bs = {
-                    name: legenddata[index],
-                    type: 'bar',
-                    data: val,
-                    barMaxWidth: barConfig.barMaxWidth,
-                    itemStyle:{normal:{color:''}},
-                    label: this._setLabelTop(barConfig)
-                };
-                series.push(bs);
-            }else{ //增长率
-                let rs = {
-                    name: legenddata[index],
-                    type: 'line',
-                    itemStyle:{normal:{color:''}},
-                    yAxisIndex: 1,
-                    smooth: true,
-                    animation: barConfig.animation, //动画效果 
-                    data: val
-                }
-                series.push(rs);
-            }
-        });
-
-        let option = this._baseBarOption(barConfig, false);
-        this.legenddata = legenddata;
-        this.vdata = vdata;
-        
-        //重新赋值option.legend.data
-        if(option.hasOwnProperty("legend"))
-            option.legend.data = legenddata;
-        
-        if(option.xAxis[0].nameLocation=="end")
-            option.xAxis[0].nameGap = 40;
-        
-        option.yAxis[1] = {   
-            name:'增长率(%)',
-            type:'value',
-            axisLine:{lineStyle:{color:'#000'}},
-            axisLabel: {textStyle:{color:'#000'}}
-        };
-        option.series = series;
-
         return option;
     }
 

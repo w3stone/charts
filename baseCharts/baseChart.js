@@ -65,7 +65,7 @@ class BaseChart{
 
         if(value>=100000000) {
             return parseFloat((value/100000000).toFixed(2)) + '亿';
-        } else if(value>=1000000) {
+        } else if(value>=10000) {
             return parseFloat((value/10000).toFixed(2)) + '万';
         } else {
             return parseFloat(value.toFixed(2)) + '';

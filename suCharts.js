@@ -47,7 +47,7 @@ class SuCharts{
                 break;
             case 101: //柱状图普通
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.bar(false, config.barConfig);
+                option = this.chartObj.barNormal(config.barConfig, "", false);
                 break;
             case 102: //柱状图+增长率
                 this.chartObj = new BarChart(this.data);
@@ -59,7 +59,7 @@ class SuCharts{
                 break;
             case 104: //柱状图普通(含平均值线)
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.bar(true, config.barConfig);
+                option = this.chartObj.barNormal(config.barConfig, "", true);
                 break;
             case 105: //柱状图百分比(相同xdata和为100%, 堆叠)
                 this.chartObj = new BarChart(this.data);
@@ -67,11 +67,15 @@ class SuCharts{
                 break;
             case 106: //柱状图百分比(相同xdata和为100%)
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barPercent("ex", config.barConfig);
+                option = this.chartObj.barNormal(config.barConfig, "ex");
                 break;
             case 107: //柱状图百分比(相同ydata,即相同颜色和为100%)
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barPercent("ey", config.barConfig);
+                option = this.chartObj.barNormal(config.barConfig, "ey");
+                break;
+            case 108: //柱状图百分比(相同ydata,即相同颜色和为100%)+增长率
+                this.chartObj = new BarChart(this.data);
+                option = this.chartObj.barWithRate(config.barConfig, "ey");
                 break;
             case 113: //柱状图动态求和
                 this.chartObj = new BarChart(this.data);
