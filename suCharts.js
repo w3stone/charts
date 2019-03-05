@@ -51,7 +51,7 @@ class SuCharts{
                 break;
             case 102: //柱状图+增长率
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barWithRate(config.barConfig);
+                option = this.chartObj.barWithRate(config.barConfig, "", false);
                 break;
             case 103: //柱状图+折线图
                 this.chartObj = new BarChart(this.data);
@@ -75,7 +75,11 @@ class SuCharts{
                 break;
             case 108: //柱状图百分比(相同ydata,即相同颜色和为100%)+增长率
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barWithRate(config.barConfig, "ey");
+                option = this.chartObj.barWithRate(config.barConfig, "ey", true);
+                break;
+            case 109: //柱状图(相同ydata,即相同颜色和为100%)+增长率
+                this.chartObj = new BarChart(this.data);
+                option = this.chartObj.barWithRate(config.barConfig, "", true);
                 break;
             case 113: //柱状图动态求和
                 this.chartObj = new BarChart(this.data);

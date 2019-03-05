@@ -305,14 +305,15 @@ class BarChart extends BaseChart {
 
 
     //柱状图+增长率
-    barWithRate(barConfig, perMode){
+    barWithRate(barConfig, perMode, rateMode){
+        //rateMode: true:相同legend, 后一x相较前一x的增长率; 
+        //false:相同x, 后一legend相较前一legend的增长率
+        
         this._init(perMode);
         let legenddata = [];
         let series = [];
         let newVdata = [];
-        //true:相同legend, 后一x相较前一x的增长率; 
-        //false:相同x, 后一legend相较前一legend的增长率
-        let rateMode = perMode=="ey"? true: false;
+        
         let tempData = rateMode? rotateArr(this.vdata): this.vdata;
         let rateData = []; //增长率数组集合
 
