@@ -9,13 +9,15 @@ function makeBarData(data, perMode) {
     let xdata = [];
     let vdata = [];
     let extraChartData = []; //存储被过滤后再还原的项
-    let legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
+    let legenddata = [];
 
     if(nUnit=="年"){
         //根据最新一年排序
         xdata = Enumerable.from(chartData).orderByDescending(o=>o.y).select(o=>o.x).distinct().toArray();
+        legenddata = Enumerable.from(chartData).orderBy(o=>o.y).select(o=>o.y).distinct().toArray();
     }else{
         xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
+        legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
     }
     
     
