@@ -80,7 +80,7 @@ class Table {
         let vUnit = this.vUnit;
         
         let lastvals = ["", 0, 0, 0]; //存储上一年的值
-        this.chartData.forEach(item => {
+        this.chartData.some(item => {
             let tr = [];
             let name = setVisibleName(item.name, this.nUnit);
             //表格行
@@ -90,6 +90,9 @@ class Table {
                 tr = [name, item.x, item.y];
             }
             tbody.push(tr);
+            
+            //如果单位为年或月，继续求增长率，否则退出本次循环
+            if(!yearOrMonth(vUnit)) return true;
 
             //增长率
             let raiseTr = [];
@@ -149,7 +152,7 @@ class Table {
         let tbody = [];
         let lastvals = ["", 0, 0, 0]; //存储上一年的值
 
-        this.chartData.forEach(item => {
+        this.chartData.some(item => {
             let tr = [];
             let name = yearOrMonth(this.nUnit)? item.name+this.nUnit: item.name;
             //表格行
@@ -159,6 +162,9 @@ class Table {
                 tr = [name, item.x, item.y];
             }
             tbody.push(tr);
+
+            //如果单位为年或月，继续求增长率，否则退出本次循环
+            if(!yearOrMonth(vUnit)) return true;
 
             //增长率
             let raiseTr = [];

@@ -19,6 +19,7 @@ function makeBarData(data, perMode) {
         xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
         legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
     }
+    //console.log(legenddata);
     
     
     if(dataType){ //需要转换
