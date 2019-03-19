@@ -232,8 +232,8 @@ class BarChart extends BaseChart {
 
         config.show = !barConfig.dataRange? true: false;
         //config.show = true;
-        config.startValue = this.xdata[0];
-        config.endValue = this.xdata[endIndex];
+        config.startValue = 0;
+        config.endValue = endIndex;
 
         return [config, {type: 'inside'}];
 
