@@ -80,7 +80,7 @@ class Table {
         let vUnit = this.vUnit;
         
         let lastvals = ["", 0, 0, 0]; //存储上一年的值
-        this.chartData.some(item => {
+        this.chartData.forEach(item => {
             let tr = [];
             let name = setVisibleName(item.name, this.nUnit);
             //表格行
@@ -92,25 +92,24 @@ class Table {
             tbody.push(tr);
             
             //如果单位为年或月，继续求增长率，否则退出本次循环
-            if(!yearOrMonth(vUnit)) return true;
-
-            //增长率
-            let raiseTr = [];
-            for (var i=0; i<tr.length; i++){
-                if(i==0){ //如果是第一项
-                    raiseTr.push(tr[i]+"增长率");
-                    
-                }else{
-                    if(lastvals[i] == 0){
-                        raiseTr.push(0);
+            if(yearOrMonth(this.nUnit)){
+                let raiseTr = [];
+                for (var i=0; i<tr.length; i++){
+                    if(i==0){ //如果是第一项
+                        raiseTr.push(tr[i]+"增长率");
+                        
                     }else{
-                        let rate = ((tr[i]-lastvals[i])/lastvals[i]*100).toFixed(2);
-                        raiseTr.push(parseFloat(rate) + "%");  
-                    }
-                    lastvals[i] = tr[i];
-                } 
+                        if(lastvals[i] == 0){
+                            raiseTr.push(0);
+                        }else{
+                            let rate = ((tr[i]-lastvals[i])/lastvals[i]*100).toFixed(2);
+                            raiseTr.push(parseFloat(rate) + "%");  
+                        }
+                        lastvals[i] = tr[i];
+                    } 
+                }
+                tbody.push(raiseTr);
             }
-            tbody.push(raiseTr);
         })
 
         let thead = this.vTitle? 
@@ -152,7 +151,7 @@ class Table {
         let tbody = [];
         let lastvals = ["", 0, 0, 0]; //存储上一年的值
 
-        this.chartData.some(item => {
+        this.chartData.forEach(item => {
             let tr = [];
             let name = yearOrMonth(this.nUnit)? item.name+this.nUnit: item.name;
             //表格行
@@ -164,25 +163,25 @@ class Table {
             tbody.push(tr);
 
             //如果单位为年或月，继续求增长率，否则退出本次循环
-            if(!yearOrMonth(vUnit)) return true;
-
-            //增长率
-            let raiseTr = [];
-            for (var i=0; i<tr.length; i++){
-                if(i==0){ //如果是第一项
-                    raiseTr.push(tr[i]+"增长率");
-                    
-                }else{
-                    if(lastvals[i] == 0){
-                        raiseTr.push(0);
+            if(yearOrMonth(this.nUnit)){
+                let raiseTr = [];
+                for (var i=0; i<tr.length; i++){
+                    if(i==0){ //如果是第一项
+                        raiseTr.push(tr[i]+"增长率");
+                        
                     }else{
-                        let rate = ((tr[i]-lastvals[i])/lastvals[i]*100).toFixed(2);
-                        raiseTr.push(parseFloat(rate));  
-                    }
-                    lastvals[i] = tr[i];
-                } 
+                        if(lastvals[i] == 0){
+                            raiseTr.push(0);
+                        }else{
+                            let rate = ((tr[i]-lastvals[i])/lastvals[i]*100).toFixed(2);
+                            raiseTr.push(parseFloat(rate));  
+                        }
+                        lastvals[i] = tr[i];
+                    } 
+                }
+                tbody.push(raiseTr);
             }
-            tbody.push(raiseTr);
+            
         })
 
         let thead = this.vTitle? 

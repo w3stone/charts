@@ -49,6 +49,7 @@ class BaseChart{
                 lineStyle:{color:'#000'}
             },
             axisLabel: {
+                interval: 0,
                 textStyle:{
                     color: config.axisFontColor,
                     fontSize: config.axisFontSize
