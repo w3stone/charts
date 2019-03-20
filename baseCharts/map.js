@@ -51,11 +51,11 @@ class MapChart extends BaseChart{
                 name: item.name, 
                 value: item.value,
                 itemStyle: {
-                    normal: {
-                        areaColor: "#349eea",
+                    areaColor: "#349eea",
                         borderColor: "#fff"
-                    },
-                    emphasis: {
+                },  
+                emphasis: {
+                    itemStyle:{
                         areaColor: "#349eea",
                         borderColor: "#fff"
                     }
@@ -92,28 +92,23 @@ class MapChart extends BaseChart{
                     zoom: 1.2,
                     selectedMode: 'single',
                     label: {
-                        normal: {
-                            show: true,
-                            formatter: function (data) {
-                                if (data.value) {
-                                    return data.name + data.value;
-                                } else {
-                                    return data.name;
-                                }
-                            },
-                            fontSize: mapConfig.labelFontSize
-                        },
-                        emphasis: {
-                            show: true,
-                            color: "#000"
+                        show: true,
+                        fontSize: mapConfig.labelFontSize,
+                        color: "#000",
+                        formatter: function (data) {
+                            if (data.value) {
+                                return data.name + data.value;
+                            } else {
+                                return data.name;
+                            }
                         }
                     },
                     itemStyle: {
-                        normal: {
-                            borderColor: '#ccc',
-                            areaColor: '#f3f3f3',
-                        },
-                        emphasis: {
+                        borderColor: '#ccc',
+                        areaColor: '#f3f3f3'
+                    },
+                    emphasis: {
+                        itemStyle:{
                             borderColor: '#ccc',
                             areaColor: '#f3f3f3'
                         }
