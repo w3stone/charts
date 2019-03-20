@@ -220,7 +220,9 @@ class ScatterChart extends BaseChart {
             fontSize: scatterConfig.labelFontSize,
             fontWeight: scatterConfig.labelFontWeight,
             color: scatterConfig.labelFontColor,
-            formatter: "{b}"
+            formatter: ((p)=>{
+                return this.setVisibleName(p.name, this.nUnit);
+            })
         }
     }
     

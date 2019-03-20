@@ -100,16 +100,14 @@ class LineChart extends BaseChart{
     //设置label
     _setLabelTop(barConfig){
         return {
-            normal: {
-                show: true,
-                position: 'top',
-                fontSize: barConfig.labelFontSize,
-                fontWeight: barConfig.labelFontWeight,
-                color: barConfig.labelFontColor,
-                formatter: ((p)=>{
-                    return this.setUnit(p.value);
-                })
-            }
+            show: true,
+            position: 'top',
+            fontSize: barConfig.labelFontSize,
+            fontWeight: barConfig.labelFontWeight,
+            color: barConfig.labelFontColor,
+            formatter: ((p)=>{
+                return this.setUnit(p.value);
+            })
         }
     }
 
