@@ -243,16 +243,14 @@ class BarChart extends BaseChart {
     _setLabelTop(barConfig, unit){
         unit = unit || "";
         return {
-            normal: {
-                show: !barConfig.ifMobile,
-                position: 'top',
-                fontSize: barConfig.labelFontSize,
-                fontWeight: barConfig.labelFontWeight,
-                color: barConfig.labelFontColor,
-                formatter: ((p)=>{
-                    return this.setUnit(p.value) + unit;
-                })
-            }
+            show: !barConfig.ifMobile,
+            position: 'top',
+            fontSize: barConfig.labelFontSize,
+            fontWeight: barConfig.labelFontWeight,
+            color: barConfig.labelFontColor,
+            formatter: ((p)=>{
+                return this.setUnit(p.value) + unit;
+            })
         }
     }
 

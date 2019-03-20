@@ -215,11 +215,12 @@ class ScatterChart extends BaseChart {
     //设置label
     _setLabel(scatterConfig){
         return {
-            normal: {
-                fontSize: scatterConfig.labelFontSize,
-                fontWeight: scatterConfig.labelFontWeight,
-                color: scatterConfig.labelFontColor
-            }
+            show: !scatterConfig.ifMobile,
+            position: "top",
+            fontSize: scatterConfig.labelFontSize,
+            fontWeight: scatterConfig.labelFontWeight,
+            color: scatterConfig.labelFontColor,
+            formatter: "{b}"
         }
     }
     
@@ -265,10 +266,10 @@ class ScatterChart extends BaseChart {
                 let bs = {
                     name: item.name,
                     type: 'scatter',
+                    label: this._setLabel(scatterConfig),
                     data: [{
                         name: item.name,
                         value: [item.x, item.y],
-                        label: this._setLabel(scatterConfig),
                         symbolSize: this._setItemSymbolSize(item.value) //散点大小
                     }]
                 } 
@@ -333,7 +334,6 @@ class ScatterChart extends BaseChart {
                 let each = {
                     name: item.name,
                     value: [item.x, item.y],
-                    label: this._setLabel(scatterConfig),
                     symbolSize: this._setItemSymbolSize(item.value) //散点大小
                 }
                 seriesData.push(each);
@@ -344,6 +344,7 @@ class ScatterChart extends BaseChart {
         let bs = {
             name: "散点图",
             type: 'scatter',
+            label: this._setLabel(scatterConfig),
             data: seriesData
         } 
         series.push(bs);
@@ -400,10 +401,10 @@ class ScatterChart extends BaseChart {
             let bs = {
                 name: item.name,
                 type: 'scatter',
+                label: this._setLabel(scatterConfig),
                 data: [{
                     name: item.name,
                     value: [item.x, item.y],
-                    label: this._setLabel(scatterConfig),
                     symbolSize: this._setItemSymbolSize(item.value) //散点大小
                 }]
             } 
@@ -479,7 +480,6 @@ class ScatterChart extends BaseChart {
                 let bd = {
                     name: item.name,
                     value: [item.x, item.y],
-                    label: this._setLabel(scatterConfig),
                     symbolSize: this._setItemSymbolSize(item.value)
                 }
         
@@ -493,16 +493,18 @@ class ScatterChart extends BaseChart {
         });
         
         //拼接三级医院、二级医院series
-        (function(){
+        (() => {
             let bs1 = {
                 name: firstGroupName,
                 type: 'scatter',
+                label: this._setLabel(scatterConfig),
                 data: firstSeriesData
             }
             series.push(bs1);
             let bs2 = {
                 name: secondGroupName,
                 type: 'scatter',
+                label: this._setLabel(scatterConfig),
                 data: secondSeriesData 
             }
             series.push(bs2);
