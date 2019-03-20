@@ -39,9 +39,11 @@ class Table {
         });
     
         this.vdata.forEach((tr, index) => {
+            let tdFirst = legenddata[index] || "";
+
             //第一列补充单位
-            let trFirst = legenddata[index].toString().indexOf("增长率")!=-1? 
-                legenddata[index]+setUnit("%"): legenddata[index]+setUnit(this.vUnit || this.yUnit);
+            let trFirst = tdFirst.toString().indexOf("增长率")!=-1? 
+                tdFirst+setUnit("%"): tdFirst+setUnit(this.vUnit || this.yUnit);
             tr.unshift(trFirst);
         });
     
