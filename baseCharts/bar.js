@@ -411,8 +411,8 @@ class BarChart extends BaseChart {
                 label: this._setLabelTop(barConfig)
             };
             //修改覆盖
-            bs.label.normal.position = index%2 ? 'left': 'right';
-            bs.label.normal.formatter = (p)=>{
+            bs.label.position = index%2 ? 'left': 'right';
+            bs.label.formatter = (p)=>{
                 return (p.value=="0.00")? "": p.value + "%";
             };
 
