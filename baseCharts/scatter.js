@@ -240,6 +240,7 @@ class ScatterChart extends BaseChart {
                     type: 'scatter',
                     animation: scatterConfig.animation, //动画效果
                     markLine: {
+                        animation: scatterConfig.animation, //动画效果
                         label: {
                             normal: {
                                 //fontSize: scatterConfig.labelFontSize,
@@ -308,6 +309,7 @@ class ScatterChart extends BaseChart {
                         symbolSize: 0
                     }],
                     markLine: {
+                        animation: scatterConfig.animation, //动画效果
                         label: {
                             normal: {
                                 //fontSize: scatterConfig.labelFontSize,
@@ -378,6 +380,7 @@ class ScatterChart extends BaseChart {
             type: 'scatter',
             animation: scatterConfig.animation, //动画效果
             markLine: {
+                animation: scatterConfig.animation, //动画效果
                 label: {
                     normal: {
                         formatter: (params) => {
@@ -457,6 +460,7 @@ class ScatterChart extends BaseChart {
                         symbolSize: 0
                     }],
                     markLine: {
+                        animation: scatterConfig.animation, //动画效果
                         label: {
                             normal: {
                                 //fontSize: scatterConfig.labelFontSize,
