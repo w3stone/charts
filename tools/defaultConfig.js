@@ -4,7 +4,7 @@ let defaultConfig = {
     ifTitle: false, //标题
     ifToolBox: true, //工具栏
     ifDataZoom: true, //默认自动
-    animation: false, //动画效果
+    animation: true, //动画效果
     titleFontSize: 18,
     titleFontColor: "#000", 
     labelFontSize: 16, //label字体大小
