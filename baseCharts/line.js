@@ -122,6 +122,7 @@ class LineChart extends BaseChart{
             let bs = {
                 name: this.legenddata[index],
                 type: 'line',
+                animation: lineConfig.animation, //动画效果
                 itemStyle: {normal: {}},
                 data: val,
                 label: this._setLabelTop(lineConfig)

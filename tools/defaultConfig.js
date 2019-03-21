@@ -4,6 +4,7 @@ let defaultConfig = {
     ifTitle: false, //标题
     ifToolBox: true, //工具栏
     ifDataZoom: true, //默认自动
+    animation: false, //动画效果
     titleFontSize: 18,
     titleFontColor: "#000", 
     labelFontSize: 16, //label字体大小
@@ -20,7 +21,6 @@ let defaultConfig = {
     barConfig:{
         barWidth: "30%", //柱状图宽度
         barMaxWidth: "25%", //最大宽度
-        animation: true, //动画效果
         setLabelUnit: false, //是否处理单位(万&亿)
         dataRange: 0 //x轴显示多少列(默认不固定)
     },

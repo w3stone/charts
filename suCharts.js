@@ -226,6 +226,7 @@ function delDataZoom(obj){
 //补充每一种图表类型的配置项
 function checkConfig(config){
     var list = [ //字典表
+        "animation",
         "titleFontSize",
         "titleFontColor",
         "labelFontSize", 

@@ -266,6 +266,7 @@ class BarChart extends BaseChart {
             let bs = {
                 name: this.legenddata[index],
                 type: 'bar',
+                animation: barConfig.animation, //动画效果
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
                 label: this._setLabelTop(barConfig)
@@ -274,6 +275,7 @@ class BarChart extends BaseChart {
             //添加平均线
             if(isAvg && 0==index){
                 bs.markLine = {
+                    animation: barConfig.animation, //动画效果
                     lineStyle: {
                         normal: { color: '#fc97af'}
                     },
@@ -343,6 +345,7 @@ class BarChart extends BaseChart {
             let bs = {
                 name: legenddata[2*index],
                 type: 'bar',
+                animation: barConfig.animation, //动画效果
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
                 itemStyle:{normal:{color:''}},
@@ -401,6 +404,7 @@ class BarChart extends BaseChart {
             let bs = {
                 name: this.legenddata[index],
                 type: 'bar',
+                animation: barConfig.animation, //动画效果
                 stack:'堆积',
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
@@ -444,6 +448,7 @@ class BarChart extends BaseChart {
             let bs = {
                 name: this.legenddata[index],
                 type: 'bar',
+                animation: barConfig.animation, //动画效果
                 smooth: true,
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
@@ -462,6 +467,7 @@ class BarChart extends BaseChart {
             },
             label: this._setLabelTop(barConfig),
             markLine: {
+                animation: barConfig.animation, //动画效果
                 lineStyle: {
                     normal: { color: '#fc97af'}
                 },
@@ -539,6 +545,7 @@ class BarChart extends BaseChart {
             let bs = {
                 name: bar_legenddata[index],
                 type: 'bar',
+                animation: barConfig.animation, //动画效果
                 yAxisIndex: 0,
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
@@ -551,6 +558,7 @@ class BarChart extends BaseChart {
             let ls = {
                 name: line_legenddata[index],
                 type: 'line',
+                animation: barConfig.animation, //动画效果
                 yAxisIndex: 1,
                 data: val,
                 label: this._setLabelTop(barConfig)

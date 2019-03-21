@@ -238,6 +238,7 @@ class ScatterChart extends BaseChart {
                 let av = {
                     name: item.name,
                     type: 'scatter',
+                    animation: scatterConfig.animation, //动画效果
                     markLine: {
                         label: {
                             normal: {
@@ -268,6 +269,7 @@ class ScatterChart extends BaseChart {
                 let bs = {
                     name: item.name,
                     type: 'scatter',
+                    animation: scatterConfig.animation, //动画效果
                     label: this._setLabel(scatterConfig),
                     data: [{
                         name: item.name,
@@ -299,6 +301,7 @@ class ScatterChart extends BaseChart {
                 let av = {
                     name: item.name,
                     type: 'scatter',
+                    animation: scatterConfig.animation, //动画效果
                     data:[{
                         name: item.name,
                         value: [item.x, item.y],
@@ -346,6 +349,7 @@ class ScatterChart extends BaseChart {
         let bs = {
             name: "散点图",
             type: 'scatter',
+            animation: scatterConfig.animation, //动画效果
             label: this._setLabel(scatterConfig),
             data: seriesData
         } 
@@ -372,6 +376,7 @@ class ScatterChart extends BaseChart {
         let av = {
             name: "平均值",
             type: 'scatter',
+            animation: scatterConfig.animation, //动画效果
             markLine: {
                 label: {
                     normal: {
@@ -403,6 +408,7 @@ class ScatterChart extends BaseChart {
             let bs = {
                 name: item.name,
                 type: 'scatter',
+                animation: scatterConfig.animation, //动画效果
                 label: this._setLabel(scatterConfig),
                 data: [{
                     name: item.name,
@@ -444,6 +450,7 @@ class ScatterChart extends BaseChart {
                 let av = {
                     name: item.name,
                     type: 'scatter',
+                    animation: scatterConfig.animation, //动画效果
                     data:[{
                         name: item.name,
                         value: [item.x, item.y],
@@ -499,6 +506,7 @@ class ScatterChart extends BaseChart {
             let bs1 = {
                 name: firstGroupName,
                 type: 'scatter',
+                animation: scatterConfig.animation, //动画效果
                 label: this._setLabel(scatterConfig),
                 data: firstSeriesData
             }
@@ -506,6 +514,7 @@ class ScatterChart extends BaseChart {
             let bs2 = {
                 name: secondGroupName,
                 type: 'scatter',
+                animation: scatterConfig.animation, //动画效果
                 label: this._setLabel(scatterConfig),
                 data: secondSeriesData 
             }

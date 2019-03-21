@@ -24,6 +24,7 @@ class PieChart extends BaseChart {
         let config = {
             name: '占比',
             type: 'pie',
+            animation: pieConfig.animation, //动画效果
             label: { 
                 normal: { 
                     show: pieConfig.pieLabelShow,
