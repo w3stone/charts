@@ -461,6 +461,7 @@ class BarChart extends BaseChart {
         let config = {
             name: '总量',
             type: 'line',
+            animation: barConfig.animation, //动画效果
             data: sumData,
             lineStyle: {
                 normal:{ color: "none" }
