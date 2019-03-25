@@ -96,11 +96,6 @@ class BarChart extends BaseChart {
             series: []
         };
         
-        //如果是百分比y轴最多为100
-        // if(isPer) {
-        //     option.yAxis[0].max = 100;
-        // }
-        
         //显示滚动条
         let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
         
@@ -198,10 +193,6 @@ class BarChart extends BaseChart {
             series: []
         };
         
-        //如果是百分比y轴最多为100
-        // if(isPer) {
-        //     option.yAxis[0].max = 100;
-        // }
         //显示滚动条? 
         if(!this.yearOrMonth(this.xUnit)){
             let endIndex = this.xdata.length>4? 3: this.xdata.length-1;
@@ -421,6 +412,7 @@ class BarChart extends BaseChart {
 
         let option = this._baseBarOption(barConfig, true);
         option.series = series;
+        option.yAxis[0].max = 100; //y轴最多为100
         
         return option;
     }
