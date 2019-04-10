@@ -297,8 +297,9 @@ class BarChart extends BaseChart {
 
     //柱状图+增长率
     barWithRate(barConfig, perMode, rateMode){
-        //rateMode: true:相同legend, 后一x相较前一x的增长率; 
-        //false:相同x, 后一legend相较前一legend的增长率
+        /** rateMode: 
+         * true:相同legend, 后一x相较前一x的增长率; 
+         * false:相同x, 后一legend相较前一legend的增长率 **/
         
         this._init(perMode);
         let legenddata = [];
@@ -307,6 +308,7 @@ class BarChart extends BaseChart {
         
         let tempData = rateMode? rotateArr(this.vdata): this.vdata;
         let rateData = []; //增长率数组集合
+        let tempBol = this.legenddata.filter(o=>{return o.indexOf("(对比)")>-1}).length>0? true: false; //是否有对比(临时)
 
         //重新拼legenddata
         this.legenddata.forEach(val => {
@@ -330,6 +332,8 @@ class BarChart extends BaseChart {
         });
         
         rateData = rateMode? rotateArr(rateData): rateData; //最终增长率集合
+        //console.log(this.vdata);
+
         this.vdata.forEach((val, index)=>{
             //柱图
             newVdata.push(val);
@@ -344,9 +348,16 @@ class BarChart extends BaseChart {
             };
             series.push(bs);
             
+            //console.log(legenddata);
+            if(tempBol) return true; //如果有对比,不显示增长率(临时)
+
             //线图
             newVdata.push(rateData[index]);
-            if(rateMode && index==0) return true;
+            
+            if(rateMode){ //排除第一年增长率(跳出本次循环)
+                if(index==0) return true; 
+            }
+            
             let rs = {
                 name: legenddata[2*index+1],
                 type: 'line',
