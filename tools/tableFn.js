@@ -50,6 +50,7 @@ class Table {
         return {
             "thead": thead,
             "tbody": this.vdata,
+            "tableArr": [thead].concat(this.vdata),
             "tabledata": arr2obj(thead, this.vdata)
         };
     }
@@ -66,10 +67,12 @@ class Table {
             let tr = isPer? [item.name, ((item.value/sum)*100).toFixed(2)]: [item.name, item.value];
             tbody.push(tr);
         })
+        let thead = [(this.nTitle || "名称"), this.vTitle+setUnit(this.vUnit)];
 
         return {
-            "thead": [(this.nTitle || "名称"), this.vTitle+setUnit(this.vUnit)],
+            "thead": thead,
             "tbody": tbody,
+            "tableArr": [thead].concat(tbody),
             "tabledata": this.chartData
         };
     }
@@ -121,6 +124,7 @@ class Table {
         return {
             "thead": thead,
             "tbody": tbody,
+            "tableArr": [thead].concat(tbody),
             "tabledata": arr2obj(thead, tbody)
         };
     }
@@ -143,6 +147,7 @@ class Table {
         return {
             "thead": thead,
             "tbody": this.vdata,
+            "tableArr": [thead].concat(this.vdata),
             "tabledata": arr2obj(thead, this.vdata)
         };
     }
@@ -193,6 +198,7 @@ class Table {
         return {
             "thead": thead,
             "tbody": tbody,
+            "tableArr": [thead].concat(tbody),
             "tabledata": arr2obj(thead, tbody)
         };
     }
