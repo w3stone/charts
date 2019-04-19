@@ -1,6 +1,7 @@
 //拼柱状图格式(xdata, legenddata, vdata)
 function makeBarData(data, perMode) {
     let chartData = data.chartData;
+    //let chartData = data.chartData.filter(o=>{return o.x!="" || o.y!=""});
     let nUnit = data.nUnit;
     let dataType = data.dataType;
     //perMode: ex相同xdata和为100%, ey相同legenddata和为100%
