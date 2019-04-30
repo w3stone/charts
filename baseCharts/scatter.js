@@ -90,7 +90,7 @@ class ScatterChart extends BaseChart {
                         
                         if(this.vTitle){ //如果有vTitle
                             result += '<br/><span>' + this.vTitle + ': ' 
-                            + this.chartData.filter(o=>{return o.name==obj.name})[0].value + this.vUnit +  '</span>'; 
+                            + this.chartData.filter(o => o.name==obj.name)[0].value + this.vUnit +  '</span>'; 
                         }
                         return result;
                     }
@@ -144,7 +144,7 @@ class ScatterChart extends BaseChart {
                         
                         if(this.vTitle){ //如果有vTitle
                             result += '<br/><span>' + this.vTitle + ': ' 
-                            + this.chartData.filter(o=>{return o.name==obj.name})[0].value + this.vUnit +  '</span>'; 
+                            + this.chartData.filter(o => o.name==obj.name)[0].value + this.vUnit +  '</span>'; 
                         }
                         return result;
                     }

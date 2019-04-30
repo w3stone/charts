@@ -308,7 +308,7 @@ class BarChart extends BaseChart {
         
         let tempData = rateMode? rotateArr(this.vdata): this.vdata;
         let rateData = []; //增长率数组集合
-        let tempBol = this.legenddata.filter(o=>{return o.indexOf("(对比)")>-1}).length>0? true: false; //是否有对比(临时)
+        let tempBol = this.legenddata.filter(o => o.indexOf("(对比)")>-1).length>0? true: false; //是否有对比(临时)
 
         //重新拼legenddata
         this.legenddata.forEach(val => {
@@ -517,8 +517,8 @@ class BarChart extends BaseChart {
         let chartData = this.chartData;
         
         this.xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray(); 
-        let barChartData = chartData.filter((o)=>{return o.name=="BarChart"});
-        let lineChartData = chartData.filter((o)=>{return o.name=="LineChart"});
+        let barChartData = chartData.filter(o => o.name=="BarChart");
+        let lineChartData = chartData.filter(o => o.name=="LineChart");
         
         let bar_legenddata = Enumerable.from(barChartData).select(o=>o.y).distinct().toArray();
         let line_legenddata = Enumerable.from(lineChartData).select(o=>o.y).distinct().toArray();
