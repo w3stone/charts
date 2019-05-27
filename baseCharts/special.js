@@ -253,7 +253,7 @@ class SpecialChart extends BaseChart {
 
         xdata.forEach((xitem, index)=>{
             let useableData = this.chartData.filter(o => o.x==xitem);
-            let data = useableData.filter(o => o.name==o.y);
+            let data = useableData.map(o => ({'name':o.y, 'value':o.value}));
             
             let xCenter = space*(index+1) + "%";
 
