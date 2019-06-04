@@ -26,9 +26,9 @@ class BaseChart{
     _setBaseLegend(config, legenddata){
         return {
             data: legenddata, 
-            type:'scroll', 
-            top:'8%',
-            formatter: (name=>{
+            type: 'scroll', 
+            top: '8%',
+            formatter: (name => {
                 return this.setVisibleName(name, this.nUnit)
             }),
             textStyle: {

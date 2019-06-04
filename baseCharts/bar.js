@@ -41,16 +41,16 @@ class BarChart extends BaseChart {
             axisLabel: {
                 interval:0, 
                 rotate: 30,
-                formatter: (name=>{
+                formatter: name => {
                     return this.setxNameOmit(name);
-                })
+                }
             }
         }
         let yAxis_Own = { //y轴配置
             name: this.setTitle(this.yTitle , this.yUnit),
             type: 'value',
             axisLabel: {
-                formatter: (value)=>{
+                formatter: value => {
                     return this.setUnit(value);
                 }
             }
@@ -63,7 +63,7 @@ class BarChart extends BaseChart {
                 axisPointer: {          
                     type: 'shadow'     
                 },
-                formatter: (p)=>{
+                formatter: p => {
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
 
                     if(isPer){ //需要转成百分比
@@ -239,7 +239,8 @@ class BarChart extends BaseChart {
             fontSize: barConfig.labelFontSize,
             fontWeight: barConfig.labelFontWeight,
             color: barConfig.labelFontColor,
-            formatter: ((p)=>{
+            formatter: (p => {
+                //return p.value? this.setUnit(p.value) + unit: ""; //?
                 return this.setUnit(p.value) + unit;
             })
         }
@@ -290,6 +291,40 @@ class BarChart extends BaseChart {
         
         let option = this._baseBarOption(barConfig, isPer);
         option.series = series;
+        
+        return option;
+    }
+
+
+    //柱状图堆叠
+    barStack(barConfig, perMode){
+        this._init(perMode);
+        let series = [];
+        let isPer = (perMode=="ex" || perMode=="ey")? true: false;
+        
+        this.vdata.forEach((val, index) => {
+            let bs = {
+                name: this.legenddata[index],
+                type: 'bar',
+                animation: barConfig.animation, //动画效果
+                stack:'堆积',
+                data: val,
+                barMaxWidth: barConfig.barMaxWidth,
+                label: this._setLabelTop(barConfig)
+            };
+            //修改覆盖
+            bs.label.position = index%2 ? 'left': 'right';
+            bs.label.formatter = (p)=>{
+                return (p.value=="0.00")? "": p.value + "%";
+            };
+
+            series.push(bs);
+        });
+
+        let option = this._baseBarOption(barConfig, isPer);
+        option.series = series;
+
+        if(isPer) option.yAxis[0].max = 100; //y轴最多为100
         
         return option;
     }
@@ -393,38 +428,6 @@ class BarChart extends BaseChart {
         };
         option.series = series;
 
-        return option;
-    }
-
-
-    //柱状图百分比(相同xdata和为100%, 数据堆叠)
-    barPercentStack(barConfig){
-        this._init("ex");
-        let series = [];
-        
-        this.vdata.forEach((val, index)=>{
-            let bs = {
-                name: this.legenddata[index],
-                type: 'bar',
-                animation: barConfig.animation, //动画效果
-                stack:'堆积',
-                data: val,
-                barMaxWidth: barConfig.barMaxWidth,
-                label: this._setLabelTop(barConfig)
-            };
-            //修改覆盖
-            bs.label.position = index%2 ? 'left': 'right';
-            bs.label.formatter = (p)=>{
-                return (p.value=="0.00")? "": p.value + "%";
-            };
-
-            series.push(bs);
-        });
-
-        let option = this._baseBarOption(barConfig, true);
-        option.series = series;
-        option.yAxis[0].max = 100; //y轴最多为100
-        
         return option;
     }
 

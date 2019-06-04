@@ -14,8 +14,10 @@ let defaultConfig = {
     axisFontColor: "#000", //坐标轴字体颜色
     axisTitleFontSize: 13, //坐标轴标题大小
     axisTitleFontColor: "#000", //坐标轴标题颜色
-    legendFontSize: 13,
-    legendFontColor: "#000",
+    legendFontSize: 13, //图例组件字体大小
+    legendFontColor: "#000", //图例组件字体颜色
+    tooltipFontSize: 14, //提示框字体大小
+    tooltipFontColor: "#fff", //提示框字体颜色
 
     //柱状图配置项
     barConfig:{
@@ -49,6 +51,26 @@ let defaultConfig = {
 }
 
 
+
+//配置字典表
+const configDic = [
+    "animation",
+    "titleFontSize",
+    "titleFontColor",
+    "labelFontSize", 
+    "labelFontWeight", 
+    "labelFontColor",
+    "axisFontSize", 
+    "axisFontColor",
+    "axisTitleFontSize",
+    "axisTitleFontColor",
+    "legendFontSize",
+    "legendFontColor",
+    "tooltipFontSize",
+    "tooltipFontColor"
+]
+
+
 export{
-    defaultConfig
+    defaultConfig, configDic
 }

@@ -5,8 +5,8 @@ import {ScatterChart} from "./baseCharts/scatter.js";
 import {MapChart} from "./baseCharts/map.js";
 import {SpecialChart} from "./baseCharts/special.js";
 import {TreeChart} from "./baseCharts/tree.js";
-import {defaultConfig} from "./tools/defaultConfig.js"
-import {mergeJson, exportExcel} from "./tools/otherFn.js"
+import {defaultConfig, configDic} from "./tools/defaultConfig.js";
+import {mergeJson, exportExcel} from "./tools/otherFn.js";
 
 
 class SuCharts{
@@ -33,8 +33,15 @@ class SuCharts{
     setOption(config){
         let option = {}; //option配置对象
         config = config? mergeJson(defaultConfig, config): defaultConfig; //合并对象
-        checkConfig(config);
-        //console.log(config);
+
+        //补充每一种图表类型的配置项(内部函数)
+        function checkConfig(innerConfig){
+            //内部config补充外部config
+            configDic.forEach(key => {
+                innerConfig[key] = config[key];
+            })
+        }
+
 
         switch (this.chartType){
             case 98: //纵向树状图
@@ -42,80 +49,104 @@ class SuCharts{
                 option = this.chartObj.tree(config);
                 break;
             case 99: //中国地图
+                checkConfig(config.mapConfig);
                 this.chartObj = new MapChart(this.data);
                 option = this.chartObj.chinaMap(config.mapConfig);
                 break;
             case 101: //柱状图普通
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barNormal(config.barConfig, "", false);
+                option = this.chartObj.barNormal(config.barConfig, '', false);
                 break;
             case 102: //柱状图+增长率
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barWithRate(config.barConfig, "", false);
+                option = this.chartObj.barWithRate(config.barConfig, '', false);
                 break;
             case 103: //柱状图+折线图
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barAndLine(config.barConfig);
                 break;
             case 104: //柱状图普通(含平均值线)
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barNormal(config.barConfig, "", true);
+                option = this.chartObj.barNormal(config.barConfig, '', true);
                 break;
             case 105: //柱状图百分比(相同xdata和为100%, 堆叠)
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barPercentStack(config.barConfig);
+                option = this.chartObj.barStack(config.barConfig, 'ex');
                 break;
             case 106: //柱状图百分比(相同xdata和为100%)
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barNormal(config.barConfig, "ex");
+                option = this.chartObj.barNormal(config.barConfig, 'ex');
                 break;
             case 107: //柱状图百分比(相同ydata,即相同颜色和为100%)
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barNormal(config.barConfig, "ey");
+                option = this.chartObj.barNormal(config.barConfig, 'ey');
                 break;
             case 108: //柱状图百分比(相同ydata,即相同颜色和为100%)+增长率
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barWithRate(config.barConfig, "ey", true);
+                option = this.chartObj.barWithRate(config.barConfig, 'ey', true);
                 break;
             case 109: //柱状图(相同ydata,即相同颜色和为100%)+增长率
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                option = this.chartObj.barWithRate(config.barConfig, "", true);
+                option = this.chartObj.barWithRate(config.barConfig, '', true);
+                break;
+            case 110: //柱状图普通堆叠
+                checkConfig(config.barConfig);
+                this.chartObj = new BarChart(this.data);
+                option = this.chartObj.barStack(config.barConfig, '');
                 break;
             case 113: //柱状图动态求和
+                checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
                 let echart = echarts.init(document.getElementById(this.panelId), this.theme); //用于绑定事件
                 option = this.chartObj.barDynamic(echart, config.barConfig);
                 break;
             case 201: //饼图
+                checkConfig(config.pieConfig);
                 this.chartObj = new PieChart(this.data);
                 option = this.chartObj.pie(config.pieConfig);
                 break;
             case 202: //环形饼图
+                checkConfig(config.pieConfig);
                 config = mergeJson(defaultConfig, {pieConfig:{innerRadius: '30%', outerRadius: '60%'}});
                 this.chartObj = new PieChart(this.data);
                 option = this.chartObj.pie(config.pieConfig);
                 break;
             case 301: //折线图普通
+                checkConfig(config.lineConfig);
                 this.chartObj = new LineChart(this.data);
                 option = this.chartObj.line(false, config.lineConfig);
                 break;
             case 302: //折线图普通(含平均线)
+                checkConfig(config.lineConfig);
                 this.chartObj = new LineChart(this.data);
                 option = this.chartObj.line(true, config.lineConfig);
                 break;
             case 401: //普通散点图
+                checkConfig(config.scatterConfig);
                 this.chartObj = new ScatterChart(this.data);
                 option = this.chartObj.scatter(config.scatterConfig);
                 break;
             case 402: //相同颜色散点图
+                checkConfig(config.scatterConfig);
                 this.chartObj = new ScatterChart(this.data);
                 option = this.chartObj.scatterSameColor(config.scatterConfig);
                 break;
             case 403: //散点图(自动求平均)
+                checkConfig(config.scatterConfig);
                 this.chartObj = new ScatterChart(this.data);
                 option = this.chartObj.scatterAutoAvg(config.scatterConfig);
                 break;
             case 404: //散点图(分两组&双平均)
+                checkConfig(config.scatterConfig);
                 this.chartObj = new ScatterChart(this.data);
                 option = this.chartObj.scatterWithGroup(config.scatterConfig);
                 break;
@@ -128,6 +159,7 @@ class SuCharts{
                 option = this.chartObj.special02(config);
                 break;
             case 993: //饼图百分比
+                checkConfig(config.pieConfig);
                 this.chartObj = new SpecialChart(this.data);
                 option = this.chartObj.special03(config.pieConfig);
                 break;
@@ -220,31 +252,5 @@ function addToolbox(data, panelId){
 function delDataZoom(obj){
     if(obj.hasOwnProperty("dataZoom")){
         delete obj.dataZoom;
-    }
-}
-
-//补充每一种图表类型的配置项
-function checkConfig(config){
-    var list = [ //字典表
-        "animation",
-        "titleFontSize",
-        "titleFontColor",
-        "labelFontSize", 
-        "labelFontWeight", 
-        "labelFontColor",
-        "axisFontSize", 
-        "axisFontColor",
-        "axisTitleFontSize",
-        "axisTitleFontColor",
-        "legendFontSize",
-        "legendFontColor"
-    ];
-    
-    for(var key in config){
-        if(typeof config[key] == "object"){
-            list.forEach(innerKey=>{
-                config[key][innerKey] = config[innerKey];
-            })
-        }
     }
 }

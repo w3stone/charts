@@ -4,8 +4,7 @@ function makeBarData(data, perMode) {
     //let chartData = data.chartData.filter(o=>{return o.x!="" || o.y!=""});
     let nUnit = data.nUnit;
     let dataType = data.dataType;
-    //perMode: ex相同xdata和为100%, ey相同legenddata和为100%
-    perMode = perMode || "normal";
+    perMode = perMode || "normal"; //perMode: ex相同xdata和为100%, ey相同legenddata和为100%
 
     let xdata = [];
     let vdata = [];
@@ -21,6 +20,26 @@ function makeBarData(data, perMode) {
         legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
     }
     //console.log(legenddata);
+
+
+    //拼接vdata(内部函数)
+    function makeBar_vdata_normal(valy){
+        let arr = [];
+        xdata.forEach(valx => {
+            if("ex"==perMode){ //转换成百分比
+                let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value);
+                arr.push( (Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100).toFixed(2) );
+            
+            }else if("ey"==perMode){
+                let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value);
+                arr.push( (Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100).toFixed(2) );
+            
+            }else{
+                arr.push( Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value) );
+            } 
+        });
+        vdata.push(arr);
+    }
     
     
     if(dataType){ //需要转换
@@ -31,96 +50,64 @@ function makeBarData(data, perMode) {
         let ortherSumArr = []; //用于存储该年其它类药品的和
         
         //初始化ortherSumArr
-        xdata.forEach(()=>{
+        xdata.forEach(() => {
             ortherSumArr.push(0); 
         })
 
         //遍历legenddata
-        legenddata.forEach((valy, y_index)=>{
-            let arr = [];
-            let per = Enumerable.from(chartData).where(o=>{return o.y==valy}).sum(o=>o.value) / allSum;
+        legenddata.forEach((valy, y_index) => {
+            let per = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value) / allSum;
             
             if(per < 0.01){ //小于1%
                 delIndexArr.unshift(y_index); //储存需要被删除的索引(向前插入)
                 delValArr.push(valy); //储存需要被删除的值
                 
-                xdata.forEach((valx, x_index)=>{
+                xdata.forEach((valx, x_index) => {
                     if("ex"==perMode){ //转换成百分比
-                        let sum = Enumerable.from(chartData).where(o=>{return o.x==valx;}).sum(o=>o.value); //相同xdata求和
-                        let value = Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value)/sum*100;
+                        let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata求和
+                        let value = Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100;
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else if("ey"==perMode){
-                        let sum = Enumerable.from(chartData).where(o=>{return o.y==valy;}).sum(o=>o.value); //相同legenddata求和
-                        let value = Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value)/sum*100;
+                        let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata求和
+                        let value = Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100;
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else{
-                        ortherSumArr[x_index] += Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value);
+                        ortherSumArr[x_index] += Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value);
                     } 
                 });
 
             }else{ //大于1%
-                xdata.forEach(valx => {
-                    if("ex"==perMode){ //转换成百分比
-                        let sum = Enumerable.from(chartData).where(o=>{return o.x==valx;}).sum(o=>o.value);
-                        arr.push( (Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value)/sum*100).toFixed(2) );
-                    
-                    }else if("ey"==perMode){
-                        let sum = Enumerable.from(chartData).where(o=>{return o.y==valy;}).sum(o=>o.value);
-                        arr.push( (Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value)/sum*100).toFixed(2) );
-                    
-                    }else{
-                        arr.push( Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value) );
-                    } 
-                });
-                vdata.push(arr);
+                makeBar_vdata_normal(valy);
             }
         });
         //console.log(ortherSumArr);
 
         //如果有需要被删除的元素(需要过滤整合)
         if(delIndexArr.length>0){ 
-            delIndexArr.forEach(val=>{
+            delIndexArr.forEach(val => {
                 legenddata.splice(val, 1);
             });
             legenddata.push("其它");
             
-            ortherSumArr.forEach( (value,index) =>{ //保留两位小数
+            ortherSumArr.forEach((value,index) => { //保留两位小数
                 ortherSumArr[index] = value.toFixed(2);
             });
-
             vdata.push(ortherSumArr);
 
             //还原被过滤的项(用于二级)
-            delValArr.forEach((val)=>{
-                let temp = Enumerable.from(chartData).where(o=>{return o.y==val}).toArray();
-                temp = temp.map((o)=>{
-                    return {"name":o.y, "x":o.x, "y":"其它", "value":o.value};
-                })
+            delValArr.forEach(val => {
+                let temp = Enumerable.from(chartData).where(o=>o.y==val).toArray();
+                temp = temp.map(o => ({"name":o.y, "x":o.x, "y":"其它", "value":o.value}) );
                 extraChartData = extraChartData.concat(temp);
             });
             //console.log(extraChartData);
         }
 
     }else{ //不需要转换
-
         legenddata.forEach(valy => {
-            let arr = [];
-            xdata.forEach(valx => {
-                if("ex"==perMode){ //转换成百分比
-                    let sum = Enumerable.from(chartData).where(o=>{return o.x==valx;}).sum(o=>o.value);
-                    arr.push( (Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value)/sum*100).toFixed(2) );
-
-                }else if("ey"==perMode){
-                    let sum = Enumerable.from(chartData).where(o=>{return o.y==valy;}).sum(o=>o.value);
-                    arr.push( (Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value)/sum*100).toFixed(2) );
-
-                }else{
-                    arr.push( Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value) );
-                } 
-            });
-            vdata.push(arr);
+            makeBar_vdata_normal(valy);
         });
     }
 
@@ -141,7 +128,7 @@ function makeBarData(data, perMode) {
 function makePieData(chartData) {
     let legenddata = Enumerable.from(chartData).select(o=>o.name).toArray();
 
-    chartData = chartData.map(o=>{
+    chartData = chartData.map(o => {
         return {
             "x": o.x, 
             "y": o.y,
@@ -166,7 +153,7 @@ function makeLineData(chartData) {
     legenddata.forEach(valy => {
         let arr = [];
         xdata.forEach(valx => {
-            arr.push( Enumerable.from(chartData).where(o=>{return o.x==valx && o.y==valy}).sum(o=>o.value) );
+            arr.push( Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value) );
         });
         vdata.push(arr);
     });
@@ -187,7 +174,7 @@ function makeLineData(chartData) {
 function makeScatterData(chartData, nUnit) {
     let legenddata = Enumerable.from(chartData).select(o=>o.name).toArray();
     
-    chartData = chartData.map(o=>{
+    chartData = chartData.map(o => {
         return {
             "x": trans2number(o.x), 
             "y": trans2number(o.y),

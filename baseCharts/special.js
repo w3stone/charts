@@ -262,7 +262,7 @@ class SpecialChart extends BaseChart {
                 type: 'pie',
                 //roseType:'radius',
                 radius : '40%',
-                center: [xCenter, '50%'],
+                center: [xCenter, '55%'],
                 data: data,
                 label: {
                     normal: {
@@ -305,7 +305,7 @@ class SpecialChart extends BaseChart {
         let option = {
             tooltip : {
                 trigger: 'item',
-                formatter: "{a} {b}: {c} ({d}%)",
+                formatter: '{a} {b}: {c}' + this.vUnit + ' ({d}%)',
                 textStyle: {
                     fontSize:14
                 }
