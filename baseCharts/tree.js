@@ -9,7 +9,7 @@ class TreeChart extends BaseChart {
     }
 
     //占比饼图
-    tree2(config){
+    tree2(treeConfig){
         let option = {
             tooltip: {
                 trigger: 'item',
@@ -27,7 +27,7 @@ class TreeChart extends BaseChart {
                             rotate: 0,
                             verticalAlign: 'middle',
                             align: 'right',
-                            fontSize: config.labelFontSize,
+                            fontSize: treeConfig.labelFontSize,
                             offset: [10, -20],
                             formatter:(ele)=>{
                                 var data = ele.data;
@@ -48,11 +48,12 @@ class TreeChart extends BaseChart {
                             }
                         }
                     },
-                    left: '4%',
-                    right: '4%',
-                    top: '10%',
-                    bottom: '25%',
-                    height: 240
+                    top: treeConfig.top,
+                    right: treeConfig.right,
+                    bottom: treeConfig.bottom,
+                    left: treeConfig.left,
+                    width: treeConfig.width,
+                    height: treeConfig.height,
                     //expandAndCollapse: true,
                     //animationDurationUpdate: 400
                 }
@@ -63,7 +64,7 @@ class TreeChart extends BaseChart {
     }
 
     //横向树状图
-    tree(config){
+    tree(treeConfig){
         var treeData = this.treeData;
         
         for(var i=0; i<treeData[0].children.length; i++){
@@ -94,7 +95,7 @@ class TreeChart extends BaseChart {
                             rotate: 0,
                             verticalAlign: 'middle',
                             align: 'right',
-                            fontSize: config.labelFontSize,
+                            fontSize: treeConfig.labelFontSize,
                             offset: [10, -20],
                             formatter:(ele)=>{
                                 var data = ele.data;
@@ -109,17 +110,17 @@ class TreeChart extends BaseChart {
                                 position: 'bottom',
                                 verticalAlign: 'middle',
                                 align: 'left',
-                                fontSize: config.labelFontSize,
+                                fontSize: treeConfig.labelFontSize,
                                 offset: [10, -10]
                             }
                         }
                     },
-                    left: '15%',
-                    right: '10%',
-                    top: '10%',
-                    bottom: '25%',
-                    width: '50%',
-                    height: '400',
+                    top: treeConfig.top,
+                    right: treeConfig.right,
+                    bottom: treeConfig.bottom,
+                    left: treeConfig.left,
+                    width: treeConfig.width,
+                    height: treeConfig.height,
                     expandAndCollapse: true,
                     initialTreeDepth: 2,
                     symbolKeepAspect: true 

@@ -47,6 +47,15 @@ let defaultConfig = {
     mapConfig:{
         rangeHighColor: "",
         rangeLowColor: ""
+    },
+    //树状图配置项
+    treeConfig:{
+        top: '10%',
+        right: '10%',
+        bottom: '10%',
+        left: '15%',
+        width: '50%',
+        height: '400'
     }
 }
 

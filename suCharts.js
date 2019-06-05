@@ -45,8 +45,9 @@ class SuCharts{
 
         switch (this.chartType){
             case 98: //纵向树状图
+                checkConfig(config.treeConfig);
                 this.chartObj = new TreeChart(this.data);
-                option = this.chartObj.tree(config);
+                option = this.chartObj.tree(config.treeConfig);
                 break;
             case 99: //中国地图
                 checkConfig(config.mapConfig);

@@ -1,5 +1,5 @@
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
+// import FileSaver from 'file-saver'
+// import XLSX from 'xlsx'
 
 //合并对象
 function mergeJson(prev, next){
@@ -39,7 +39,7 @@ function exportExcel(dom, excelName){
     /* get binary string as output */
     var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
     try {
-        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), excelName + '.xlsx')
+        saveAs(new Blob([wbout], { type: 'application/octet-stream' }), excelName + '.xlsx')
     } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
     return wbout;
 }
