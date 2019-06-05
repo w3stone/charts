@@ -39,8 +39,11 @@ function exportExcel(dom, excelName){
     /* get binary string as output */
     var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
     try {
+        excelName = excelName || '表格';
         saveAs(new Blob([wbout], { type: 'application/octet-stream' }), excelName + '.xlsx')
-    } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+    } catch (e) { 
+        if (typeof console !== 'undefined') console.log(e, wbout) 
+    }
     return wbout;
 }
 
