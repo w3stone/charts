@@ -26,16 +26,21 @@ function makeBarData(data, perMode) {
     function makeBar_vdata_normal(valy){
         let arr = [];
         xdata.forEach(valx => {
+            let list = chartData.filter(o=>o.x==valx && o.y==valy);
+
             if("ex"==perMode){ //转换成百分比
-                let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value);
-                arr.push( (Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100).toFixed(2) );
+                let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata总和
+                let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
+                arr.push(value);
             
             }else if("ey"==perMode){
-                let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value);
-                arr.push( (Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100).toFixed(2) );
+                let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata总和
+                let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
+                arr.push(value);
             
             }else{
-                arr.push( Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value) );
+                //arr.push( Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value) );
+                arr.push( list.length>0? Enumerable.from(list).sum(o=>o.value): '' );
             } 
         });
         vdata.push(arr);
@@ -63,18 +68,20 @@ function makeBarData(data, perMode) {
                 delValArr.push(valy); //储存需要被删除的值
                 
                 xdata.forEach((valx, x_index) => {
+                    let list = chartData.filter(o=>o.x==valx && o.y==valy);
+
                     if("ex"==perMode){ //转换成百分比
                         let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata求和
-                        let value = Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100;
+                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): 0;
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else if("ey"==perMode){
                         let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata求和
-                        let value = Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value)/sum*100;
+                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): 0;
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else{
-                        ortherSumArr[x_index] += Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value);
+                        ortherSumArr[x_index] += list.length>0? Enumerable.from(list).sum(o=>o.value): 0;
                     } 
                 });
 
@@ -90,10 +97,7 @@ function makeBarData(data, perMode) {
                 legenddata.splice(val, 1);
             });
             legenddata.push("其它");
-            
-            ortherSumArr.forEach((value,index) => { //保留两位小数
-                ortherSumArr[index] = value.toFixed(2);
-            });
+
             vdata.push(ortherSumArr);
 
             //还原被过滤的项(用于二级)
@@ -113,7 +117,7 @@ function makeBarData(data, perMode) {
 
     // console.log(xdata);
     // console.log(legenddata);
-    // console.log(vdata);
+    console.log(vdata);
 
     return {
         "xdata": xdata,
