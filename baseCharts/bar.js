@@ -444,7 +444,8 @@ class BarChart extends BaseChart {
             for (let i=0; i<this.vdata[0].length; i++){
                 let sum = 0;
                 for(let j=0; j<this.vdata.length; j++){
-                    sum += this.vdata[j][i];
+                    let value = this.vdata[j][i]? this.vdata[j][i]: 0;
+                    sum += value;
                 }
                 sumData[i] = parseFloat(sum.toFixed(2));
             }
