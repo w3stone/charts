@@ -118,7 +118,7 @@ function makeBarData(data, perMode) {
 
     // console.log(xdata);
     // console.log(legenddata);
-    console.log(vdata);
+    // console.log(vdata);
 
     return {
         "xdata": xdata,
