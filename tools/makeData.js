@@ -23,19 +23,21 @@ function makeBarData(data, perMode) {
 
 
     //拼接vdata(内部函数)
-    function makeBar_vdata_normal(valy){
+    let makeBar_vdata_normal = valy => {
         let arr = [];
         xdata.forEach(valx => {
             let list = chartData.filter(o=>o.x==valx && o.y==valy);
 
             if("ex"==perMode){ //转换成百分比
                 let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata总和
-                let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
+                sum = sum || 1;
+                let value = list.length>0? parseFloat( (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2) ): '';
                 arr.push(value);
             
             }else if("ey"==perMode){
                 let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata总和
-                let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
+                sum = sum || 1;
+                let value = list.length>0? parseFloat( (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2) ): '';
                 arr.push(value);
             
             }else{
@@ -72,17 +74,22 @@ function makeBarData(data, perMode) {
 
                     if("ex"==perMode){ //转换成百分比
                         let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata求和
+                        sum = sum || 1;
                         let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): 0;
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else if("ey"==perMode){
                         let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata求和
+                        sum = sum || 1;
                         let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): 0;
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else{
-                        ortherSumArr[x_index] += list.length>0? Enumerable.from(list).sum(o=>o.value): 0;
-                    } 
+                        let value = list.length>0? Enumerable.from(list).sum(o=>o.value): 0;
+                        ortherSumArr[x_index] += parseFloat(value); 
+                    }
+                    //再次保留两位小数
+                    ortherSumArr[x_index] = parseFloat( ortherSumArr[x_index].toFixed(2) );
                 });
 
             }else{ //大于1%
@@ -117,7 +124,7 @@ function makeBarData(data, perMode) {
 
     // console.log(xdata);
     // console.log(legenddata);
-    console.log(vdata);
+    // console.log(vdata);
 
     return {
         "xdata": xdata,

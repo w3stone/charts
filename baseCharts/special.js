@@ -247,11 +247,21 @@ class SpecialChart extends BaseChart {
         this._init("ex");
 
         let xdata = this.xdata;
+        let newxdata = [];
+
+        
+        //验证数据，如果每一年的小数据都为0，则删除该x
+        xdata.forEach(xitem => {
+            let xSum = Enumerable.from(this.chartData).where(o=>o.x==xitem).sum(o=>o.value);
+            //console.log(xSum);
+            if(xSum!=0) newxdata.push(xitem);
+        });
+
         let length = xdata.length;
         let space = parseInt( 100 / (length+1) ); //间距
         let series = [];
 
-        xdata.forEach((xitem, index)=>{
+        newxdata.forEach((xitem, index)=>{
             let useableData = this.chartData.filter(o => o.x==xitem);
             let data = useableData.map(o => ({'name':o.y, 'value':o.value}));
             
@@ -292,11 +302,11 @@ class SpecialChart extends BaseChart {
             name: this.setTitle(this.xTitle, this.xUnit),
             nameLocation: 'end',
             type: 'category',
-            data: this.xdata,
+            data: newxdata,
             axisLabel: {
                 interval:0, 
                 rotate: 30,
-                formatter: (name=>{
+                formatter: (name => {
                     return this.setxNameOmit(name);
                 })
             }
@@ -311,14 +321,6 @@ class SpecialChart extends BaseChart {
                 }
             },
             legend:this._setBaseLegend(pieConfig, this.legenddata),
-            // legend: {
-            //     orient: 'vertical',
-            //     left: 'left',
-            //     data: this.legenddata
-            // },
-            // grid: [
-            //     {x: '7.5%',y: '65%', width: '88%', height: '60%'},
-            // ],
             xAxis: [mergeJson(axis_Base, xAxis_Own)],
             yAxis: {gridIndex: 0, name:'year', show: false},
             series:series
