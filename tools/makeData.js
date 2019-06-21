@@ -3,6 +3,7 @@ function makeBarData(data, perMode) {
     let chartData = data.chartData;
     //let chartData = data.chartData.filter(o=>{return o.x!="" || o.y!=""});
     let nUnit = data.nUnit;
+    let xUnit = data.xUnit;
     let dataType = data.dataType;
     perMode = perMode || "normal"; //perMode: ex相同xdata和为100%, ey相同legenddata和为100%
 
@@ -11,7 +12,7 @@ function makeBarData(data, perMode) {
     let extraChartData = []; //存储被过滤后再还原的项
     let legenddata = [];
 
-    if(nUnit=="年"){
+    if(nUnit=="年" && xUnit!='月'){
         //根据最新一年排序
         xdata = Enumerable.from(chartData).orderByDescending(o=>o.y).select(o=>o.x).distinct().toArray();
         legenddata = Enumerable.from(chartData).orderBy(o=>o.y).select(o=>o.y).distinct().toArray();
