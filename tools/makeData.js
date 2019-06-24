@@ -16,7 +16,12 @@ function makeBarData(data, perMode) {
         //根据最新一年排序
         xdata = Enumerable.from(chartData).orderByDescending(o=>o.y).select(o=>o.x).distinct().toArray();
         legenddata = Enumerable.from(chartData).orderBy(o=>o.y).select(o=>o.y).distinct().toArray();
-    }else{
+
+    }else if(nUnit=="年" && xUnit=='月'){ //?x轴为月份,legend为年份
+        xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
+        legenddata = Enumerable.from(chartData).orderBy(o=>o.y).select(o=>o.y).distinct().toArray();
+
+    }else{ //常规
         xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
         legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
     }
