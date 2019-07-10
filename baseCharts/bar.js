@@ -231,10 +231,10 @@ class BarChart extends BaseChart {
     }
 
     //设置label
-    _setLabelTop(barConfig, unit){
+    _setLabelTop(barConfig, unit, forceShow){
         unit = unit || "";
         return {
-            show: !barConfig.ifMobile,
+            show: typeof forceShow!='undefined'? forceShow: !barConfig.ifMobile,
             position: 'top',
             fontSize: barConfig.labelFontSize,
             fontWeight: barConfig.labelFontWeight,
@@ -396,12 +396,17 @@ class BarChart extends BaseChart {
             let rs = {
                 name: legenddata[2*index+1],
                 type: 'line',
-                itemStyle:{normal:{color:''}},
+                itemStyle:{
+                    opacity: rateMode==false? 1: 0
+                },
+                lineStyle:{
+                    opacity: rateMode==false? 1: 0
+                },
                 yAxisIndex: 1,
                 smooth: true,
                 animation: barConfig.animation, //动画效果 
                 data: rateData[index],
-                label: this._setLabelTop(barConfig, "%")
+                label: rateMode==false? this._setLabelTop(barConfig, "%"): this._setLabelTop(barConfig, "%", false)
             }
             series.push(rs);  
         });
