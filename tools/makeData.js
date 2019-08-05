@@ -18,7 +18,7 @@ function makeBarData(data, perMode) {
         legenddata = Enumerable.from(chartData).orderBy(o=>o.y).select(o=>o.y).distinct().toArray();
 
     }else if(nUnit=="年" && xUnit=='月'){ //?x轴为月份,legend为年份
-        xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
+        xdata = Enumerable.from(chartData).orderBy(o=>parseInt(o.x)).select(o=>o.x).distinct().toArray();
         legenddata = Enumerable.from(chartData).orderBy(o=>o.y).select(o=>o.y).distinct().toArray();
 
     }else{ //常规

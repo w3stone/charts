@@ -94,7 +94,7 @@ class SuCharts{
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barWithRate(config.barConfig, 'ey', true);
                 break;
-            case 109: //柱状图(相同ydata,即相同颜色和为100%)+增长率
+            case 109: //柱状图+增长率(相同xdata之间的增长率)
                 checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barWithRate(config.barConfig, '', true);
