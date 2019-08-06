@@ -77,6 +77,7 @@ class MapChart extends BaseChart{
                 }
             },
             dataRange: {
+                show: mapConfig.dataRangeShow,
                 min: 0,
                 max: rangeMax,
                 x: 'left',
