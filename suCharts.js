@@ -32,6 +32,7 @@ class SuCharts{
     //设置option
     setOption(config){
         let option = {}; //option配置对象
+        let echart = echarts.init(document.getElementById(this.panelId), this.theme); //用于绑定事件
         config = config? mergeJson(defaultConfig, config): defaultConfig; //合并对象
 
         //补充每一种图表类型的配置项(内部函数)
@@ -59,7 +60,7 @@ class SuCharts{
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barNormal(config.barConfig, '', false);
                 break;
-            case 102: //柱状图+增长率
+            case 102: //柱状图+增长率(相同legend, 即颜色之间的增长率)
                 checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barWithRate(config.barConfig, '', false);
@@ -89,7 +90,7 @@ class SuCharts{
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barNormal(config.barConfig, 'ey');
                 break;
-            case 108: //柱状图百分比(相同ydata,即相同颜色和为100%)+增长率
+            case 108: //柱状图百分比(相同ydata,即相同颜色和为100%)+增长率(相同xdata之间的增长率)
                 checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barWithRate(config.barConfig, 'ey', true);
@@ -104,10 +105,14 @@ class SuCharts{
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barStack(config.barConfig, '');
                 break;
+            case 111: //柱状图原始&占比切换
+                checkConfig(config.barConfig);
+                this.chartObj = new BarChart(this.data);
+                option = this.chartObj.barNormalAndPer(echart, config.barConfig, 'ey');
+                break;
             case 113: //柱状图动态求和
                 checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
-                let echart = echarts.init(document.getElementById(this.panelId), this.theme); //用于绑定事件
                 option = this.chartObj.barDynamic(echart, config.barConfig);
                 break;
             case 201: //饼图
@@ -169,12 +174,15 @@ class SuCharts{
         }
 
         //补充添加配置项
-        if(config.ifTitle==true){
+        if(config.ifTitle==true){ //标题显示
             option.title = addTitle(this.data.title, config);
             //option.grid.top = '20%'
         }
-        if(config.ifToolBox==true){
-            option.toolbox = addToolbox(this.data, this.panelId);
+        if(config.ifToolBox==true){ //右上角工具栏
+            if(!option.hasOwnProperty("toolbox"))
+                option.toolbox = {};
+            
+            option.toolbox = mergeJson(addToolbox(this.data, this.panelId), option.toolbox); //合并对象
         }
         if(config.ifDataZoom==false){//删除dataZoom属性
             delDataZoom(option);
@@ -234,7 +242,6 @@ function addToolbox(data, panelId){
                 title: '下载图片',
                 backgroundColor:'#ffffff' 
             },
-            //报表下载
             myDownload:{
                 show: true,
                 title: '下载报表',
@@ -243,7 +250,17 @@ function addToolbox(data, panelId){
                     var ele = $("#"+panelId).parents(".chart_item").find(".su_table");
                     exportExcel($(ele)[0], data.title);
                 }
-            }
+            },
+            // restore: { 
+            //     show: true,
+            //     title: '配置项还原',
+            //     backgroundColor:'#ffffff' 
+            // },
+            // dataView : { 
+            //     show: true,
+            //     title: '数据视图工具',
+            //     backgroundColor:'#ffffff' 
+            // }
         }
     };
     return toolbox;

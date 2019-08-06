@@ -65,20 +65,26 @@ class BarChart extends BaseChart {
                 },
                 formatter: p => {
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
-
-                    if(isPer){ //需要转成百分比
-                        for(let i=0;i<p.length;i++){
-                            if(p[i].value>0){
-                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                            }
-                        }
-                    }else{ //不需要转成百分比
-                        for(let i=0;i<p.length;i++){
-                            if(p[i].seriesName.indexOf("增长率")!=-1){ //？
-                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                            }else{
-                                result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
-                            }
+                    // if(isPer){ //需要转成百分比
+                    //     for(let i=0;i<p.length;i++){
+                    //         if(p[i].value>0){
+                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                    //         }
+                    //     }
+                    // }else{ //不需要转成百分比
+                    //     for(let i=0;i<p.length;i++){
+                    //         if(p[i].seriesName.indexOf("增长率")!=-1){ //???
+                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                    //         }else{
+                    //             result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
+                    //         }
+                    //     }
+                    // }
+                    for(let i=0;i<p.length;i++){
+                        if(p[i].seriesName.indexOf("增长率")!=-1){ //???
+                            result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                        }else{
+                            result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
                         }
                     }
                     return result;
@@ -333,25 +339,26 @@ class BarChart extends BaseChart {
     //柱状图+增长率
     barWithRate(barConfig, perMode, rateMode){
         /** rateMode: 
-         * true:相同legend, 后一x相较前一x的增长率; 
-         * false:相同x, 后一legend相较前一legend的增长率 **/
+         * false:相同legend, 后一x相较前一x的增长率; 
+         * true:相同x, 后一legend相较前一legend的增长率 **/
         
         this._init(perMode);
-        let legenddata = [];
+        let new_legenddata = [];
         let series = [];
-        let newVdata = [];
+        let new_vdata = [];
         
         let tempData = rateMode? rotateArr(this.vdata): this.vdata;
         let rateData = []; //增长率数组集合
-        let tempBol = this.legenddata.filter(o => o.indexOf("(对比)")>-1).length>0? true: false; //是否有对比(临时)
+        let tempBol = this.legenddata.filter(o=>o.indexOf("(对比)")>-1).length>0? true: false; //是否有对比(临时)
 
         //重新拼legenddata
-        this.legenddata.forEach(val => {
-            legenddata.push(val);
-            legenddata.push(val+"增长率");
+        this.legenddata.forEach(name => {
+            new_legenddata.push(name);
+            new_legenddata.push(name+"增长率");
         });
+
         //求增长率集合
-        tempData.forEach(arr => { //
+        tempData.forEach(arr => {
             let lastval = 0;
             let raiseArr = [];
             arr.forEach(val => {
@@ -366,42 +373,31 @@ class BarChart extends BaseChart {
             rateData.push(raiseArr);
         });
         
-        rateData = rateMode? rotateArr(rateData): rateData; //最终增长率集合
-        //console.log(this.vdata);
+        //最终增长率集合
+        rateData = rateMode? rotateArr(rateData): rateData;
 
         this.vdata.forEach((val, index)=>{
             //柱图
-            newVdata.push(val);
+            new_vdata.push(val);
             let bs = {
-                name: legenddata[2*index],
+                name: new_legenddata[2*index],
                 type: 'bar',
                 animation: barConfig.animation, //动画效果
                 data: val,
                 barMaxWidth: barConfig.barMaxWidth,
-                itemStyle:{normal:{color:''}},
+                itemStyle: {normal:{color:''}},
                 label: this._setLabelTop(barConfig)
             };
             series.push(bs);
-            
-            //console.log(legenddata);
-            if(tempBol) return true; //如果有对比,不显示增长率(临时)
 
             //线图
-            newVdata.push(rateData[index]);
-            
-            if(rateMode){ //排除第一年增长率(跳出本次循环)
-                if(index==0) return true; 
-            }
+            new_vdata.push(rateData[index]);
+
+            if(rateMode) return true; //跳出本次循环
             
             let rs = {
-                name: legenddata[2*index+1],
+                name: new_legenddata[2*index+1],
                 type: 'line',
-                itemStyle:{
-                    opacity: rateMode==false? 1: 0
-                },
-                lineStyle:{
-                    opacity: rateMode==false? 1: 0
-                },
                 yAxisIndex: 1,
                 smooth: true,
                 animation: barConfig.animation, //动画效果 
@@ -411,28 +407,31 @@ class BarChart extends BaseChart {
             series.push(rs);  
         });
 
-        let option = this._baseBarOption(barConfig, false);
-        
         //重新赋值对象实例的legenddata, vdata
-        this.legenddata = legenddata;
-        this.vdata = newVdata;
+        this.legenddata = rateMode? this.legenddata: new_legenddata;
         
-        //重新赋值option.legend.data
-        if(option.hasOwnProperty("legend"))
-            option.legend.data = legenddata;
+        let option = this._baseBarOption(barConfig, false);
         
         if(option.xAxis[0].nameLocation=="end")
             option.xAxis[0].nameGap = 40;
         
         //右坐标轴
-        option.yAxis[1] = {   
-            name:'增长率(%)',
-            type:'value',
-            axisLine:{lineStyle:{color:'#000'}},
-            axisLabel: {textStyle:{color:'#000'}}
-        };
+        if(!rateMode){
+            option.yAxis[1] = {   
+                name:'增长率(%)',
+                type:'value',
+                axisLine:{lineStyle:{color:'#000'}},
+                axisLabel: {textStyle:{color:'#000'}}
+            };
+        }
+
         option.series = series;
 
+        //设置最终legenddata, 用于表格
+        if(!(tempBol && rateMode)){ //???如果有对比且rateMode为true(不显示增长率)
+            this.legenddata = new_legenddata;
+            this.vdata =  new_vdata;
+        }
         return option;
     }
 
@@ -597,6 +596,116 @@ class BarChart extends BaseChart {
         };
         option.series = series;
 
+        return option;
+    }
+
+
+    //柱状图(原始&占比切换)
+    barNormalAndPer(chart, barConfig, perMode, rateMode){
+        /** rateMode: 
+         * false:相同legend, 后一x相较前一x的增长率; 
+         * true:相同x, 后一legend相较前一legend的增长率 **/
+        //this._init(perMode);
+
+        let workedData_normal = makeBarData(this);
+        let workedData_per = makeBarData(this, perMode);
+        this.xdata = workedData_per.xdata;
+        this.legenddata = workedData_per.legenddata;
+        let vdata_normal = workedData_normal.vdata;
+        let vdata_per = workedData_per.vdata;
+        //
+        let legenddata_bak = this.legenddata;
+        let yUnit_bak = this.yUnit;
+        let vUnit_bak = this.vUnit;
+
+
+        //
+        let type = true; //type: true占比;false:原始
+        let isPer = (perMode=="ex" || perMode=="ey")? true: false;
+
+        let option = this._baseBarOption(barConfig, isPer);
+        option.toolbox = {
+            feature: {
+                mySwitch: {
+                    show: true,
+                    title: '原始&占比切换',
+                    icon: 'path d="M830.6 732.8H287.3c-24.4 0-47.5-9.6-65-27-17.4-17.4-27-40.5-27-65V505.6l20.1 20.1c10.9 10.9 28.7 10.9 39.6 0 10.9-10.9 10.9-28.7 0-39.6l-66.5-66.5c-11.7-11.7-30.7-11.7-42.4 0l-66.5 66.5c-10.9 10.9-10.9 28.7 0 39.6 10.9 10.9 28.7 10.9 39.6 0l20.1-20.1v135.2c0 81.7 66.3 148 148 148h543.3c15.5 0 28-12.5 28-28 0-15.4-12.5-28-28-28zM946.3 499.1c-10.9-10.9-28.7-10.9-39.6 0l-20.1 20.1V387c0-81.7-66.3-148-148-148H195.3c-15.5 0-28 12.5-28 28s12.5 28 28 28h543.3c24.4 0 47.5 9.6 65 27 17.4 17.4 27 40.5 27 65v132.2l-20.1-20.1c-10.9-10.9-28.7-10.9-39.6 0-10.9 10.9-10.9 28.7 0 39.6l66.5 66.5c11.7 11.7 30.7 11.7 42.4 0l66.5-66.5c10.9-10.9 10.9-28.6 0-39.6z"',
+                    onclick: ()=>{
+                        type = !type;
+                        //还原
+                        this.legenddata = legenddata_bak;
+                        this.yUnit = yUnit_bak;
+                        this.vUnit = vUnit_bak;
+                        makeSeries(false);
+                        setUnit();
+                        //setTooltipLabel();
+                        chart.setOption(option);
+                    }
+                }
+            }
+        }
+
+        //设置series配置项
+        let makeSeries = (ifFirst)=>{
+            let series = [];
+            this.vdata = [];
+
+            vdata_per.forEach((val, index) => {
+                let bs = {
+                    name: this.legenddata[index],
+                    type: 'bar',
+                    animation: barConfig.animation, //动画效果
+                    data: type? val: vdata_normal[index],
+                    barMaxWidth: barConfig.barMaxWidth,
+                    label: this._setLabelTop(barConfig)
+                };
+                if(ifFirst){
+                    this.vdata.push(vdata_normal[index]);
+                    this.vdata.push(vdata_per[index]);
+                }
+                series.push(bs);
+            });
+            option.series = series;
+        }
+
+        //设置单位
+        let setUnit = ()=>{
+            if(type){
+                option.yAxis[0].name = this.setTitle(this.yTitle+'占比', '%');
+            }else{
+                option.yAxis[0].name = this.setTitle(this.yTitle, this.yUnit);
+            }
+        }
+        let setTooltipLabel = ()=>{
+            //let vUnit = type? "%": this.vUnit;
+            option.tooltip.formatter = (p)=>{
+                let result = this._setTooltipTitle(p[0].name, this.xUnit);
+        
+                for(let i=0;i<p.length;i++){
+                    if(p[i].seriesName.indexOf("增长率")!=-1){ //???
+                        result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                    }else{
+                        result += p[i].seriesName + ": " + p[i].value + "</br>";
+                    }
+                }
+                return result;
+            };
+        }
+
+        makeSeries(true);
+        setUnit();
+        setTooltipLabel();
+
+        //覆盖部分默认参数，用于表格
+        let new_legenddata = [];
+        this.legenddata.forEach(name=>{
+            new_legenddata.push(this.setTitle(name, this.yUnit));
+            new_legenddata.push(this.setTitle(name+"占比", "%"));
+        })
+        this.legenddata = new_legenddata;
+        this.yUnit = "";
+        this.vUnit = "";
+        
         return option;
     }
 

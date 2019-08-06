@@ -13,8 +13,8 @@ function makeBarData(data, perMode) {
     let legenddata = [];
 
     if(nUnit=="年" && xUnit!='月'){
-        //根据最新一年排序
-        xdata = Enumerable.from(chartData).orderByDescending(o=>o.y).select(o=>o.x).distinct().toArray();
+        //根据最新一年的后端默认排序
+        xdata = Enumerable.from(chartData).orderByDescending(o=>parseInt(o.y)).select(o=>o.x).distinct().toArray();
         legenddata = Enumerable.from(chartData).orderBy(o=>o.y).select(o=>o.y).distinct().toArray();
 
     }else if(nUnit=="年" && xUnit=='月'){ //?x轴为月份,legend为年份

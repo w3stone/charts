@@ -75,6 +75,7 @@ class BaseChart{
 
     //设置标题
     setTitle(title, unit) {
+        //if(title.indexOf('占比')>-1) unit="%"; //如果是占比自动设置单位为%
         if(title && unit){
             return title + "(" + unit + ")";
         }else if(title && !unit){
