@@ -51,12 +51,12 @@ class MapChart extends BaseChart{
                 name: item.name, 
                 value: item.value,
                 itemStyle: {
-                    areaColor: "#349eea",
-                        borderColor: "#fff"
+                    areaColor: mapConfig.emphasisColor,
+                    borderColor: "#fff"
                 },  
                 emphasis: {
                     itemStyle:{
-                        areaColor: "#349eea",
+                        areaColor: mapConfig.emphasisColor,
                         borderColor: "#fff"
                     }
                 }

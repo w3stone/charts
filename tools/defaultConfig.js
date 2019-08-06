@@ -45,6 +45,7 @@ let defaultConfig = {
     },
     //地图配置项
     mapConfig:{
+        emphasisColor: "#349eea",
         rangeHighColor: "",
         rangeLowColor: ""
     },
