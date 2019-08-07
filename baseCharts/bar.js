@@ -1,6 +1,7 @@
 /**柱状图封装**/
 import {BaseChart} from './baseChart.js'
 import {makeBarData} from '../tools/makeData.js'
+import {Table} from '../tools/tableFn.js'
 import {mergeJson, rotateArr} from '../tools/otherFn.js'
 
 class BarChart extends BaseChart {
@@ -246,8 +247,9 @@ class BarChart extends BaseChart {
             fontWeight: barConfig.labelFontWeight,
             color: barConfig.labelFontColor,
             formatter: (p => {
+                console.log(p);
                 //return p.value? this.setUnit(p.value) + unit: ""; //?
-                return this.setUnit(p.value) + unit;
+                return this.setUnit(p.value[1]) + unit;
             })
         }
     }
@@ -262,10 +264,11 @@ class BarChart extends BaseChart {
         //设置series配置项
         this.vdata.forEach((val, index) => {
             let bs = {
-                name: this.legenddata[index],
+                //name: this.legenddata[index],
                 type: 'bar',
+                seriesLayoutBy: 'row',
                 animation: barConfig.animation, //动画效果
-                data: val,
+                //data: val,
                 barMaxWidth: barConfig.barMaxWidth,
                 label: this._setLabelTop(barConfig)
             };
@@ -296,6 +299,25 @@ class BarChart extends BaseChart {
         
         
         let option = this._baseBarOption(barConfig, isPer);
+        
+        let tabledata = new Table(this);
+        console.log(tabledata);
+        let source = tabledata.make3DTableNU();
+        console.log(source.thead);
+        console.log(source.tbody);
+        console.log([source.thead].concat(source.tbody));
+
+        let temp = [
+            ["date", "1", "2", "3", "4"],
+            ["2016", 5651, 7477, 826, 27],
+            ["2017", 4796, 9176, 1694, 203],
+            ["2018", 4659, 8200, 2629, 708]
+        ];
+
+        option.dataset = {
+            source: temp
+        };
+            
         option.series = series;
         
         return option;
