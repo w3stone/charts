@@ -80,7 +80,7 @@ class BarChart extends BaseChart {
                     //         }
                     //     }
                     // }
-                    for(let i=0;i<p.length;i++){
+                    for(let i=0; i<p.length; i++){
                         if(p[i].seriesName.indexOf("增长率")!=-1){ //???
                             result += p[i].seriesName + ": " + p[i].value + "%</br>";
                         }else{
@@ -140,7 +140,7 @@ class BarChart extends BaseChart {
                     //         }
                     //     }
                     // }
-                    for(let i=0;i<p.length;i++){
+                    for(let i=0; i<p.length; i++){
                         if(p[i].seriesName.indexOf("增长率")!=-1){ //???
                             result += p[i].seriesName + ": " + p[i].value + "%</br>";
                         }else{
