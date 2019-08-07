@@ -22,9 +22,9 @@ class SuCharts{
     //构建器
     constructor(data, panelId, chartType, theme){
         this.data = data; //传入数据
-        this.panelId = panelId; //dom节点id名
-        this.chartType = chartType; //图表类型
-        this.theme = theme; //echart主题
+        this.panelId = panelId || ""; //dom节点id名
+        this.chartType = chartType || data.charttype || data.chartType || 0; //图表类型
+        this.theme = theme || ""; //echart主题
         this.echart = {}; //创建的echarts对象
         this.chartObj = {}; //含data中的数据，及xdata, ydata, vdata等处理过的数据...
     }
