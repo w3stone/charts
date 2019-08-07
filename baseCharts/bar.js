@@ -125,20 +125,26 @@ class BarChart extends BaseChart {
                 },
                 formatter: (p)=>{
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
-
-                    if(isPer){ //需要转成百分比
-                        for(let i=0;i<p.length;i++){
-                            if(p[i].value>0){
-                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                            }
-                        }
-                    }else{ //不需要转成百分比
-                        for(let i=0;i<p.length;i++){
-                            if(p[i].seriesName.indexOf("增长率")!=-1){ //？
-                                result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                            }else{
-                                result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
-                            }
+                    // if(isPer){ //需要转成百分比
+                    //     for(let i=0;i<p.length;i++){
+                    //         if(p[i].value>0){
+                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                    //         }
+                    //     }
+                    // }else{ //不需要转成百分比
+                    //     for(let i=0;i<p.length;i++){
+                    //         if(p[i].seriesName.indexOf("增长率")!=-1){ //？
+                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                    //         }else{
+                    //             result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
+                    //         }
+                    //     }
+                    // }
+                    for(let i=0;i<p.length;i++){
+                        if(p[i].seriesName.indexOf("增长率")!=-1){ //???
+                            result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                        }else{
+                            result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
                         }
                     }
                     return result;
@@ -293,7 +299,6 @@ class BarChart extends BaseChart {
             }
             series.push(bs);
         });
-        
         
         let option = this._baseBarOption(barConfig, isPer);
         option.series = series;
