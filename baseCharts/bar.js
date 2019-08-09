@@ -104,9 +104,12 @@ class BarChart extends BaseChart {
         
         //显示滚动条
         let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
+        let showMax = 20; //柱图数量超过该数值，显示滚动条
         
-        if((this.xdata.length*legenddataLength > 20) && !this.yearOrMonth(this.xUnit)){ //触发规则?
-            let endIndex = !(this.xdata.length>5 && legenddataLength>10)? parseInt(20/this.legenddata.length)-1: 4;
+        if((this.xdata.length*legenddataLength > showMax) && !this.yearOrMonth(this.xUnit)){ //触发规则?
+            let tempIndex = parseInt(showMax/this.legenddata.length);
+            let endIndex = !(this.xdata.length>5 && legenddataLength>10)? 
+                (this.legenddata.length<showMax? tempIndex-1: tempIndex): 4;
 
             option.grid.bottom = "5%";
             option.dataZoom = this._setDataZoom(barConfig, endIndex);

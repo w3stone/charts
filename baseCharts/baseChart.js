@@ -111,6 +111,7 @@ class BaseChart{
         }else{
             return this.setVisibleName(name, this.xUnit);
         }
+        //return name;
     }
 
     //保留小数
