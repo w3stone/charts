@@ -129,12 +129,12 @@ class SuCharts{
             case 301: //折线图普通
                 checkConfig(config.lineConfig);
                 this.chartObj = new LineChart(this.data);
-                option = this.chartObj.line(false, config.lineConfig);
+                option = this.chartObj.line(config.lineConfig, false);
                 break;
             case 302: //折线图普通(含平均线)
                 checkConfig(config.lineConfig);
                 this.chartObj = new LineChart(this.data);
-                option = this.chartObj.line(true, config.lineConfig);
+                option = this.chartObj.line(config.lineConfig, true);
                 break;
             case 401: //普通散点图
                 checkConfig(config.scatterConfig);

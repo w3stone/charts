@@ -62,7 +62,6 @@ let defaultConfig = {
 }
 
 
-
 //配置字典表
 const configDic = [
     "animation",

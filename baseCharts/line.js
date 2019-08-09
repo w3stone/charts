@@ -1,6 +1,8 @@
 /**折线图封装**/
 import {BaseChart} from './baseChart.js'
 import {makeLineData} from '../tools/makeData.js'
+import {mergeJson} from '../tools/otherFn.js'
+
 
 class LineChart extends BaseChart{
     //构建器
@@ -19,25 +21,55 @@ class LineChart extends BaseChart{
     }
 
     //基础配置
-    _baseLineOption(){
-        let option = {
-            legend: {
-                data: this.legenddata, 
-                type:'scroll', 
-                top:'8%',
-                formatter: (name)=>{
-                    return this.setVisibleName(name, this.nUnit)
+    _baseLineOption(lineConfig){
+        if(lineConfig.ifMobile){
+            return this._baseLineOption_mobile(lineConfig);
+        }else{
+            return this._baseLineOption_pc(lineConfig);
+        }
+    }
+
+    //基础配置详情(pc端)
+    _baseLineOption_pc(lineConfig){
+        let axis_Base = this._setBaseAxis(lineConfig); //x轴/y轴基础配置
+        let xAxis_Own = { //x轴配置
+            name: this.setTitle(this.xTitle, this.xUnit),
+            nameLocation: 'end',
+            type: 'category',
+            data: this.xdata,
+            axisLabel: {
+                interval:0, 
+                rotate: 30,
+                formatter: name => {
+                    return this.setxNameOmit(name);
                 }
-            },
+            }
+        }
+        let yAxis_Own = { //y轴配置
+            name: this.setTitle(this.yTitle , this.yUnit),
+            type: 'value',
+            axisLabel: {
+                formatter: value => {
+                    return this.setUnit(value);
+                }
+            }
+        }
+
+        let option = {
+            legend: this._setBaseLegend(lineConfig, this.legenddata),
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {          
                     type: 'shadow'     
                 },
-                formatter: (p)=>{
+                formatter: p => {
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
-                    for(let i=0;i<p.length;i++){
-                        result += p[i].seriesName + ":" + p[i].value + "("+ this.vUnit + ")</br>";
+                    for(let i=0; i<p.length; i++){
+                        if(p[i].seriesName.indexOf("增长率")!=-1){ //???
+                            result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                        }else{
+                            result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
+                        }
                     }
                     return result;
                 },
@@ -49,71 +81,114 @@ class LineChart extends BaseChart{
                 bottom: '0%',
                 containLabel: true
             },
+            xAxis: [mergeJson(axis_Base, xAxis_Own)],
+            yAxis: [mergeJson(axis_Base, yAxis_Own)],
+            series: []
+        };
+        
+        //显示滚动条
+        let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
+        let showMax = 20; //柱图数量超过该数值，显示滚动条
+        
+        if((this.xdata.length*legenddataLength > showMax) && !this.yearOrMonth(this.xUnit)){ //触发规则?
+            let tempIndex = parseInt(showMax/this.legenddata.length);
+            let endIndex = !(this.xdata.length>5 && legenddataLength>10)? 
+                (this.legenddata.length<showMax? tempIndex-1: tempIndex): 4;
+
+            option.grid.bottom = "5%";
+            option.dataZoom = this._setDataZoom(lineConfig, endIndex);
+        }
+
+        return option;
+    }
+
+    //基础配置详情(移动端)
+    _baseLineOption_mobile(lineConfig){
+        let option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {          
+                    type: 'shadow'     
+                },
+                formatter: (p)=>{
+                    let result = this._setTooltipTitle(p[0].name, this.xUnit);
+                    for(let i=0; i<p.length; i++){
+                        if(p[i].seriesName.indexOf("增长率")!=-1){ //???
+                            result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                        }else{
+                            result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
+                        }
+                    }
+                    return result;
+                },
+            },
+            grid: {
+                top:'20%',
+                left: '5%',
+                right: '10%',
+                bottom: '10%',
+                containLabel: true
+            },
             xAxis: [
                 {
                     name: this.setTitle(this.xTitle, this.xUnit),
+                    nameTextStyle:{
+                        color: lineConfig.axisTitleFontColor,
+                        fontSize: lineConfig.axisTitleFontSize
+                    },
+                    nameLocation: 'center', 
+                    nameGap: 25,
                     type: 'category',
                     axisLine:{lineStyle:{color:'#000'}},
                     data: this.xdata,
                     axisLabel: {
                         interval:0, 
-                        rotate: 30,
+                        rotate: 0,
                         formatter: (name)=>{
                             return this.setxNameOmit(name);
                         },
-                        textStyle:{color:'#000'}
+                        textStyle:{
+                            color: lineConfig.axisFontColor,
+                            fontSize: lineConfig.axisFontSize
+                        }
                     }
                 }
             ],
             yAxis: [
                 {
-                    name: this.setTitle(this.yTitle, this.yUnit),
+                    name: this.setTitle(this.yTitle , this.yUnit),
+                    nameTextStyle:{
+                        color: lineConfig.axisTitleFontColor,
+                        fontSize: lineConfig.axisTitleFontSize
+                    },
                     type: 'value',
                     axisLine:{lineStyle:{color:'#000'}},
                     axisLabel: {
-                        textStyle:{color:'#000'},
+                        textStyle:{
+                            color: lineConfig.axisFontColor,
+                            fontSize: lineConfig.axisFontSize
+                        },
                         formatter: (value)=>{
                             return this.setUnit(value);
-                        },
+                        }
                     }
                 }
             ],
             series: []
         };
         
-        //显示滚动条
-        if(this.xdata.length > 12){
-            option.grid.bottom = "12%";
-            option.dataZoom = [{
-                show: true,
-                height: 30,
-                bottom: 10,
-                startValue: this.xdata[0],
-                endValue: this.xdata[12-1],
-                handleSize: '110%',
-            }, {type: 'inside'}];
+        //显示滚动条? 
+        if(!this.yearOrMonth(this.xUnit)){
+            let endIndex = this.xdata.length>4? 3: this.xdata.length-1;
+            option.dataZoom = this._setDataZoom(lineConfig, endIndex);
         }
 
         return option;
     }
 
-    //设置label
-    _setLabelTop(barConfig){
-        return {
-            show: true,
-            position: 'top',
-            fontSize: barConfig.labelFontSize,
-            fontWeight: barConfig.labelFontWeight,
-            color: barConfig.labelFontColor,
-            formatter: ((p)=>{
-                return this.setUnit(p.value);
-            })
-        }
-    }
-
     
     //普通折线图
-    line(isAvg, lineConfig){
+    line(lineConfig, isAvg){
         this._init();
         let series = [];
 
@@ -123,16 +198,15 @@ class LineChart extends BaseChart{
                 name: this.legenddata[index],
                 type: 'line',
                 animation: lineConfig.animation, //动画效果
-                itemStyle: {normal: {}},
                 data: val,
                 label: this._setLabelTop(lineConfig)
             };
 
             //添加平均线
-            if(isAvg && 0==index){
+            if(isAvg){
                 bs.markLine = {
                     lineStyle: {
-                        normal: { color: '#fc97af'}
+                        normal: {color:'#fc97af'}
                     },
                     label: {
                         normal: {
@@ -151,7 +225,7 @@ class LineChart extends BaseChart{
             series.push(bs);
         });
         
-        let option = this._baseLineOption();
+        let option = this._baseLineOption(lineConfig);
         option.series = series;
         
         return option;

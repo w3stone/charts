@@ -217,49 +217,49 @@ class BarChart extends BaseChart {
         return option;
     }
 
-    //设置缩放
-    _setDataZoom(barConfig, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
-        endIndex = barConfig.dataRange || endIndex; //默认取配置项里的dataRange
+    // //设置缩放
+    // _setDataZoom(barConfig, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
+    //     endIndex = barConfig.dataRange || endIndex; //默认取配置项里的dataRange
 
-        let config = {};
-        if(!barConfig.ifMobile){ //PC端
-            config = {
-                height: 30,
-                bottom: 10,
-                handleSize: '110%'
-            };
+    //     let config = {};
+    //     if(!barConfig.ifMobile){ //PC端
+    //         config = {
+    //             height: 30,
+    //             bottom: 10,
+    //             handleSize: '110%'
+    //         };
 
-        }else{ //移动端
-            config = {
-                height: 20,
-                bottom: 0
-            };
-        }
+    //     }else{ //移动端
+    //         config = {
+    //             height: 20,
+    //             bottom: 0
+    //         };
+    //     }
 
-        config.show = !barConfig.dataRange? true: false;
-        //config.show = true;
-        config.startValue = 0;
-        config.endValue = endIndex;
+    //     config.show = !barConfig.dataRange? true: false;
+    //     //config.show = true;
+    //     config.startValue = 0;
+    //     config.endValue = endIndex;
 
-        return [config, {type: 'inside'}];
+    //     return [config, {type: 'inside'}];
 
-    }
+    // }
 
-    //设置label
-    _setLabelTop(barConfig, unit, forceShow){
-        unit = unit || "";
-        return {
-            show: typeof forceShow!='undefined'? forceShow: !barConfig.ifMobile,
-            position: 'top',
-            fontSize: barConfig.labelFontSize,
-            fontWeight: barConfig.labelFontWeight,
-            color: barConfig.labelFontColor,
-            formatter: (p => {
-                //return p.value? this.setUnit(p.value) + unit: ""; //?
-                return this.setUnit(p.value) + unit;
-            })
-        }
-    }
+    // //设置label
+    // _setLabelTop(barConfig, unit, forceShow){
+    //     unit = unit || "";
+    //     return {
+    //         show: typeof forceShow!='undefined'? forceShow: !barConfig.ifMobile,
+    //         position: 'top',
+    //         fontSize: barConfig.labelFontSize,
+    //         fontWeight: barConfig.labelFontWeight,
+    //         color: barConfig.labelFontColor,
+    //         formatter: (p => {
+    //             //return p.value? this.setUnit(p.value) + unit: ""; //?
+    //             return this.setUnit(p.value) + unit;
+    //         })
+    //     }
+    // }
 
 
     //普通柱状图
@@ -280,11 +280,11 @@ class BarChart extends BaseChart {
             };
 
             //添加平均线
-            if(isAvg && 0==index){
+            if(isAvg){
                 bs.markLine = {
                     animation: barConfig.animation, //动画效果
                     lineStyle: {
-                        normal: { color: '#fc97af'}
+                        normal: {color: '#fc97af'}
                     },
                     label: {
                         normal: {

@@ -58,6 +58,50 @@ class BaseChart{
         };
     }
 
+    //设置缩放
+    _setDataZoom(barConfig, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
+        endIndex = barConfig.dataRange || endIndex; //默认取配置项里的dataRange
+
+        let config = {};
+        if(!barConfig.ifMobile){ //PC端
+            config = {
+                height: 30,
+                bottom: 10,
+                handleSize: '110%'
+            };
+
+        }else{ //移动端
+            config = {
+                height: 20,
+                bottom: 0
+            };
+        }
+
+        config.show = !barConfig.dataRange? true: false;
+        //config.show = true;
+        config.startValue = 0;
+        config.endValue = endIndex;
+
+        return [config, {type: 'inside'}];
+    }
+
+    
+    //设置label(柱图&折线图)
+    _setLabelTop(config, unit, forceShow){
+        unit = unit || "";
+        return {
+            show: typeof forceShow!='undefined'? forceShow: !config.ifMobile,
+            position: 'top',
+            fontSize: config.labelFontSize,
+            fontWeight: config.labelFontWeight,
+            color: config.labelFontColor,
+            formatter: (p => {
+                //return p.value? this.setUnit(p.value) + unit: ""; //?
+                return this.setUnit(p.value) + unit;
+            })
+        }
+    }
+
     //设置单位
     setUnit(value) {
         let reg = new RegExp("^[-+]?[0-9]+(\\.[0-9]+)?$"); //正负整数或小数
