@@ -104,6 +104,8 @@ class BaseChart{
 
     //设置显示(长度大于5省略，xUnit为年或月舔加单位)
     setxNameOmit(name){
+        name = name || "";
+        //console.log(name);
         if(!this.yearOrMonth(this.xUnit)){
             return name.length>5? name.slice(0,5)+"...": name;
         }else{
