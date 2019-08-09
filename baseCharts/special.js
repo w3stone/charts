@@ -335,8 +335,3 @@ class SpecialChart extends BaseChart {
 //导出
 export { SpecialChart }
 
-
-//单位是否为年或月
-function yearOrMonth(unit){
-    return (unit=="月" || unit=="年")? true: false;
-}
