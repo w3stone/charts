@@ -81,18 +81,18 @@ function makeBarData(data, perMode) {
                     if("ex"==perMode){ //转换成百分比
                         let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata求和
                         sum = sum || 1;
-                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): 0;
+                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else if("ey"==perMode){
                         let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata求和
                         sum = sum || 1;
-                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): 0;
+                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
                         ortherSumArr[x_index] += parseFloat(value);
 
                     }else{
-                        let value = list.length>0? Enumerable.from(list).sum(o=>o.value): 0;
-                        ortherSumArr[x_index] += parseFloat(value); 
+                        let value = list.length>0? Enumerable.from(list).sum(o=>o.value): '';
+                        ortherSumArr[x_index] += parseFloat(value);
                     }
                     //再次保留两位小数
                     ortherSumArr[x_index] = parseFloat( ortherSumArr[x_index].toFixed(2) );
