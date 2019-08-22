@@ -28,7 +28,7 @@ let defaultConfig = {
     },
     //折线图配置
     lineConfig:{
-        
+        dataRange: 0 //x轴显示多少列(默认不固定)
     },
     //饼图配置项
     pieConfig: {

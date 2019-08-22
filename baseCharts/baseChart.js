@@ -59,30 +59,30 @@ class BaseChart{
     }
 
     //设置缩放
-    _setDataZoom(barConfig, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
-        endIndex = barConfig.dataRange || endIndex; //默认取配置项里的dataRange
+    _setDataZoom(config, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
+        endIndex = config.dataRange || endIndex; //默认取配置项里的dataRange
 
-        let config = {};
-        if(!barConfig.ifMobile){ //PC端
-            config = {
+        let newConfig = {};
+        if(!config.ifMobile){ //PC端
+            newConfig = {
                 height: 30,
                 bottom: 10,
                 handleSize: '110%'
             };
 
         }else{ //移动端
-            config = {
+            newConfig = {
                 height: 20,
                 bottom: 0
             };
         }
 
-        config.show = !barConfig.dataRange? true: false;
-        //config.show = true;
-        config.startValue = 0;
-        config.endValue = endIndex;
+        newConfig.show = !config.dataRange? true: false;
+        //newConfig.show = true;
+        newConfig.startValue = 0;
+        newConfig.endValue = endIndex;
 
-        return [config, {type: 'inside'}];
+        return [newConfig, {type: 'inside'}];
     }
 
     
