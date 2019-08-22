@@ -25,7 +25,6 @@ function makeBarData(data, perMode) {
         xdata = Enumerable.from(chartData).select(o=>o.x).distinct().toArray();
         legenddata = Enumerable.from(chartData).select(o=>o.y).distinct().toArray();
     }
-    //console.log(legenddata);
 
     //剔除'\0' & ''
     xdata = xdata.filter(val => val!='' || val !='\0');
