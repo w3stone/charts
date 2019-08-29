@@ -52,7 +52,8 @@ class BaseChart{
                 interval: 0,
                 textStyle:{
                     color: config.axisFontColor,
-                    fontSize: config.axisFontSize
+                    fontSize: config.axisFontSize,
+                    fontWeight: 'normal'
                 }
             }
         };
