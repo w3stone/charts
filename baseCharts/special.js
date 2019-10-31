@@ -307,7 +307,7 @@ class SpecialChart extends BaseChart {
                 interval:0, 
                 rotate: 30,
                 formatter: (name => {
-                    return this.setxNameOmit(name);
+                    return this.setxNameOmit(name, pieConfig.xMaxLength);
                 })
             }
         }

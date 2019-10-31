@@ -41,7 +41,7 @@ class LineChart extends BaseChart{
                 interval:0, 
                 rotate: 30,
                 formatter: name => {
-                    return this.setxNameOmit(name);
+                    return this.setxNameOmit(name, lineConfig.xMaxLength);
                 }
             }
         }
@@ -145,7 +145,7 @@ class LineChart extends BaseChart{
                         interval:0, 
                         rotate: 0,
                         formatter: (name)=>{
-                            return this.setxNameOmit(name);
+                            return this.setxNameOmit(name, lineConfig.xMaxLength);
                         },
                         textStyle:{
                             color: lineConfig.axisFontColor,

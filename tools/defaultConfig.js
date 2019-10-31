@@ -18,7 +18,7 @@ let defaultConfig = {
     legendFontColor: "#000", //图例组件字体颜色
     tooltipFontSize: 14, //提示框字体大小
     tooltipFontColor: "#fff", //提示框字体颜色
-
+    xMaxLength: 5, //x轴最大显示长度
     //柱状图配置项
     barConfig:{
         barWidth: "30%", //柱状图宽度
@@ -78,7 +78,8 @@ const configDic = [
     "legendFontSize",
     "legendFontColor",
     "tooltipFontSize",
-    "tooltipFontColor"
+    "tooltipFontColor",
+    "xMaxLength"
 ]
 
 

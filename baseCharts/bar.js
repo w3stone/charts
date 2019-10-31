@@ -42,7 +42,7 @@ class BarChart extends BaseChart {
                 interval:0, 
                 rotate: 30,
                 formatter: name => {
-                    return this.setxNameOmit(name);
+                    return this.setxNameOmit(name, barConfig.xMaxLength);
                 }
             }
         }

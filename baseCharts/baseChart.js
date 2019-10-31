@@ -147,12 +147,12 @@ class BaseChart{
         }
     }
 
-    //设置显示(长度大于5省略，xUnit为年或月舔加单位)
-    setxNameOmit(name){
+    //设置显示(长度大于5省略，xUnit为年或月添加单位)
+    setxNameOmit(name, maxLength){
         name = name || "";
         //console.log(name);
         if(!this.yearOrMonth(this.xUnit)){
-            return name.length>5? name.slice(0,5)+"...": name;
+            return name.length>maxLength? name.slice(0,maxLength)+"...": name;
         }else{
             return this.setVisibleName(name, this.xUnit);
         }
