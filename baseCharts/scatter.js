@@ -9,11 +9,6 @@ class ScatterChart extends BaseChart {
         super(data);
         this.legenddata = [];
         this.valueMax = 0;
-        this.valueMax = 0;
-        this.xMin = 0;
-        this.xMax = 0;
-        this.yMin = 0;
-        this.yMax = 0;
         this.defaultSymbolSize = 0; //默认散点大小
     }
 
@@ -23,10 +18,6 @@ class ScatterChart extends BaseChart {
         this.legenddata = workedData.legenddata;
         this.chartData = workedData.chartData;
         this.valueMax = workedData.valueMax; //value最大值
-        this.xMin = workedData.xMin;
-        this.xMax = workedData.xMax;
-        this.yMin = workedData.yMin;
-        this.yMax = workedData.yMax;
         this.defaultSymbolSize = scatterConfig.symbolSize; //默认散点大小
     }
 
@@ -47,8 +38,10 @@ class ScatterChart extends BaseChart {
             type: 'value',
             scale: true,
             splitLine: {show: false},
-            //min: (this.xUnit!="%")? this.round(0.85*this.xMin, 0): this.round((this.xMin-15), 0),
-            max: (this.xUnit!="%")? this.round(1.15*this.xMax, 0): this.round((this.xMax+15), 0),
+            max: (value)=>{
+                let max = this.xUnit!="%"? 1.15*value.max: value.max+15;
+                return Math.ceil(max); //向上取整
+            },
             axisLabel: {
                 formatter: (value)=>{
                     return this.setUnit(value);
@@ -60,8 +53,10 @@ class ScatterChart extends BaseChart {
             type: 'value',
             scale: true,
             splitLine: {show: false},
-            //min: (this.yUnit!="%")? this.round(0.85*this.yMin, 0): this.round((this.yMin-15), 1),
-            max: (this.yUnit!="%")? this.round(1.15*this.yMax, 0): this.round((this.yMax+15), 0),
+            max: (value)=>{
+                let max = this.yUnit!="%"? 1.15*value.max: value.max+15;
+                return Math.ceil(max); //向上取整
+            },
             axisLabel: {
                 formatter: (value)=>{
                     return this.setUnit(value);
@@ -169,8 +164,10 @@ class ScatterChart extends BaseChart {
                 nameGap: 25,
                 type: 'value',
                 scale: true,
-                //min: (this.xUnit!="%")? parseFloat(0.85*this.xMin): parseFloat((this.xMin-15)),
-                max: (this.xUnit!="%")? parseFloat(1.15*this.xMax): parseFloat((this.xMax+15)),
+                max: (value)=>{
+                    let max = this.xUnit!="%"? 1.15*value.max: value.max+15;
+                    return Math.ceil(max); //向上取整
+                },
                 axisLine:{lineStyle:{color:'#000'}},
                 axisLabel: {
                     textStyle:{color:'#000'},
@@ -184,8 +181,10 @@ class ScatterChart extends BaseChart {
                 name: this.setTitle(this.yTitle, this.yUnit),
                 type: 'value',
                 scale: true,
-                //min: (this.yUnit!="%")? parseFloat(0.85*this.yMin): parseFloat((this.yMin-15)),
-                max: (this.yUnit!="%")? parseFloat(1.15*this.yMax): parseFloat((this.yMax+15)),
+                max: (value)=>{
+                    let max = this.yUnit!="%"? 1.15*value.max: value.max+15;
+                    return Math.ceil(max); //向上取整
+                },
                 axisLine:{lineStyle:{color:'#000'}},
                 axisLabel: {
                     textStyle:{color:'#000'},

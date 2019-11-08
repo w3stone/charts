@@ -205,7 +205,6 @@ function makeScatterData(chartData, nUnit) {
     });
 
     let valueMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.value): 0; //value最大值
-    let xMin = chartData.length>0? Enumerable.from(chartData).min(o=>o.x): 0; //x最小值
     let xMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.x): 0; //x最大值
     let yMin = chartData.length>0? Enumerable.from(chartData).min(o=>o.y): 0; //x最小值
     let yMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.y): 0; //x最大值
@@ -214,11 +213,7 @@ function makeScatterData(chartData, nUnit) {
     return {
         "legenddata": legenddata,
         "chartData": chartData,
-        "valueMax": valueMax,
-        "xMin": xMin,
-        "xMax": xMax,
-        "yMin": yMin,
-        "yMax": yMax
+        "valueMax": valueMax
     }
 }
 

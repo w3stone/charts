@@ -158,12 +158,6 @@ class BaseChart{
         }
         //return name;
     }
-
-    //保留小数
-    round(value, decimal){
-        return parseFloat(value.toFixed(decimal));
-    }
-    
 }
 
 //导出
