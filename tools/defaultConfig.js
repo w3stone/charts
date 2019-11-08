@@ -24,11 +24,13 @@ let defaultConfig = {
         barWidth: "30%", //柱状图宽度
         barMaxWidth: "25%", //最大宽度
         setLabelUnit: false, //是否处理单位(万&亿)
-        dataRange: 0 //x轴显示多少列(默认不固定)
+        dataRange: 0, //x轴显示多少列(默认不固定)
+        yMinInterval: 0 //坐标轴最小间隔大小 
     },
     //折线图配置
     lineConfig:{
-        dataRange: 0 //x轴显示多少列(默认不固定)
+        dataRange: 0, //x轴显示多少列(默认不固定)
+        yMinInterval: 0, //坐标轴最小间隔大小 
     },
     //饼图配置项
     pieConfig: {

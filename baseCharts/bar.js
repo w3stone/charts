@@ -49,20 +49,22 @@ class BarChart extends BaseChart {
         let yAxis_Own = { //y轴配置
             name: this.setTitle(this.yTitle , this.yUnit),
             type: 'value',
+            minInterval: barConfig.yMinInterval,
+            max: (value)=>{
+                return Math.ceil(1.1*value.max); //向上取整
+            },
             axisLabel: {
                 formatter: value => {
                     return this.setUnit(value);
                 }
             }
         }
-
+        //最终option
         let option = {
             legend: this._setBaseLegend(barConfig, this.legenddata),
             tooltip: {
                 trigger: 'axis',
-                axisPointer: {          
-                    type: 'shadow'     
-                },
+                axisPointer: {type: 'shadow'},
                 formatter: p => {
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
                     // if(isPer){ //需要转成百分比

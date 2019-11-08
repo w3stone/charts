@@ -48,20 +48,22 @@ class LineChart extends BaseChart{
         let yAxis_Own = { //y轴配置
             name: this.setTitle(this.yTitle , this.yUnit),
             type: 'value',
+            minInterval: lineConfig.yMinInterval,
+            max: (value)=>{
+                return Math.ceil(1.1*value.max); //向上取整
+            },
             axisLabel: {
                 formatter: value => {
                     return this.setUnit(value);
                 }
             }
         }
-
+        //最终option
         let option = {
             legend: this._setBaseLegend(lineConfig, this.legenddata),
             tooltip: {
                 trigger: 'axis',
-                axisPointer: {          
-                    type: 'shadow'     
-                },
+                axisPointer: {type:'shadow'},
                 formatter: p => {
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
                     for(let i=0; i<p.length; i++){
