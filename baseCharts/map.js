@@ -100,7 +100,7 @@ class MapChart extends BaseChart{
                             if (data.value) {
                                 return data.name + data.value;
                             } else {
-                                return data.name;
+                                return "";
                             }
                         }
                     },
