@@ -331,7 +331,7 @@ class BarChart extends BaseChart {
             //修改覆盖
             bs.label.position = index%2 ? 'left': 'right';
             bs.label.formatter = (p)=>{
-                return (p.value=="0.00")? "": p.value + "%";
+                return (p.value=="0.00")? "": p.value;
             };
 
             series.push(bs);
