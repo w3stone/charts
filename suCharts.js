@@ -1,4 +1,5 @@
 import {BarChart} from "./baseCharts/bar.js";
+import {BarChart_horizontal} from "./baseCharts/bar_horizontal.js";
 import {PieChart} from "./baseCharts/pie.js";
 import {LineChart} from "./baseCharts/line.js";
 import {ScatterChart} from "./baseCharts/scatter.js";
@@ -42,7 +43,6 @@ class SuCharts{
                 innerConfig[key] = config[key];
             })
         }
-
 
         switch (this.chartType){
             case 98: //纵向树状图
@@ -114,6 +114,11 @@ class SuCharts{
                 checkConfig(config.barConfig);
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barDynamic(echart, config.barConfig);
+                break;
+            case 151: //横向-柱状图普通
+                checkConfig(config.barConfig);
+                this.chartObj = new BarChart_horizontal(this.data);
+                option = this.chartObj.barNormal(config.barConfig, '', false);
                 break;
             case 201: //饼图
                 checkConfig(config.pieConfig);

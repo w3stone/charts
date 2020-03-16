@@ -82,6 +82,7 @@ class BaseChart{
         //newConfig.show = true;
         newConfig.startValue = 0;
         newConfig.endValue = endIndex;
+        newConfig.orient = "horizontal";
 
         return [newConfig, {type: 'inside'}];
     }

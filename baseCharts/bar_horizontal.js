@@ -1,316 +1,50 @@
-/**柱状图封装**/
+/**横向柱状图封装**/
 import {BaseChart} from './baseChart.js'
+import {BarChart} from "./bar.js";
 import {makeBarData} from '../tools/makeData.js'
-import {mergeJson, rotateArr} from '../tools/otherFn.js'
+import {rotateArr} from '../tools/otherFn.js'
 
-class BarChart extends BaseChart {
+class BarChart_horizontal extends BaseChart {
     
     constructor(data){
         super(data);
-        this.xdata = [];
-        this.legenddata = [];
-        this.vdata = [];
-        this.extraChartData = [];
     }
 
-    _init(perMode){
-        let workedData = makeBarData(this, perMode);
-        this.xdata = workedData.xdata;
-        this.legenddata = workedData.legenddata;
-        this.vdata = workedData.vdata;
-        this.extraChartData = workedData.extraChartData;
+    //xAxis和yAxis互换
+    _changeAxis(option){
+        let temp_xAxis = JSON.parse(JSON.stringify(option.xAxis));
+        option.xAxis = option.yAxis;
+        option.yAxis = temp_xAxis;
     }
 
-    //基础配置
-    _baseBarOption(barConfig, isPer){
-        if(barConfig.ifMobile){
-            return this._baseBarOption_mobile(barConfig, isPer);
-        }else{
-            return this._baseBarOption_pc(barConfig, isPer);
-        }
+    //重置dataZoom
+    _resetDataZoom(dataZoom){
+        let dataZoom0 = dataZoom[0];
+        delete dataZoom0.height;
+        delete dataZoom0.bottom;
+        dataZoom0.width = 30;
+        dataZoom0.left = 10;
+        dataZoom0.orient = "vertical";
+        return [dataZoom0, dataZoom[1]];
     }
-
-    //基础配置详情(pc端)
-    _baseBarOption_pc(barConfig, isPer){
-        let axis_Base = this._setBaseAxis(barConfig); //x轴/y轴基础配置
-        let xAxis_Own = { //x轴配置
-            name: this.setTitle(this.xTitle, this.xUnit),
-            nameLocation: 'end',
-            type: 'category',
-            data: this.xdata,
-            axisLabel: {
-                interval:0, 
-                rotate: 30,
-                formatter: name => {
-                    return this.setxNameOmit(name, barConfig.xMaxLength);
-                }
-            }
-        }
-        let yAxis_Own = { //y轴配置
-            name: this.setTitle(this.yTitle , this.yUnit),
-            type: 'value',
-            minInterval: barConfig.yMinInterval,
-            max: (value)=>{
-                return Math.ceil(1.1*value.max); //向上取整
-            },
-            axisLabel: {
-                formatter: value => {
-                    return this.setUnit(value);
-                }
-            }
-        }
-        //最终option
-        let option = {
-            legend: this._setBaseLegend(barConfig, this.legenddata),
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {type: 'shadow'},
-                formatter: p => {
-                    let result = this._setTooltipTitle(p[0].name, this.xUnit);
-                    // if(isPer){ //需要转成百分比
-                    //     for(let i=0;i<p.length;i++){
-                    //         if(p[i].value>0){
-                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                    //         }
-                    //     }
-                    // }else{ //不需要转成百分比
-                    //     for(let i=0;i<p.length;i++){
-                    //         if(p[i].seriesName.indexOf("增长率")!=-1){ //???
-                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                    //         }else{
-                    //             result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
-                    //         }
-                    //     }
-                    // }
-                    for(let i=0; i<p.length; i++){
-                        if(p[i].seriesName.indexOf("增长率")!=-1){ //???
-                            result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                        }else{
-                            result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
-                        }
-                    }
-                    return result;
-                },
-            },
-            grid: {
-                top:'20%',
-                left: '2%',
-                right: '6%',
-                bottom: '0%',
-                containLabel: true
-            },
-            xAxis: [mergeJson(axis_Base, xAxis_Own)],
-            yAxis: [mergeJson(axis_Base, yAxis_Own)],
-            series: []
-        };
-        
-        //显示滚动条
-        let legenddataLength = !(this.chartType==105 || this.chartType==113)? this.legenddata.length: 1; //如果数据堆叠，legenddata长度算1
-        let showMax = 20; //柱图数量超过该数值，显示滚动条
-        
-        if((this.xdata.length*legenddataLength > showMax) && !this.yearOrMonth(this.xUnit)){ //触发规则?
-            let tempIndex = parseInt(showMax/this.legenddata.length);
-            let endIndex = !(this.xdata.length>5 && legenddataLength>10)? 
-                (this.legenddata.length<showMax? tempIndex-1: tempIndex): 4;
-
-            option.grid.bottom = "5%";
-            option.dataZoom = this._setDataZoom(barConfig, endIndex);
-        }
-
-        return option;
-    }
-
-    //基础配置详情(移动端)
-    _baseBarOption_mobile(barConfig, isPer){
-        let option = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {          
-                    type: 'shadow'     
-                },
-                formatter: (p)=>{
-                    let result = this._setTooltipTitle(p[0].name, this.xUnit);
-                    // if(isPer){ //需要转成百分比
-                    //     for(let i=0;i<p.length;i++){
-                    //         if(p[i].value>0){
-                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                    //         }
-                    //     }
-                    // }else{ //不需要转成百分比
-                    //     for(let i=0;i<p.length;i++){
-                    //         if(p[i].seriesName.indexOf("增长率")!=-1){ //？
-                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                    //         }else{
-                    //             result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
-                    //         }
-                    //     }
-                    // }
-                    for(let i=0; i<p.length; i++){
-                        if(p[i].seriesName.indexOf("增长率")!=-1){ //???
-                            result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                        }else{
-                            result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
-                        }
-                    }
-                    return result;
-                },
-            },
-            grid: {
-                top:'20%',
-                left: '5%',
-                right: '10%',
-                bottom: '10%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    name: this.setTitle(this.xTitle, this.xUnit),
-                    nameTextStyle:{
-                        color: barConfig.axisTitleFontColor,
-                        fontSize: barConfig.axisTitleFontSize
-                    },
-                    nameLocation: 'center', 
-                    nameGap: 25,
-                    type: 'category',
-                    axisLine:{lineStyle:{color:'#000'}},
-                    data: this.xdata,
-                    axisLabel: {
-                        interval:0, 
-                        rotate: 0,
-                        formatter: (name)=>{
-                            return this.setxNameOmit(name);
-                        },
-                        textStyle:{
-                            color: barConfig.axisFontColor,
-                            fontSize: barConfig.axisFontSize
-                        }
-                    }
-                }
-            ],
-            yAxis: [
-                {
-                    name: this.setTitle(this.yTitle , this.yUnit),
-                    nameTextStyle:{
-                        color: barConfig.axisTitleFontColor,
-                        fontSize: barConfig.axisTitleFontSize
-                    },
-                    type: 'value',
-                    axisLine:{lineStyle:{color:'#000'}},
-                    axisLabel: {
-                        textStyle:{
-                            color: barConfig.axisFontColor,
-                            fontSize: barConfig.axisFontSize
-                        },
-                        formatter: (value)=>{
-                            return this.setUnit(value);
-                        }
-                    }
-                }
-            ],
-            series: []
-        };
-        
-        //显示滚动条? 
-        if(!this.yearOrMonth(this.xUnit)){
-            let endIndex = this.xdata.length>4? 3: this.xdata.length-1;
-            option.dataZoom = this._setDataZoom(barConfig, endIndex);
-        }
-
-        return option;
-    }
-
-    // //设置缩放
-    // _setDataZoom(barConfig, endIndex){ //zoomObj:{height:0, bottom:0, startValue:0, endValue:0}
-    //     endIndex = barConfig.dataRange || endIndex; //默认取配置项里的dataRange
-
-    //     let config = {};
-    //     if(!barConfig.ifMobile){ //PC端
-    //         config = {
-    //             height: 30,
-    //             bottom: 10,
-    //             handleSize: '110%'
-    //         };
-
-    //     }else{ //移动端
-    //         config = {
-    //             height: 20,
-    //             bottom: 0
-    //         };
-    //     }
-
-    //     config.show = !barConfig.dataRange? true: false;
-    //     //config.show = true;
-    //     config.startValue = 0;
-    //     config.endValue = endIndex;
-
-    //     return [config, {type: 'inside'}];
-
-    // }
-
-    // //设置label
-    // _setLabelTop(barConfig, unit, forceShow){
-    //     unit = unit || "";
-    //     return {
-    //         show: typeof forceShow!='undefined'? forceShow: !barConfig.ifMobile,
-    //         position: 'top',
-    //         fontSize: barConfig.labelFontSize,
-    //         fontWeight: barConfig.labelFontWeight,
-    //         color: barConfig.labelFontColor,
-    //         formatter: (p => {
-    //             //return p.value? this.setUnit(p.value) + unit: ""; //?
-    //             return this.setUnit(p.value) + unit;
-    //         })
-    //     }
-    // }
 
 
     //普通柱状图
     barNormal(barConfig, perMode, isAvg){
-        this._init(perMode);
-        let series = [];
-        let isPer = (perMode=="ex" || perMode=="ey")? true: false;
-
-        //设置series配置项
-        this.vdata.forEach((val, index) => {
-            let bs = {
-                name: this.legenddata[index],
-                type: 'bar',
-                animation: barConfig.animation, //动画效果
-                data: val,
-                barMaxWidth: barConfig.barMaxWidth,
-                label: this._setLabelTop(barConfig)
-            };
-
-            //添加平均线
-            if(isAvg){
-                bs.markLine = {
-                    animation: barConfig.animation, //动画效果
-                    lineStyle: {
-                        normal: {color: '#fc97af'}
-                    },
-                    label: {
-                        normal: {
-                            position: 'start',
-                            formatter: (data)=>{
-                                return this.setUnit(data.value);
-                            }
-                        }
-                    },
-                    data: [{
-                        name: '平均值',
-                        type: 'average'
-                    }]
-                };
-            }
-            series.push(bs);
-        });
+        let _data = this;
+        let chartObj = new BarChart(_data);
+        let option = chartObj.barNormal(barConfig, perMode, isAvg);
+        this._changeAxis(option);
         
-        let option = this._baseBarOption(barConfig, isPer);
-        option.series = series;
-        
+        //替换series的label位置
+        let temp_series = JSON.stringify(option.series);
+        temp_series = temp_series.replace(/"top"/g, '"right"');
+        option.series = JSON.parse(temp_series);
+        //重置dataZoom
+        option.dataZoom = this._resetDataZoom(option.dataZoom);
+        //console.log(option);
         return option;
     }
-
 
     //柱状图堆叠
     barStack(barConfig, perMode){
@@ -722,4 +456,4 @@ class BarChart extends BaseChart {
 }
 
 //导出
-export { BarChart }
+export { BarChart_horizontal }
