@@ -27,7 +27,7 @@ class PieChart extends BaseChart {
             animation: pieConfig.animation, //动画效果
             label: { 
                 normal: { 
-                    show: pieConfig.pieLabelShow,
+                    show: pieConfig.pieLabelShow && !pieConfig.ifMobile, //移动端默认不显示
                     formatter: '{b}({d}%)',
                     fontSize: 16
                 } 
