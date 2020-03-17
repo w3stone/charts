@@ -115,11 +115,33 @@ class SuCharts{
                 this.chartObj = new BarChart(this.data);
                 option = this.chartObj.barDynamic(echart, config.barConfig);
                 break;
+            /*******************************************************************/
             case 151: //横向-柱状图普通
                 checkConfig(config.barConfig);
                 this.chartObj = new BarChart_horizontal(this.data);
                 option = this.chartObj.barNormal(config.barConfig, '', false);
                 break;
+            case 154: //横向-柱状图普通(含平均值线)
+                checkConfig(config.barConfig);
+                this.chartObj = new BarChart_horizontal(this.data);
+                option = this.chartObj.barNormal(config.barConfig, '', true);
+                break;
+            case 155: //横向-柱状图百分比(相同xdata和为100%, 堆叠)
+                checkConfig(config.barConfig);
+                this.chartObj = new BarChart_horizontal(this.data);
+                option = this.chartObj.barStack(config.barConfig, 'ex');
+                break;
+            case 160: //横向-柱状图普通堆叠
+                checkConfig(config.barConfig);
+                this.chartObj = new BarChart_horizontal(this.data);
+                option = this.chartObj.barStack(config.barConfig, '');
+                break;
+            case 163: //横向-柱状图动态求和
+                checkConfig(config.barConfig);
+                this.chartObj = new BarChart_horizontal(this.data);
+                option = this.chartObj.barDynamic(echart, config.barConfig);
+                break;
+            /*******************************************************************/
             case 201: //饼图
                 checkConfig(config.pieConfig);
                 this.chartObj = new PieChart(this.data);
@@ -131,6 +153,7 @@ class SuCharts{
                 this.chartObj = new PieChart(this.data);
                 option = this.chartObj.pie(config.pieConfig);
                 break;
+            /*******************************************************************/
             case 301: //折线图普通
                 checkConfig(config.lineConfig);
                 this.chartObj = new LineChart(this.data);
@@ -141,6 +164,7 @@ class SuCharts{
                 this.chartObj = new LineChart(this.data);
                 option = this.chartObj.line(config.lineConfig, true);
                 break;
+            /*******************************************************************/
             case 401: //普通散点图
                 checkConfig(config.scatterConfig);
                 this.chartObj = new ScatterChart(this.data);
@@ -161,6 +185,7 @@ class SuCharts{
                 this.chartObj = new ScatterChart(this.data);
                 option = this.chartObj.scatterWithGroup(config.scatterConfig);
                 break;
+            /*******************************************************************/
             case 991: //数量&增长率分开
                 this.chartObj = new SpecialChart(this.data);
                 option = this.chartObj.special01(config);

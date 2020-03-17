@@ -219,22 +219,6 @@ class BarChart extends BaseChart {
         return option;
     }
 
-    // //设置label
-    // _setLabelTop(barConfig, unit, forceShow){
-    //     unit = unit || "";
-    //     return {
-    //         show: typeof forceShow!='undefined'? forceShow: !barConfig.ifMobile,
-    //         position: 'top',
-    //         fontSize: barConfig.labelFontSize,
-    //         fontWeight: barConfig.labelFontWeight,
-    //         color: barConfig.labelFontColor,
-    //         formatter: (p => {
-    //             //return p.value? this.setUnit(p.value) + unit: ""; //?
-    //             return this.setUnit(p.value) + unit;
-    //         })
-    //     }
-    // }
-
 
     //普通柱状图
     barNormal(barConfig, perMode, isAvg){
@@ -459,8 +443,11 @@ class BarChart extends BaseChart {
             lineStyle: {
                 normal:{ color: "none" }
             },
-            label: this._setLabelTop(barConfig),
-            markLine: {
+            label: this._setLabelTop(barConfig)
+        };
+
+        if(barConfig.showAverage){ //是否补充平均线
+            config.markLine = {
                 animation: barConfig.animation, //动画效果
                 lineStyle: {
                     normal: { color: '#fc97af'}
@@ -480,7 +467,7 @@ class BarChart extends BaseChart {
         option.series = series;
 
         //lengend点击事件
-        chart.on("legendselectchanged", (params)=>{
+        chart.on("legendselectchanged", params=>{
             selected = params.selected; //legenddata被选中的实时状态
             //循环
             for (let i=0; i<this.vdata[0].length; i++){

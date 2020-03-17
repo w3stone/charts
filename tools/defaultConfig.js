@@ -25,7 +25,8 @@ let defaultConfig = {
         barMaxWidth: "25%", //最大宽度
         setLabelUnit: false, //是否处理单位(万&亿)
         dataRange: 0, //x轴显示多少列(默认不固定)
-        yMinInterval: 0 //坐标轴最小间隔大小 
+        yMinInterval: 0, //坐标轴最小间隔大小
+        showAverage: true //是否现实平均线（暂只适用于自动求和图表）
     },
     //折线图配置
     lineConfig:{
