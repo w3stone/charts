@@ -123,6 +123,7 @@ class BarChart extends BaseChart {
     //基础配置详情(移动端)
     _baseBarOption_mobile(barConfig, isPer){
         let option = {
+            legend: this._setBaseLegend(barConfig, this.legenddata),
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {          

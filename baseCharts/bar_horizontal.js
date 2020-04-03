@@ -69,6 +69,9 @@ class BarChart_horizontal extends BaseChart {
         let option = chartObj.barDynamic(chart, barConfig);
         this._changeAxis(option);
 
+        //重置dataZoom
+        option.dataZoom = this._resetDataZoom(option.dataZoom);
+
         return option;
     }
 }

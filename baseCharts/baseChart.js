@@ -25,6 +25,7 @@ class BaseChart{
     //设置legend基础配置
     _setBaseLegend(config, legenddata){
         return {
+            show: !config.ifMobile? true: false,
             data: legenddata, 
             type: 'scroll', 
             top: '8%',
@@ -110,9 +111,9 @@ class BaseChart{
         if(typeof value!="number" && !reg.test(value)) return value;
         value = parseFloat(value);
 
-        if(value>=100000000) {
+        if(Math.abs(value)>=100000000) {
             return parseFloat((value/100000000).toFixed(2)) + '亿';
-        } else if(value>=10000) {
+        } else if(Math.abs(value)>=10000) {
             return parseFloat((value/10000).toFixed(2)) + '万';
         } else {
             return parseFloat(value.toFixed(2)) + '';
