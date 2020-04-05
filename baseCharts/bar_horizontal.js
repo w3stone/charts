@@ -1,6 +1,7 @@
 /**横向柱状图封装**/
 import {BaseChart} from './baseChart.js';
 import {BarChart} from "./bar.js";
+import {makeBarData} from '../tools/makeData.js'
 
 class BarChart_horizontal extends BaseChart {
     
