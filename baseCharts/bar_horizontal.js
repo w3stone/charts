@@ -7,6 +7,16 @@ class BarChart_horizontal extends BaseChart {
     
     constructor(data){
         super(data);
+        this.xdata = [];
+        this.legenddata = [];
+        this.vdata = [];
+    }
+
+    _init(perMode){
+        let workedData = makeBarData(this, perMode);
+        this.xdata = workedData.xdata;
+        this.legenddata = workedData.legenddata;
+        this.vdata = workedData.vdata;
     }
 
     //xAxis和yAxis互换
@@ -30,6 +40,8 @@ class BarChart_horizontal extends BaseChart {
 
     //普通柱状图
     barNormal(barConfig, perMode, isAvg){
+        this._init(perMode);
+
         let _data = this;
         let chartObj = new BarChart(_data);
         let option = chartObj.barNormal(barConfig, perMode, isAvg);
@@ -48,6 +60,8 @@ class BarChart_horizontal extends BaseChart {
 
     //柱状图堆叠
     barStack(barConfig, perMode){
+        this._init(perMode);
+
         let _data = this;
         let chartObj = new BarChart(_data);
         let option = chartObj.barStack(barConfig, perMode);
@@ -65,6 +79,8 @@ class BarChart_horizontal extends BaseChart {
 
     //各类占比柱状图(动态求和)
     barDynamic(chart, barConfig){
+        this._init();
+
         let _data = this;
         let chartObj = new BarChart(_data);
         let option = chartObj.barDynamic(chart, barConfig);
