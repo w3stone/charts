@@ -24,11 +24,12 @@ class BarChart_horizontal extends BaseChart {
         let temp_xAxis = JSON.parse(JSON.stringify(option.xAxis));
         option.xAxis = option.yAxis;
         option.yAxis = temp_xAxis;
+        delete option.yAxis[0].axisLabel.rotate; //移除文字旋转
     }
 
     //重置dataZoom
     _resetDataZoom(dataZoom){
-        if(dataZoom.length>0){
+        if(dataZoom && dataZoom.length>0){
             let dataZoom0 = dataZoom[0];
             delete dataZoom0.height;
             delete dataZoom0.bottom;
