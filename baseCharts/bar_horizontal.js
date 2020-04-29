@@ -28,13 +28,17 @@ class BarChart_horizontal extends BaseChart {
 
     //重置dataZoom
     _resetDataZoom(dataZoom){
-        let dataZoom0 = dataZoom[0];
-        delete dataZoom0.height;
-        delete dataZoom0.bottom;
-        dataZoom0.width = 30;
-        dataZoom0.left = 10;
-        dataZoom0.orient = "vertical";
-        return [dataZoom0, dataZoom[1]];
+        if(dataZoom.length>0){
+            let dataZoom0 = dataZoom[0];
+            delete dataZoom0.height;
+            delete dataZoom0.bottom;
+            dataZoom0.width = 30;
+            dataZoom0.left = 10;
+            dataZoom0.orient = "vertical";
+            return [dataZoom0, dataZoom[1]];
+        }else{
+            return [];
+        }
     }
 
 
