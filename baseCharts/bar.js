@@ -66,7 +66,6 @@ class BarChart extends BaseChart {
                 trigger: 'axis',
                 axisPointer: {type: 'shadow'},
                 formatter: p => {
-                    console.log(this.legenddata);
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
                     // if(isPer){ //需要转成百分比
                     //     for(let i=0;i<p.length;i++){
