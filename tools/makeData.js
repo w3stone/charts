@@ -39,18 +39,18 @@ function makeBarData(data, perMode) {
             if("ex"==perMode){ //转换成百分比
                 let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata总和
                 sum = sum || 1;
-                let value = list.length>0? parseFloat( (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2) ): '';
+                let value = list.length>0? decimal(Enumerable.from(list).sum(o=>o.value)/sum*100): '';
                 arr.push(value);
             
             }else if("ey"==perMode){
                 let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata总和
                 sum = sum || 1;
-                let value = list.length>0? parseFloat( (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2) ): '';
+                let value = list.length>0? decimal(Enumerable.from(list).sum(o=>o.value)/sum*100): '';
                 arr.push(value);
             
             }else{
                 //arr.push( Enumerable.from(chartData).where(o=>o.x==valx && o.y==valy).sum(o=>o.value) );
-                arr.push( list.length>0? Enumerable.from(list).sum(o=>o.value): '' );
+                arr.push( list.length>0? decimal(Enumerable.from(list).sum(o=>o.value)): '' );
             } 
         });
         vdata.push(arr);
@@ -83,21 +83,21 @@ function makeBarData(data, perMode) {
                     if("ex"==perMode){ //转换成百分比
                         let sum = Enumerable.from(chartData).where(o=>o.x==valx).sum(o=>o.value); //相同xdata求和
                         sum = sum || 1;
-                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
-                        ortherSumArr[x_index] += parseFloat(value);
+                        let value = list.length>0? decimal(Enumerable.from(list).sum(o=>o.value)/sum*100): '';
+                        ortherSumArr[x_index] += value;
 
                     }else if("ey"==perMode){
                         let sum = Enumerable.from(chartData).where(o=>o.y==valy).sum(o=>o.value); //相同legenddata求和
                         sum = sum || 1;
-                        let value = list.length>0? (Enumerable.from(list).sum(o=>o.value)/sum*100).toFixed(2): '';
-                        ortherSumArr[x_index] += parseFloat(value);
+                        let value = list.length>0? decimal(Enumerable.from(list).sum(o=>o.value)/sum*100): '';
+                        ortherSumArr[x_index] += value;
 
                     }else{
-                        let value = list.length>0? Enumerable.from(list).sum(o=>o.value): '';
-                        ortherSumArr[x_index] += parseFloat(value);
+                        let value = list.length>0? decimal(Enumerable.from(list).sum(o=>o.value)): '';
+                        ortherSumArr[x_index] += value;
                     }
                     //再次保留两位小数
-                    ortherSumArr[x_index] = parseFloat( ortherSumArr[x_index].toFixed(2) );
+                    ortherSumArr[x_index] = decimal(ortherSumArr[x_index]);
                 });
 
             }else{ //大于1%
@@ -151,7 +151,7 @@ function makePieData(chartData) {
         return {
             "x": o.x, 
             "y": o.y,
-            "value": o.value,
+            "value": decimal(o.value),
             "name": o.name || "未填"
         }
     });
@@ -197,7 +197,7 @@ function makeScatterData(chartData, nUnit) {
         return {
             "x": trans2number(o.x), 
             "y": trans2number(o.y),
-            "value": o.value,
+            "value": decimal(o.value),
             //"name": yearOrMonth(nUnit)? o.name + nUnit :o.name,
             "name": o.name,
             "type": trans2number(o.type)
@@ -205,10 +205,6 @@ function makeScatterData(chartData, nUnit) {
     });
 
     let valueMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.value): 0; //value最大值
-    let xMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.x): 0; //x最大值
-    let yMin = chartData.length>0? Enumerable.from(chartData).min(o=>o.y): 0; //x最小值
-    let yMax = chartData.length>0? Enumerable.from(chartData).max(o=>o.y): 0; //x最大值
-    //console.log(xMin, xMax, yMin, yMax);
 
     return {
         "legenddata": legenddata,
@@ -231,3 +227,11 @@ function trans2number(val){
         return val;
     }
 }
+
+//保留两位小数
+function decimal(value){
+    let reg = new RegExp("^[-+]?[0-9]+(\\.[0-9]+)?$"); //正负整数或小数
+    if(typeof value!="number" && !reg.test(value)) return value || "";
+    return (Math.round(value*100)/100);
+}
+
