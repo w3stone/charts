@@ -112,11 +112,11 @@ class BaseChart{
         value = parseFloat(value);
 
         if(Math.abs(value)>=100000000) {
-            return parseFloat((value/100000000).toFixed(2)) + '亿';
+            return this.decimal(value/100000000) + '亿';
         } else if(Math.abs(value)>=10000) {
-            return parseFloat((value/10000).toFixed(2)) + '万';
+            return this.decimal(value/10000) + '万';
         } else {
-            return parseFloat(value.toFixed(2)) + '';
+            return this.decimal(value) + '';
         }
     }
 
@@ -137,6 +137,13 @@ class BaseChart{
     //单位是否为年或月
     yearOrMonth(unit){
         return (unit=="月" || unit=="年")? true: false;
+    }
+
+    //保留两位小数
+    decimal(value){
+        let reg = new RegExp("^[-+]?[0-9]+(\\.[0-9]+)?$"); //正负整数或小数
+        if(typeof value!="number" && !reg.test(value)) return value || "";
+        return (Math.round(value*100)/100);
     }
 
     //设置显示的名称(如果单位为年或月,在数字后插入单位)

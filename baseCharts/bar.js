@@ -66,6 +66,7 @@ class BarChart extends BaseChart {
                 trigger: 'axis',
                 axisPointer: {type: 'shadow'},
                 formatter: p => {
+                    console.log(this.legenddata);
                     let result = this._setTooltipTitle(p[0].name, this.xUnit);
                     // if(isPer){ //需要转成百分比
                     //     for(let i=0;i<p.length;i++){
@@ -73,20 +74,15 @@ class BarChart extends BaseChart {
                     //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
                     //         }
                     //     }
-                    // }else{ //不需要转成百分比
-                    //     for(let i=0;i<p.length;i++){
-                    //         if(p[i].seriesName.indexOf("增长率")!=-1){ //???
-                    //             result += p[i].seriesName + ": " + p[i].value + "%</br>";
-                    //         }else{
-                    //             result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
-                    //         }
-                    //     }
                     // }
                     for(let i=0; i<p.length; i++){
+                        let seriesName = this.legenddata[i]? (p[i].seriesName + "："): "";
+                        let seriesValue = this.decimal(p[i].value);
+
                         if(p[i].seriesName.indexOf("增长率")!=-1){ //???
-                            result += p[i].seriesName + ": " + p[i].value + "%</br>";
+                            result += seriesName + seriesValue + "%</br>";
                         }else{
-                            result += p[i].seriesName + ": " + p[i].value + this.vUnit + "</br>";
+                            result += seriesName + seriesValue + this.vUnit + "</br>";
                         }
                     }
                     return result;

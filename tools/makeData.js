@@ -27,8 +27,8 @@ function makeBarData(data, perMode) {
     }
 
     //剔除'\0' & ''
-    xdata = xdata.filter(val => val!='' && val !=/\0/);
-    legenddata = legenddata.filter(val => val!='' && val !=/\0/);
+    xdata = xdata.filter(val => val!=='' && val !=/\0/);
+    legenddata = legenddata.filter(val => val!=='' && val !=/\0/);
 
     //拼接vdata(内部函数)
     let makeBar_vdata_normal = valy => {
